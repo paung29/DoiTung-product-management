@@ -8,16 +8,16 @@ export default function ProtectedLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div>
-      <header className="w-full bg-yellow-900 text-white px-6 py-4">
-        <div className="flex items-center justify-between">
-          {/* LEFT: menu + logo */}
+    <div className="min-h-screen bg-[#f2f1ed]">
+      <header className="sticky top-0 z-50 h-20 w-full bg-yellow-900 text-white px-6">
+        <div className="h-full flex items-center justify-between">
+          {/* LEFT */}
           <div className="flex items-center gap-4">
             <StaffMenu />
             <Image src="/logo.png" alt="Logo" width={200} height={100} />
           </div>
 
-          {/* CENTER: title */}
+          {/* CENTER */}
           <div className="text-center">
             <h1 className="text-xl font-semibold">
               Vanilla Product Management
@@ -25,12 +25,12 @@ export default function ProtectedLayout({
             <p className="text-sm">Staff Portal</p>
           </div>
 
-          {/* RIGHT: language switch */}
+          {/* RIGHT */}
           <LanguageSwitch locale="en" />
         </div>
       </header>
 
-      <main>{children}</main>
+      <main className="min-h-[calc(100vh-80px)] bg-[#f2f1ed]">{children}</main>
     </div>
   );
 }
