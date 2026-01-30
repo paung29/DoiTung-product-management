@@ -12,16 +12,16 @@ import Image from "next/image";
 
 export function LoginForm() {
   return (
-    <Card className="w-full max-w-[487px] min-h-[650px] flex justify-center gap-8">
+    <Card className="w-full max-w-[700px] md:max-w-[487px] sm:max-w-[340px] h-auto md:h-[650px] flex flex-col justify-center gap-8 p-6">
       <CardHeader className="flex justify-center flex-col items-center">
         <Image
           src={"/images/MFLF_Logo.png"}
           alt="MFLF Logo"
           height={100}
           width={340}
-          className="object-cover max-h-[100px] mix-w-[340px]"
+          className="object-contain w-56 md:w-80 h-auto max-h-[100px]"
         />
-        <CardTitle className=" font-semibold text-2xl">
+        <CardTitle className="font-semibold text-xl">
           Login to your account
         </CardTitle>
       </CardHeader>
@@ -42,9 +42,9 @@ export function LoginForm() {
                 <Label htmlFor="password">Password</Label>
                 <a
                   href="#"
-                  className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+                  className="ml-auto inline-block text-sm underline-offset-4 hover:underline text-primary-button"
                 >
-                  Forgot your password?
+                  Forgot?
                 </a>
               </div>
               <Input id="password" type="password" required />

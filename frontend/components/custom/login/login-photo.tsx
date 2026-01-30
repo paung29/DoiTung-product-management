@@ -6,9 +6,9 @@ export function LoginPhoto() {
       <Image
         src="/images/VanillaLogin.png"
         alt="VanillaPhoto"
-        height={"872"}
-        width={"722"}
-        className="rounded-lg object-cover min-h-[872px] max-w-[722px] "
+        width={700}
+        height={800}
+        className="hidden md:block md:w-[380px] md:h-[600px] lg:w-[600px] lg:h-[870px] rounded-lg object-cover"
       />
     </>
   );
