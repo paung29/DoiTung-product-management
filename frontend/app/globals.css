@@ -127,3 +127,7 @@
 .card-vanilla {
   background-color: #FAF3E0;
 }
+
+@theme{
+  --color-primary-button: #6B4423;
+}

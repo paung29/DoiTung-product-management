@@ -1,7 +1,18 @@
+import LoginForm from "@/components/custom/form/login-form";
+import { LoginPhoto } from "@/components/custom/login/login-photo";
+
 export default function LoginPage() {
-    return (
-        <div>
-            <h1>Login Page</h1>
+  return (
+    <>
+      <div className="flex flex-col h-screen">
+        <h1>Menu Bar</h1>
+        <div className="flex flex-col flex-1 justify-center ">
+          <div className="flex justify-center items-center h-full gap-24">
+            <LoginForm></LoginForm>
+            <LoginPhoto></LoginPhoto>
+          </div>
         </div>
-    );
+      </div>
+    </>
+  );
 }
