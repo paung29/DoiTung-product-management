@@ -21,9 +21,7 @@ function FormPageShell({
   children,
 }: FormPageShellProps) {
   const router = useRouter();
-  const backfunction = () => {
-    router.back();
-  };
+
   return (
     <>
       <div className="min-h-screen max-w-[80%] border-primary-button border rounded-2xl shadow-2xl mx-auto my-15">
