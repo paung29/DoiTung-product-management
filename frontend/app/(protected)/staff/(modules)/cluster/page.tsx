@@ -11,6 +11,9 @@ export default function ClusterEntryPage() {
       <ClusterRecordingCard />
       <ClusterRecordingCard />
       <ClusterRecordingCard />
+      <ClusterRecordingCard />
+      <ClusterRecordingCard />
+      <ClusterRecordingCard />
     </>
   );
 }
