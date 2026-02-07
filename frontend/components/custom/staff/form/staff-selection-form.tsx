@@ -24,7 +24,7 @@ function StaffSelectionForm({
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full appearance-none rounded-lg bg-[#e9ecf0] px-4 py-3 pr-10 text-sm text-[#2d201b] outline-none"
+        className="bg-staff-form-field w-full appearance-none rounded-lg px-4 py-3 pr-10 text-sm text-[#2d201b] outline-none"
       >
         <option value="" disabled>
           {placeholder}
