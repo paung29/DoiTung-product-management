@@ -47,7 +47,7 @@ export default function ClusterSearch() {
           ]} />
 
           <div className="w-full sm:w-auto sm:ml-auto flex justify-end">
-            <CustomButton label="Search" onClick={form.handleSubmit(onSubmit)}/>
+            <CustomButton label="Search" onClick={form.handleSubmit(onSubmit)} />
           </div>
         
         </form>
