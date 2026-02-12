@@ -35,7 +35,7 @@ export default function CustomSelect<T extends FieldValues> (
 
                     <Select value={field.value} onValueChange={field.onChange}>
                         <FormControl>
-                            <SelectTrigger className={cn("w-full min-w-[180px] border truncate", "focus:border-[#2B9B9B] focus-visible:ring-0", triggerClassName)} >
+                            <SelectTrigger className={cn("w-full min-w-[180px] border truncate", "sm:min-w-[180px]", "focus:border-[#2B9B9B] focus-visible:ring-0", triggerClassName)} >
                                 <SelectValue className="truncate"  placeholder={placeholder}/>
                             </SelectTrigger>
                         </FormControl>

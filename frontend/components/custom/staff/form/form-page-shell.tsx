@@ -24,12 +24,22 @@ function FormPageShell({
 
   return (
     <>
-      <div className="bg-staff-backdrop border-primary-button mx-auto my-15 min-h-screen max-w-[80%] rounded-2xl border shadow-2xl">
-        <div className="bg-secondary border-primary-button flex h-18 flex-row items-center justify-between rounded-t-2xl border-b px-10">
+      <div className="bg-staff-backdrop border-primary-button
+                        mx-0 sm:mx-auto
+                        my-0 sm:my-15
+                        min-h-screen
+                        w-full sm:max-w-[80%]
+                        rounded-none sm:rounded-2xl
+                        border shadow-2xl">
+        <div className="bg-secondary border-primary-button
+                          flex h-16 items-center justify-between
+                          border-b
+                          px-4 sm:px-10
+                          rounded-none sm:rounded-t-2xl">
           <FormIconTitles title={title} subtitle={subtitle} icon={icon} />
           <BackButton />
         </div>
-        <div className="px-10 py-10">{children}</div>
+        <div className="px-4 py-4 sm:px-10 sm:py-10">{children}</div>
       </div>
     </>
   );

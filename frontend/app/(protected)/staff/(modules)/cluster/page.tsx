@@ -1,20 +1,27 @@
 import ClusterRecordingCard from "@/components/custom/staff/cluster-recording-card";
 import ClusterSearch from "@/components/custom/staff/cluster-search";
+import StaffContent from "./layout";
 
 export default function ClusterEntryPage() {
   return (
-    <>
-      <h1>Cluster Entry Page</h1>
+    <div className="space-y-4 sm:space-y-6">
+      <h1 className="text-lg sm:text-2xl font-semibold">Cluster Entry Page</h1>
 
-      <ClusterSearch />
+      <StaffContent>
+        <ClusterSearch />
+      </StaffContent>
 
-      <ClusterRecordingCard />
-      <ClusterRecordingCard />
-      <ClusterRecordingCard />
-      <ClusterRecordingCard />
-      <ClusterRecordingCard />
-      <ClusterRecordingCard />
-    </>
+      <StaffContent>
+        <div className="space-y-4">
+          <ClusterRecordingCard />
+          <ClusterRecordingCard />
+          <ClusterRecordingCard />
+          <ClusterRecordingCard />
+          <ClusterRecordingCard />
+          <ClusterRecordingCard />
+        </div>
+      </StaffContent>
+    </div>
   );
 }
 

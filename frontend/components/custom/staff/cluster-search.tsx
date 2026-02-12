@@ -30,25 +30,28 @@ export default function ClusterSearch() {
   return (
     <Form {...form}>
       
-        <form className="mx-auto max-w-6xl sm:max-w-2xl md:max-w-4xl flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-end p-2 sm:p-4 mt-4">
-          <CustomSelect control={form.control} path="location"  label="Location" placeholder="Select Location"
-          options={[
-            {id : "-1", value : "Select All"},
-            ...locations
-          ]} />
+        <form  className="w-full p-2 sm:p-4 mt-4">
+          <div  className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5 lg:items-end">
+            <CustomSelect className="w-full" control={form.control} path="location"  label="Location" placeholder="Select Location"
+            options={[
+              {id : "-1", value : "Select All"},
+              ...locations
+            ]} />
 
-          <FormsInput className="w-full sm:w-[180px]" control={form.control} path="pole_id" label="Pole ID" placeholder="Enter pole ID" />
-          <FormsInput className="w-full sm:w-[180px]" control={form.control} path="cluster_id" label="Cluster ID" placeholder="Search by Cluster ID" />
-          
-          <CustomSelect control={form.control} path="progress_status"  label="Progress Status" placeholder="Select Progress"
-          options={[
-            {id : "-1", value : "Select All"},
-            ...progressStatusOptions
-          ]} />
+            <FormsInput className="w-full" control={form.control} path="pole_id" label="Pole ID" placeholder="Enter pole ID" />
+            <FormsInput className="w-full" control={form.control} path="cluster_id" label="Cluster ID" placeholder="Search by Cluster ID" />
+            
+            <CustomSelect className="w-full" control={form.control} path="progress_status"  label="Progress Status" placeholder="Select Progress"
+            options={[
+              {id : "-1", value : "Select All"},
+              ...progressStatusOptions
+            ]} />
 
-          <div className="w-full sm:w-auto sm:ml-auto flex justify-end">
-            <CustomButton label="Search" onClick={form.handleSubmit(onSubmit)} />
+            <div className="w-full flex lg:justify-end">
+              <CustomButton label="Search" onClick={form.handleSubmit(onSubmit)} className="btn-primary  w-full lg:w-[180px]"/>
+            </div>
           </div>
+
         
         </form>
       
