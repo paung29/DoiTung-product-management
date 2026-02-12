@@ -133,4 +133,18 @@
   --color-secondary: #faf3e0;
   --color-staff-backdrop: #f2f1ed;
   --color-staff-form-field: #e5e7eb;
+  --color-staff-cluster-edit: #007A55;
+}
+
+/* globals.css */
+.btn-primary {
+  background-color: #6b4423;
+}
+
+.btn-edit {
+  background-color: #007a55;
+}
+
+.btn-danger {
+  background-color: #c2410c;
 }

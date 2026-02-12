@@ -6,12 +6,12 @@ type CustomButtonProps = {
     label: string;
     onClick: () => void;
     icon ?: LucideIcon;
-    bgColor ?: string;
+    className?: string;
 }
 
-export default function CustomButton({label, onClick, icon : Icon, bgColor = "#007A55"}: CustomButtonProps) {
+export default function CustomButton({label, onClick, icon : Icon, className = ""}: CustomButtonProps) {
     return (
-        <Button className={`bg-[${bgColor}]`} onClick={onClick}>
+        <Button  onClick={onClick} className={`text-white hover:opacity-90 transition ${className}`}>
             <h1>{label}</h1>
             {Icon && <Icon />}
         </Button>
