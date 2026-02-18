@@ -5,42 +5,92 @@ import CustomButton from "../common/custom-button";
 import { Edit } from "lucide-react";
 import ProgressLight from "../common/progress-light";
 
-export default function ClusterRecordingCard() {
-    return(
-        <Card className="card-vanilla mx-auto max-w-6xl sm:max-w-2xl md:max-w-4xl p-2 sm:p-4 mt-4">
-            <div className="overflow-x-auto">
-                <table className="w-full table-fixed text-sm">
-                    <thead >
-                        <tr>
-                            <th className="text-left">No.</th>
-                            <th className="text-left">Location</th>
-                            <th className="text-left">Pole Number</th>
-                            <th className="text-left">Cluster ID</th>
-                            <th ><CustomButton label="Edit" icon={Edit} onClick={() => {}} /></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr className="border-b">
-                            <td className="text-left">1</td>
-                            <td>Phamee Zone 1, Phase 1</td>
-                            <td>P-00001</td>
-                            <td>C-00001</td>
-                            <td></td>
-                        </tr>
-                    </tbody>
-                </table>
+interface ClusterRecord {
+  id: string;
+  no: number;
+  location: string;
+  poleNumber: string;
+  clusterId: string;
+  recordedDate: string;
+}
 
-                <div className="flex justify-between mt-2 p-2">
-                    <h1>Recorded:20/1/2026</h1>
+interface ClusterRecordingCardProps {
+  records?: ClusterRecord[];
+  onEdit?: (record: ClusterRecord) => void;
+}
 
-                    <div className="flex gap-2">
-                        <h1>Progress </h1>
-                        <ProgressLight total={4} current={3} />
-                    </div>
-                </div>
+export default function ClusterRecordingCard({
+  records = [],
+  onEdit = () => {},
+}: ClusterRecordingCardProps) {
+  // Default data
+  const defaultRecords: ClusterRecord[] = [
+    {
+      id: "1",
+      no: 1,
+      location: "Phamee Zone 1, Phase 1",
+      poleNumber: "P-00001",
+      clusterId: "C-00001",
+      recordedDate: "20/01/2026",
+    },
+  ];
+
+  const displayRecords = records.length > 0 ? records : defaultRecords;
+
+  return (
+    <div className="mx-auto max-w-6xl px-2 sm:px-4">
+      {displayRecords.map((record) => (
+        <Card
+          key={record.id}
+          className="card-vanilla mt-4 overflow-hidden rounded-lg p-3 shadow-sm sm:p-4"
+        >
+          {/* Top Section */}
+          <div className="grid grid-cols-2 items-center gap-2 text-xs md:grid-cols-5 md:gap-4 md:text-sm">
+            <div>
+              <p className="text-muted-foreground text-xs">No.</p>
+              <p className="text-sm font-medium">{record.no}</p>
             </div>
-                   
+
+            <div>
+              <p className="text-muted-foreground text-xs">Location</p>
+              <p className="text-sm font-medium">{record.location}</p>
+            </div>
+
+            <div>
+              <p className="text-muted-foreground text-xs">Pole Number</p>
+              <p className="text-sm font-medium">{record.poleNumber}</p>
+            </div>
+
+            <div>
+              <p className="text-muted-foreground text-xs">Cluster ID</p>
+              <p className="text-sm font-medium">{record.clusterId}</p>
+            </div>
+
+            <div className="flex justify-end">
+              <CustomButton
+                label="Edit"
+                icon={Edit}
+                onClick={() => onEdit(record)}
+                className="w-20 py-1 text-xs"
+              />
+            </div>
+          </div>
+
+          {/* Divider */}
+          <div className="my-0 border-t" />
+
+          {/* Bottom Section */}
+          <div className="flex flex-col items-start justify-between gap-2 text-xs sm:flex-row sm:items-center">
+            <p className="text-muted-foreground">Recorded: {record.recordedDate}</p>
+
+            <div className="flex items-center gap-2">
+              <span className="text-muted-foreground">Progress</span>
+              <ProgressLight total={4} current={3} />
+            </div>
+          </div>
         </Card>
-    )
+      ))}
+    </div>
+  );
 }
 

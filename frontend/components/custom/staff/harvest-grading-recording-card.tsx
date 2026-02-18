@@ -14,6 +14,8 @@ interface HarvestGradingRecord {
   status: "complete" | "incomplete" | "pending";
 }
 
+export type { HarvestGradingRecord };
+
 interface HarvestGradingRecordingCardProps {
   records?: HarvestGradingRecord[];
   onEdit?: (record: HarvestGradingRecord) => void;
@@ -71,7 +73,7 @@ export default function HarvestGradingRecordingCard({
           key={record.id}
           className="card-vanilla mt-4 overflow-hidden rounded-lg p-3 shadow-sm sm:p-4"
         >
-          {/* Top Section - Table Style */}
+          {/* Top Section */}
           <div className="grid grid-cols-2 items-center gap-2 text-xs md:grid-cols-5 md:gap-4 md:text-sm">
             <div>
               <p className="text-muted-foreground text-xs">No.</p>
