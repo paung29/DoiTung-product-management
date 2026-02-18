@@ -19,3 +19,13 @@ export type FlowerRecordingFormType = {
   condition: string;
   total_flowers: string;
 };
+
+export type PollinationRecordingFormType = {
+  location: string;
+  pole_id: string;
+  cluster_id: string;
+  condition: string;
+  total_flowers: string;
+  number_of_pods: string;
+  unsuccessful_pollination: string;
+};
