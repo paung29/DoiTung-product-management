@@ -8,29 +8,39 @@ export default function ProtectedLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-[#f2f1ed]">
-      <header className="sticky top-0 z-50 h-20 w-full bg-yellow-900 text-white px-6">
-        <div className="h-full flex items-center justify-between">
+    <div className="bg-staff-backdrop min-h-screen">
+      <header className="sticky top-0 z-50 h-auto w-full bg-yellow-900 px-3 py-2 text-white sm:h-16 sm:px-4 sm:py-3 md:h-20 md:px-6 md:py-4">
+        <div className="flex h-full items-center justify-between gap-2 sm:gap-3 md:gap-4">
           {/* LEFT */}
-          <div className="flex items-center gap-4">
+          <div className="flex min-w-fit items-center gap-2 sm:gap-3 md:gap-4">
             <StaffMenu />
-            <Image src="/logo.png" alt="Logo" width={200} height={100} />
+            <Image
+              src="/logo.png"
+              alt="Logo"
+              width={180}
+              height={80}
+              className="h-8 w-auto sm:h-10 md:h-12"
+            />
           </div>
 
           {/* CENTER */}
-          <div className="text-center">
-            <h1 className="text-xl font-semibold">
+          <div className="hidden flex-1 text-center sm:block">
+            <h1 className="truncate text-sm font-semibold sm:text-base md:text-xl">
               Vanilla Product Management
             </h1>
-            <p className="text-sm">Staff Portal</p>
+            <p className="hidden text-xs sm:text-sm md:block">Staff Portal</p>
           </div>
 
           {/* RIGHT */}
-          <LanguageSwitch locale="en" />
+          <div className="min-w-fit">
+            <LanguageSwitch locale="en" />
+          </div>
         </div>
       </header>
 
-      <main className="min-h-[calc(100vh-80px)] bg-[#f2f1ed]">{children}</main>
+      <main className="min-h-[calc(100vh-60px)] bg-[#f2f1ed] sm:min-h-[calc(100vh-64px)] md:min-h-[calc(100vh-80px)]">
+        {children}
+      </main>
     </div>
   );
 }
