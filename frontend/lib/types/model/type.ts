@@ -11,3 +11,11 @@ export type ClusterRecordingFormType = {
   cluster_id: string;
   condition: string;
 };
+
+export type FlowerRecordingFormType = {
+  location: string;
+  pole_id: string;
+  cluster_id: string;
+  condition: string;
+  total_flowers: string;
+};
