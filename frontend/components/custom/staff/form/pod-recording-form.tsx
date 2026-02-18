@@ -28,29 +28,10 @@ function PodRecordingForm() {
         <div className="pb-8">
           <FormCard>
             <StaffFormTitle isRequired={false} title={"Cluster Information"} />
-            <div className="flex flex-col justify-between md:flex-row md:gap-10 md:py-4">
-              <StaffDisable
-                isRow={true}
-                title={"Location"}
-                placeholder={"zone-1"}
-              />
-              <StaffDisable
-                isRow={true}
-                title={"Pole-Id"}
-                placeholder={"001"}
-              />
-            </div>
-            <div className="flex flex-col justify-between md:flex-row md:gap-10 md:py-4">
-              <StaffDisable
-                isRow={true}
-                title={"Cluster-Id"}
-                placeholder={"001"}
-              />
-              <StaffDisable
-                isRow={true}
-                title={"Total-Flower"}
-                placeholder={"10"}
-              />
+            <div className="flex flex-col justify-between gap-10 py-4 md:flex-row">
+              <StaffDisable title={"Location"} placeholder={"zone-1"} />
+              <StaffDisable title={"Pole-Id"} placeholder={"001"} />
+              <StaffDisable title={"Cluster-Id"} placeholder={"001"} />
             </div>
           </FormCard>
         </div>
@@ -58,7 +39,7 @@ function PodRecordingForm() {
         <div className="pb-8 md:flex-row">
           {/*  Number */}
           <FormCard>
-            <StaffFormTitle isRequired={true} title={"Flower Data"} />
+            <StaffFormTitle isRequired={true} title={"Pod Formation Data"} />
             <div className="flex flex-col md:flex-row md:gap-10 md:py-2">
               <StaffDisable title={"Number of Pods Formed"} placeholder={"1"} />
               <StaffDisable title={"Remaining Pods"} placeholder={"1"} />
