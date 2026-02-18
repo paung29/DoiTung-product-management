@@ -13,6 +13,7 @@ import { Option } from "@/lib/types/model/option";
 import StaffSelectionForm from "./staff-selection-form";
 import FormsInput from "../../common/forms/form-input";
 import CustomButton from "../../common/custom-button";
+import { CircleCheck, CircleX } from "lucide-react";
 
 function ClusterRecordingForm() {
   const onSubmit = (data: ClusterRecordingFormType) => {
@@ -86,15 +87,17 @@ function ClusterRecordingForm() {
 
       <div className="flex flex-row items-center justify-around gap-4">
         <CustomButton
-          label="Delete"
+          label="Cancel"
           onClick={() => console.log("Delete")}
           className="w-[180px] bg-red-600 hover:bg-red-700"
+          icon={CircleX}
         />
 
         <CustomButton
           label="Submit"
           onClick={form.handleSubmit(onSubmit)}
           className="bg-staff-success w-[180px] hover:bg-green-800"
+          icon={CircleCheck}
         />
       </div>
     </Form>
