@@ -133,7 +133,9 @@
   --color-secondary: #faf3e0;
   --color-staff-backdrop: #f2f1ed;
   --color-staff-form-field: #e5e7eb;
-  --color-staff-cluster-edit: #007A55;
+  --color-staff-cluster-edit: #007a55;
+  --color-staff-success: #3a835d;
+  --color-staff-failed: #c32527;
 }
 
 /* globals.css */

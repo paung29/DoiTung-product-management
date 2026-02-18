@@ -2,69 +2,102 @@
 import React, { useState } from "react";
 import FormCard from "./form-card";
 import StaffFormTitle from "./staff-form-title";
-import StaffSelectionForm, { Option } from "./staff-selection-form";
+
 import StaffInputField from "./staff-input-field";
 import ConditionForm from "./condition-form";
+import { Form } from "@/components/ui/form";
+import { useForm } from "react-hook-form";
+import { ClusterRecordingFormType } from "@/lib/types/model/type";
+import CustomSelect from "../../common/forms/form-select";
+import { Option } from "@/lib/types/model/option";
+import StaffSelectionForm from "./staff-selection-form";
+import FormsInput from "../../common/forms/form-input";
+import CustomButton from "../../common/custom-button";
 
 function ClusterRecordingForm() {
-  const options: Option[] = [
-    {
-      value: "Kit",
-      label: "Kit",
-    },
-    {
-      value: "Kat",
-      label: "Kat",
-    },
-    {
-      value: "Kot",
-      label: "Kot",
-    },
-    {
-      value: "Ket",
-      label: "Ket",
-    },
+  const onSubmit = (data: ClusterRecordingFormType) => {
+    console.log(data);
+  };
+
+  const locations: Option[] = [
+    { id: "zone-1", value: "Zone 1" },
+    { id: "zone-2", value: "Zone 2" },
+    { id: "zone-3", value: "Zone 3" },
+    { id: "zone-4", value: "Zone 4" },
   ];
 
   const [location, setLocation] = useState("");
-  const [condition, setCondition] = useState("GOOD");
+
+  const form = useForm<ClusterRecordingFormType>({});
 
   return (
-    <div>
-      {/* Location */}
-      <div className="pb-8">
-        <FormCard>
-          <StaffFormTitle isRequired={true} title={"Location"} />
-          <StaffSelectionForm
-            options={options}
-            value={location}
-            onChange={setLocation}
-            placeholder={"Select Location"}
-          />
-        </FormCard>
-      </div>
+    <Form {...form}>
+      <form className="flex flex-col">
+        {/* Location */}
+        <div className="pb-8">
+          <FormCard>
+            <StaffFormTitle isRequired={true} title={"Location"} />
 
-      <div className="flex flex-col gap-10 pb-8 md:flex-row">
-        {/* Pole Number */}
-        <FormCard>
-          <StaffFormTitle isRequired={true} title={"Pole Number"} />
-          <StaffInputField placeholder="eg: 1" />
-        </FormCard>
-        {/* Cluster Number */}
-        <FormCard>
-          <StaffFormTitle isRequired={true} title={"Cluster Number"} />
-          <StaffInputField placeholder="eg: 1" isDisable={true} />
-        </FormCard>
-      </div>
+            <CustomSelect
+              className="bg-staff-form-field w-full appearance-none rounded-lg px-4 py-3 pr-10 text-sm text-[#2d201b] outline-none"
+              control={form.control}
+              path="location"
+              placeholder="Select Location"
+              options={locations}
+            />
+          </FormCard>
+        </div>
 
-      {/* Condition */}
-      <div className="pb-8">
-        <FormCard>
-          <StaffFormTitle isRequired={true} title={"Location"} />
-          <ConditionForm value={condition} onChange={setCondition} />
-        </FormCard>
+        <div className="flex flex-col gap-10 pb-8 md:flex-row">
+          {/* Pole Number */}
+          <FormCard>
+            <StaffFormTitle isRequired={true} title={"Pole Number"} />
+            <FormsInput
+              control={form.control}
+              path={"pole_id"}
+              placeholder="eg., P-001"
+              className="bg-staff-form-field rounded-lg"
+            />
+          </FormCard>
+          {/* Cluster Number */}
+          <FormCard>
+            <StaffFormTitle isRequired={true} title={"Cluster Number"} />
+            <FormsInput
+              control={form.control}
+              path={"cluster_id"}
+              placeholder="eg., C-001"
+              className="bg-staff-form-field rounded-lg"
+            />
+          </FormCard>
+        </div>
+
+        {/* Condition */}
+        <div className="pb-8">
+          <FormCard>
+            <StaffFormTitle isRequired={true} title={"Location"} />
+            <ConditionForm
+              control={form.control}
+              path={"condition"}
+              label="Condition"
+            />
+          </FormCard>
+        </div>
+      </form>
+
+      <div className="flex flex-row items-center justify-around gap-4">
+        <CustomButton
+          label="Delete"
+          onClick={() => console.log("Delete")}
+          className="w-[180px] bg-red-600 hover:bg-red-700"
+        />
+
+        <CustomButton
+          label="Submit"
+          onClick={form.handleSubmit(onSubmit)}
+          className="bg-staff-success w-[180px] hover:bg-green-800"
+        />
       </div>
-    </div>
+    </Form>
   );
 }
 
