@@ -29,3 +29,11 @@ export type PollinationRecordingFormType = {
   number_of_pods: string;
   unsuccessful_pollination: string;
 };
+
+export type PodRecordingFormType = {
+  location: string;
+  pole_id: string;
+  cluster_id: string;
+  condition: string;
+  lost_pods: string;
+};
