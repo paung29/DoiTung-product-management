@@ -1,7 +1,7 @@
-import React from "react";
+import PreHarvestRecordingForm from "@/components/custom/staff/form/pre-harvest-recording-form";
 
 function PreHarvestForm() {
-  return <div>PreHarvestForm</div>;
+  return <PreHarvestRecordingForm />;
 }
 
 export default PreHarvestForm;

@@ -37,3 +37,13 @@ export type PodRecordingFormType = {
   condition: string;
   lost_pods: string;
 };
+
+export type PreHarvestRecordingFormType = {
+  location: string;
+  pole_id: string;
+  cluster_id: string;
+  condition: string;
+  number_of_pods_round_2: string;
+  pods_removed: string;
+  plants_with_pods_removed: string;
+};
