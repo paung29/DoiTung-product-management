@@ -83,7 +83,7 @@ function StaffHome() {
       path: "/staff/pod",
     },
     {
-      id: "preharvest",
+      id: "pre-harvest",
       titleKey: "preHarvest",
       image: imgPreharvestForm,
       path: "/staff/pre-harvest",
