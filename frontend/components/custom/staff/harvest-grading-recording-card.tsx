@@ -3,39 +3,68 @@
 import { Card } from "@/components/ui/card";
 import CustomButton from "../common/custom-button";
 import { Edit } from "lucide-react";
-import ProgressLight from "../common/progress-light";
 
-interface ClusterRecord {
+interface HarvestGradingRecord {
   id: string;
   no: number;
   location: string;
   poleNumber: string;
-  clusterId: string;
   recordedDate: string;
+  editedDate: string;
+  status: "complete" | "incomplete" | "pending";
 }
 
-interface ClusterRecordingCardProps {
-  records?: ClusterRecord[];
-  onEdit?: (record: ClusterRecord) => void;
+export type { HarvestGradingRecord };
+
+interface HarvestGradingRecordingCardProps {
+  records?: HarvestGradingRecord[];
+  onEdit?: (record: HarvestGradingRecord) => void;
 }
 
-export default function ClusterRecordingCard({
+export default function HarvestGradingRecordingCard({
   records = [],
   onEdit = () => {},
-}: ClusterRecordingCardProps) {
+}: HarvestGradingRecordingCardProps) {
   // Default data
-  const defaultRecords: ClusterRecord[] = [
+  const defaultRecords: HarvestGradingRecord[] = [
     {
       id: "1",
       no: 1,
       location: "Phamee Zone 1, Phase 1",
       poleNumber: "P-00001",
-      clusterId: "C-00001",
-      recordedDate: "20/01/2026",
+      recordedDate: "15/01/2026",
+      editedDate: "20/01/2026",
+      status: "complete",
     },
   ];
 
   const displayRecords = records.length > 0 ? records : defaultRecords;
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "complete":
+        return "bg-green-100 text-green-700";
+      case "incomplete":
+        return "bg-orange-100 text-orange-700";
+      case "pending":
+        return "bg-gray-100 text-gray-700";
+      default:
+        return "bg-gray-100 text-gray-700";
+    }
+  };
+
+  const getStatusLabel = (status: string) => {
+    switch (status) {
+      case "complete":
+        return "Complete";
+      case "incomplete":
+        return "Incomplete";
+      case "pending":
+        return "Pending";
+      default:
+        return status;
+    }
+  };
 
   return (
     <div className="mx-auto max-w-6xl px-2 sm:px-4">
@@ -62,8 +91,8 @@ export default function ClusterRecordingCard({
             </div>
 
             <div>
-              <p className="text-muted-foreground text-xs">Cluster ID</p>
-              <p className="text-sm font-medium">{record.clusterId}</p>
+              <p className="text-muted-foreground text-xs">Record Date</p>
+              <p className="text-sm font-medium">{record.recordedDate}</p>
             </div>
 
             <div className="flex justify-end">
@@ -81,11 +110,16 @@ export default function ClusterRecordingCard({
 
           {/* Bottom Section */}
           <div className="flex flex-col items-start justify-between gap-2 text-xs sm:flex-row sm:items-center">
-            <p className="text-muted-foreground">Recorded: {record.recordedDate}</p>
+            <p className="text-muted-foreground">Edited:{record.editedDate}</p>
 
-            <div className="flex items-center gap-2">
-              <span className="text-muted-foreground">Progress</span>
-              <ProgressLight total={4} current={3} />
+            <div className="flex items-center gap-4">
+              <span
+                className={`rounded-full px-2 py-0.5 text-xs font-medium ${getStatusColor(
+                  record.status,
+                )}`}
+              >
+                {getStatusLabel(record.status)}
+              </span>
             </div>
           </div>
         </Card>
@@ -93,4 +127,3 @@ export default function ClusterRecordingCard({
     </div>
   );
 }
-
