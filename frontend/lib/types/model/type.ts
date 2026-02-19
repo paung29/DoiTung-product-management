@@ -47,3 +47,8 @@ export type PreHarvestRecordingFormType = {
   pods_removed: string;
   plants_with_pods_removed: string;
 };
+
+export type HarvestAndGradingSearchForm = {
+  location: string;
+  pole_id: string;
+}
