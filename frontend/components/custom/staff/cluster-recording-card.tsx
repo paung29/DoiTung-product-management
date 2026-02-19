@@ -16,7 +16,7 @@ export default function ClusterRecordingCard() {
                             <th className="text-left">Location</th>
                             <th className="text-left">Pole Number</th>
                             <th className="text-left">Cluster ID</th>
-                            <th ><CustomButton label="Edit" icon={Edit} onClick={() => {}} /></th>
+                            <th ><CustomButton label="Edit"  icon={Edit} onClick={() => {}} /></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -35,7 +35,7 @@ export default function ClusterRecordingCard() {
 
                     <div className="flex gap-2">
                         <h1>Progress </h1>
-                        <ProgressLight total={4} current={3} />
+                        <ProgressLight total={5} current={3} />
                     </div>
                 </div>
             </div>

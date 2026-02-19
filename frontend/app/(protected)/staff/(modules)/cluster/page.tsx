@@ -5,7 +5,7 @@ import StaffContent from "./layout";
 export default function ClusterEntryPage() {
   return (
     <div className="space-y-4 sm:space-y-6">
-      <h1 className="text-lg sm:text-2xl font-semibold">Cluster Entry Page</h1>
+      
 
       <StaffContent>
         <ClusterSearch />
