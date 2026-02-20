@@ -1,5 +1,19 @@
+"use client";
+
 import LanguageSwitch from "@/components/custom/staff/language-switch";
-import StaffMenu from "@/components/custom/staff/menu";
+import StaffMenu, { MenuItem } from "@/components/custom/staff/menu";
+import {
+  ChartColumn,
+  FileChartColumn,
+  Folder,
+  History,
+  Home,
+  LayoutDashboardIcon,
+  MapPin,
+  Package,
+  User,
+  Users2,
+} from "lucide-react";
 import Image from "next/image";
 
 export default function ProtectedLayout({
@@ -7,13 +21,46 @@ export default function ProtectedLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const adminMenuItems: MenuItem[] = [
+    {
+      label: "Dashboard",
+      icon: LayoutDashboardIcon,
+      href: "/admin/dashboard",
+    },
+    {
+      label: "User Management",
+      icon: Users2,
+      href: "/admin/user-management",
+    },
+    {
+      label: "Production Analytics",
+      icon: ChartColumn,
+      href: "/admin/production-analytics",
+    },
+    {
+      label: "Zone & Form\nManagement",
+      icon: MapPin,
+      href: "/admin/zone-form-management",
+    },
+    {
+      label: "Inventory & \nDistribution",
+      icon: Package,
+      href: "/admin/inventory-distribution",
+    },
+    {
+      label: "Reports & Export",
+      icon: FileChartColumn,
+      href: "/admin/reports-export",
+    },
+  ];
+
   return (
     <div className="bg-staff-backdrop min-h-screen">
       <header className="sticky top-0 z-50 h-auto w-full bg-yellow-900 px-3 py-2 text-white sm:h-16 sm:px-4 sm:py-3 md:h-20 md:px-6 md:py-4">
         <div className="flex h-full items-center justify-between gap-2 sm:gap-3 md:gap-4">
           {/* LEFT */}
           <div className="flex min-w-fit items-center gap-2 sm:gap-3 md:gap-4">
-            <StaffMenu />
+            <StaffMenu menuItems={adminMenuItems} title="Admin Menu" />
             <Image
               src="/logo.png"
               alt="Logo"
@@ -28,7 +75,9 @@ export default function ProtectedLayout({
             <h1 className="truncate text-sm font-semibold sm:text-base md:text-xl">
               Vanilla Product Management
             </h1>
-            <p className="hidden text-xs sm:text-sm md:block">Staff Portal</p>
+            <p className="hidden text-xs sm:text-sm md:block">
+              Admin Dashboard
+            </p>
           </div>
 
           {/* RIGHT */}
