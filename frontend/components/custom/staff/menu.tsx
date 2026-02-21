@@ -18,7 +18,7 @@ type MenuProps = {
   title: string;
 };
 
-export default function StaffMenu({ menuItems, title }: MenuProps) {
+export default function Menu({ menuItems, title }: MenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
 

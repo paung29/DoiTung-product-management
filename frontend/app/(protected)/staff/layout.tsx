@@ -1,7 +1,7 @@
 "use client";
 
 import LanguageSwitch from "@/components/custom/staff/language-switch";
-import StaffMenu, { MenuItem } from "@/components/custom/staff/menu";
+import Menu, { MenuItem } from "@/components/custom/staff/menu";
 import { Folder, History, Home, User } from "lucide-react";
 import Image from "next/image";
 
@@ -31,7 +31,7 @@ export default function ProtectedLayout({
         <div className="flex h-full items-center justify-between gap-2 sm:gap-3 md:gap-4">
           {/* LEFT */}
           <div className="flex min-w-fit items-center gap-2 sm:gap-3 md:gap-4">
-            <StaffMenu menuItems={staffMenuItems} title="Staff Menu" />
+            <Menu menuItems={staffMenuItems} title="Staff Menu" />
             <Image
               src="/logo.png"
               alt="Logo"
