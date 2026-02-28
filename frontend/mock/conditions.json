@@ -1,0 +1,14 @@
+[
+  {
+    "condition_id": "COND001",
+    "condition": "GOOD"
+  },
+  {
+    "condition_id": "COND002",
+    "condition": "INJECT"
+  },
+  {
+    "condition_id": "COND003",
+    "condition": "ROTTEN"
+  }
+]

@@ -1,0 +1,38 @@
+[
+  {
+    "pole_id": "POLE001",
+    "zone_id": "ZONE001",
+    "pole_name": "Pole A1",
+    "unique_code_id": "P-00001"
+  },
+  {
+    "pole_id": "POLE002",
+    "zone_id": "ZONE001",
+    "pole_name": "Pole A2",
+    "unique_code_id": "P-00002"
+  },
+  {
+    "pole_id": "POLE003",
+    "zone_id": "ZONE001",
+    "pole_name": "Pole A3",
+    "unique_code_id": "P-00003"
+  },
+  {
+    "pole_id": "POLE004",
+    "zone_id": "ZONE002",
+    "pole_name": "Pole B1",
+    "unique_code_id": "P-00004"
+  },
+  {
+    "pole_id": "POLE005",
+    "zone_id": "ZONE002",
+    "pole_name": "Pole B2",
+    "unique_code_id": "P-00005"
+  },
+  {
+    "pole_id": "POLE006",
+    "zone_id": "ZONE003",
+    "pole_name": "Pole C1",
+    "unique_code_id": "P-00006"
+  }
+]

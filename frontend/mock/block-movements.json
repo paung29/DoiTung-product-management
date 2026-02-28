@@ -1,0 +1,35 @@
+[
+  {
+    "movement_id": "MVT001",
+    "location_id": "LOC001",
+    "movement_type_id": "MVTTYPE001",
+    "stock_name": "Vanilla Seeds A",
+    "stock_item_id": "STOCK001",
+    "quantity_in_grams": 500,
+    "price_per_gram": 25.5,
+    "recorded_by": "ACC001",
+    "recorded_date": "2026-01-15"
+  },
+  {
+    "movement_id": "MVT002",
+    "location_id": "LOC002",
+    "movement_type_id": "MVTTYPE002",
+    "stock_name": "Vanilla Fertilizer B",
+    "stock_item_id": "STOCK002",
+    "quantity_in_grams": 1000,
+    "price_per_gram": 5.75,
+    "recorded_by": "ACC002",
+    "recorded_date": "2026-01-20"
+  },
+  {
+    "movement_id": "MVT003",
+    "location_id": "LOC001",
+    "movement_type_id": "MVTTYPE003",
+    "stock_name": "Vanilla Seeds A",
+    "stock_item_id": "STOCK001",
+    "quantity_in_grams": 100,
+    "price_per_gram": 25.5,
+    "recorded_by": "ACC003",
+    "recorded_date": "2026-01-25"
+  }
+]

@@ -1,0 +1,26 @@
+[
+  {
+    "zone_id": "ZONE001",
+    "year_id": "YEAR001",
+    "zone_no": 1,
+    "zone_name": "Phamee Zone 1"
+  },
+  {
+    "zone_id": "ZONE002",
+    "year_id": "YEAR001",
+    "zone_no": 2,
+    "zone_name": "Phamee Zone 2"
+  },
+  {
+    "zone_id": "ZONE003",
+    "year_id": "YEAR001",
+    "zone_no": 3,
+    "zone_name": "Phamee Zone 3"
+  },
+  {
+    "zone_id": "ZONE004",
+    "year_id": "YEAR002",
+    "zone_no": 1,
+    "zone_name": "Phamee Zone 1"
+  }
+]

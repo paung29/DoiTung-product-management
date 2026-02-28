@@ -1,0 +1,22 @@
+[
+  {
+    "location_id": "LOC001",
+    "location_name": "Phamee Zone 1"
+  },
+  {
+    "location_id": "LOC002",
+    "location_name": "Phamee Zone 2"
+  },
+  {
+    "location_id": "LOC003",
+    "location_name": "Phamee Zone 3"
+  },
+  {
+    "location_id": "LOC004",
+    "location_name": "Northern Block"
+  },
+  {
+    "location_id": "LOC005",
+    "location_name": "Southern Block"
+  }
+]

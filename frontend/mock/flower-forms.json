@@ -1,0 +1,42 @@
+[
+  {
+    "flower_form_id": "FF001",
+    "cluster_id": "CLUSTER001",
+    "recorded_by": "ACC002",
+    "recorded_date": "2026-02-10",
+    "number_of_flower": 12,
+    "healthy_flower": 10,
+    "defected_flower": 2,
+    "details": "Good flower development with minor defects"
+  },
+  {
+    "flower_form_id": "FF002",
+    "cluster_id": "CLUSTER002",
+    "recorded_by": "ACC003",
+    "recorded_date": "2026-02-12",
+    "number_of_flower": 14,
+    "healthy_flower": 13,
+    "defected_flower": 1,
+    "details": "Excellent flower count and health"
+  },
+  {
+    "flower_form_id": "FF003",
+    "cluster_id": "CLUSTER003",
+    "recorded_by": "ACC002",
+    "recorded_date": "2026-02-15",
+    "number_of_flower": 11,
+    "healthy_flower": 9,
+    "defected_flower": 2,
+    "details": "Average flower development"
+  },
+  {
+    "flower_form_id": "FF004",
+    "cluster_id": "CLUSTER004",
+    "recorded_by": "ACC003",
+    "recorded_date": "2026-02-18",
+    "number_of_flower": 8,
+    "healthy_flower": 6,
+    "defected_flower": 2,
+    "details": "Below average flower count"
+  }
+]

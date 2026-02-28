@@ -1,0 +1,14 @@
+[
+  {
+    "year_id": "YEAR001",
+    "yod_status": "ACTIVE",
+    "yof_uri_on_folderscan": "http://example.com/forms/year_2026",
+    "yoer_admin_folderscan": "admin_folder_2026"
+  },
+  {
+    "year_id": "YEAR002",
+    "yod_status": "INACTIVE",
+    "yof_uri_on_folderscan": "http://example.com/forms/year_2025",
+    "yoer_admin_folderscan": "admin_folder_2025"
+  }
+]

@@ -1,0 +1,22 @@
+[
+  {
+    "movement_type_id": "MVTTYPE001",
+    "movement_type": "ENTRY-CHIT",
+    "description": "Entry stock movement"
+  },
+  {
+    "movement_type_id": "MVTTYPE002",
+    "movement_type": "ISSUANCE",
+    "description": "Issuance of stock"
+  },
+  {
+    "movement_type_id": "MVTTYPE003",
+    "movement_type": "RETURN",
+    "description": "Return of stock"
+  },
+  {
+    "movement_type_id": "MVTTYPE004",
+    "movement_type": "ADJUSTMENT",
+    "description": "Stock adjustment"
+  }
+]
