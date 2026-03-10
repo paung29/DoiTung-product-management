@@ -52,3 +52,21 @@ export type HarvestAndGradingSearchForm = {
   location: string;
   pole_id: string;
 }
+
+export type ActiveYearFrom = {
+  year: string;
+}
+
+export type InventoryCategory = "carry-over" | "incoming" | "issued";
+
+export type InventoryForm = {
+  date : string;
+  category : InventoryCategory;
+  grade : string
+  plantationYear : string;
+  plantationArea : string;
+  numberOfPods : string;
+  pricePerGram ?: string;
+  amount : string;
+  Remarks : string;
+}
