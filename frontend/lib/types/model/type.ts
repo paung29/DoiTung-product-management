@@ -70,3 +70,12 @@ export type InventoryForm = {
   amount : string;
   Remarks : string;
 }
+
+export type DistributionHistorySearchForm = {
+  startDate: string;
+  endDate: string;
+  category: InventoryCategory
+  grade: string;
+  productionYear: string;
+  plantationArea: string;
+}

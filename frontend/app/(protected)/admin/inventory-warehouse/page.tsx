@@ -1,6 +1,7 @@
 "use client"
 
 import AdminCustomTabs from "@/components/custom/admin/admin-custom-tabs";
+import DistributionHistory from "@/components/custom/admin/distribution-history";
 import InventorySaleForm from "@/components/custom/admin/inventory-sale-form";
 import SelectYearCard from "@/components/custom/admin/select-year-card";
 import { TabsContent } from "@/components/ui/tabs";
@@ -48,7 +49,7 @@ export default function InventoryAndWarehouses() {
                 </TabsContent>
 
                 <TabsContent value="history">
-                    <div>History UI here</div>
+                    <DistributionHistory />
                 </TabsContent>
             </AdminCustomTabs>
         </>
