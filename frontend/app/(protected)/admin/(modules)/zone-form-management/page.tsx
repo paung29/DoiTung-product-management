@@ -1,7 +1,11 @@
-import React from "react";
+import ZoneAndFormLayoutComponent from "@/components/custom/admin/zone&form/ZoneAndFormLayout";
 
-function ZoneAndFormManagementPage() {
-  return <div>ZoneAndFormManagementPage</div>;
+export default function ZoneAndFormManagementPage() {
+  return (
+    <>
+      <ZoneAndFormLayoutComponent>
+        <div>{/* page content here */}</div>
+      </ZoneAndFormLayoutComponent>
+    </>
+  );
 }
-
-export default ZoneAndFormManagementPage;
