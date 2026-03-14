@@ -1,9 +1,27 @@
 import { CreateOrEditZoneButton } from "@/components/custom/admin/zone&form/CreateNewZoneButton";
+import {
+  ZoneTable,
+  ZoneTableDataType,
+} from "@/components/custom/admin/zone&form/zoneTable";
+
 import ZoneTotalCard from "@/components/custom/admin/zone&form/ZoneTotalCard";
 import { Flower, MapPin } from "lucide-react";
-import React from "react";
 
 function ZoneManagementPage() {
+  const zoneTableData: ZoneTableDataType[] = [
+    {
+      zone_name: "Zone 1",
+      total_plants: 10,
+    },
+    {
+      zone_name: "Zone 2",
+      total_plants: 20,
+    },
+    {
+      zone_name: "Zone 3",
+      total_plants: 30,
+    },
+  ];
   return (
     <>
       <div className="flex flex-col gap-4 pt-4">
@@ -14,7 +32,8 @@ function ZoneManagementPage() {
           </div>
           <CreateOrEditZoneButton />
         </div>
-        <div className="">Table</div>
+        {/* Table */}
+        <ZoneTable zoneTableData={zoneTableData} />
       </div>
     </>
   );

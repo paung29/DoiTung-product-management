@@ -92,7 +92,7 @@ export function CreateOrEditZoneButton({
                 className="bg-primary-button hover:bg-primary-button hover:opacity-90 hover:shadow-lg"
                 type="submit"
               >
-                {isEdit ? "Edit" : "Create"} Zone
+                {isEdit ? "Save Changes" : "Create Zone"}
               </Button>
             </DialogFooter>
           </form>
