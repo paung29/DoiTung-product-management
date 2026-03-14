@@ -56,7 +56,7 @@ export function CreateOrEditZoneButton({
         )}
       </DialogTrigger>
 
-      <DialogContent className="text-primary-button bg-soft-secondary border-primary border-1 sm:max-w-sm">
+      <DialogContent className="text-primary-button bg-soft-secondary border-primary border sm:max-w-sm">
         <DialogHeader>
           <DialogTitle className="text-2xl">
             {isEdit ? "Edit Zone" : "Create New Zone"}{" "}
