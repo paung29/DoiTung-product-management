@@ -1,6 +1,6 @@
 import YearTable, {
   YearTableDataType,
-} from "@/components/custom/admin/zone&form/yearTable";
+} from "@/components/custom/admin/zone&form/year-table";
 import React from "react";
 
 function FormManagementPage() {

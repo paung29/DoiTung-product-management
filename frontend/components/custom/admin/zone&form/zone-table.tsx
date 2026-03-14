@@ -7,8 +7,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { CreateOrEditZoneButton } from "./CreateNewZoneButton";
-import { DeleteZoneButton } from "./deleteZoneButton";
+import { CreateOrEditZoneButton } from "./create-new-zone-button";
+import { DeleteZoneButton } from "./delete-zone-button";
 
 export type ZoneTableDataType = {
   zone_name: string;

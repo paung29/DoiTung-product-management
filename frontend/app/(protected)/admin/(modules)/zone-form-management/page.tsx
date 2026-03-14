@@ -1,4 +1,4 @@
-import ZoneAndFormLayoutComponent from "@/components/custom/admin/zone&form/ZoneAndFormLayout";
+import ZoneAndFormLayoutComponent from "@/components/custom/admin/zone&form/zone-and-form-layout";
 
 export default function ZoneAndFormManagementPage() {
   return (

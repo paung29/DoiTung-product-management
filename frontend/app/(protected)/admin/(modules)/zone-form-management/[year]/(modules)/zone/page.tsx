@@ -1,10 +1,10 @@
-import { CreateOrEditZoneButton } from "@/components/custom/admin/zone&form/CreateNewZoneButton";
+import { CreateOrEditZoneButton } from "@/components/custom/admin/zone&form/create-new-zone-button";
 import {
   ZoneTable,
   ZoneTableDataType,
-} from "@/components/custom/admin/zone&form/zoneTable";
+} from "@/components/custom/admin/zone&form/zone-table";
+import ZoneTotalCard from "@/components/custom/admin/zone&form/zone-total-card";
 
-import ZoneTotalCard from "@/components/custom/admin/zone&form/ZoneTotalCard";
 import { Flower, MapPin } from "lucide-react";
 
 function ZoneManagementPage() {

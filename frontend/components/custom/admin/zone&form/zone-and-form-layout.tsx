@@ -1,7 +1,7 @@
 "use client";
 import { ChevronDown, Layers } from "lucide-react";
 import React, { ReactNode, useState } from "react";
-import YearPickerDialog from "./YearPickDialogue";
+import YearPickerDialog from "./year-pick-dialogue";
 import { useRouter } from "next/navigation";
 
 type Props = {
