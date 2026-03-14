@@ -67,6 +67,7 @@ export function CreateOrEditZoneButton({
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <FieldGroup>
               <FormsInput
+                inputClassName="bg-white"
                 control={form.control}
                 path="zone_name"
                 label="Zone Name"
@@ -74,6 +75,7 @@ export function CreateOrEditZoneButton({
                 placeholder="Eg: Zone-1"
               />
               <FormsInput
+                inputClassName="bg-white"
                 control={form.control}
                 path="total_plants"
                 label="Total Plants"

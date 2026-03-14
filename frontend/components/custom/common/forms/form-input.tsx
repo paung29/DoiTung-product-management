@@ -18,8 +18,7 @@ type FormsInputPops<T extends FieldValues> = {
   className?: string;
   inputClassName?: string;
   placeholder?: string;
-  disabled?: boolean;
-  value?: string;
+  readonly?: boolean;
 };
 
 export default function FormsInput<T extends FieldValues>({
@@ -30,8 +29,7 @@ export default function FormsInput<T extends FieldValues>({
   className,
   placeholder,
   inputClassName,
-  disabled,
-  value,
+  readonly,
 }: FormsInputPops<T>) {
   return (
     <FormField
@@ -47,8 +45,7 @@ export default function FormsInput<T extends FieldValues>({
               type={type}
               placeholder={placeholder || `Enter ${label || "input"}`}
               className={cn("w-full", inputClassName)}
-              disabled={disabled}
-              value={value}
+              readOnly={readonly}
             />
           </FormControl>
           <FormMessage />

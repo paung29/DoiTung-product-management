@@ -1,9 +1,8 @@
 import FormTable, {
   FormTableDataType,
 } from "@/components/custom/admin/zone&form/form-table";
-import YearTable, {
-  YearTableDataType,
-} from "@/components/custom/admin/zone&form/year-table";
+import ZoneTotalCard from "@/components/custom/admin/zone&form/zone-total-card";
+import { Activity } from "lucide-react";
 import React from "react";
 
 function FormManagementPage() {
@@ -22,7 +21,7 @@ function FormManagementPage() {
     {
       form_id: 4,
       form_name: "Pod Form",
-      active_status: false,
+      active_status: true,
     },
     {
       form_id: 5,
@@ -38,9 +37,11 @@ function FormManagementPage() {
   return (
     <>
       <div className="flex flex-col gap-4">
-        <button className="bg-primary-button m-4 w-60 rounded-lg px-4 py-2 text-white">
-          Add New Form +
-        </button>
+        <ZoneTotalCard
+          title={"Active Zone"}
+          total={formTableData.filter((f) => f.active_status).length}
+          icon={Activity}
+        />
         <FormTable formTableData={formTableData} />
       </div>
     </>

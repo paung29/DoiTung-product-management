@@ -70,7 +70,8 @@ export function EditFormButton({
               <FormsInput type="hidden" control={form.control} path="form_id" />
 
               <FormsInput
-                disabled
+                inputClassName="bg-white"
+                readonly
                 control={form.control}
                 path="form_name"
                 label="Form Name"
@@ -78,6 +79,7 @@ export function EditFormButton({
               />
 
               <CustomSelect
+                triggerClassName="bg-white"
                 control={form.control}
                 path="active_status"
                 label="Active Status"
