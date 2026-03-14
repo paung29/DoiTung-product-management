@@ -139,6 +139,8 @@
   --color-staff-success: #3a835d;
   --color-staff-failed: #c32527;
   --color-staff-disable: #717182;
+  --color-success: #3a835d;
+  --color-soft-success: #dcfce7;
 }
 
 /* globals.css */
