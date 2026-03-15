@@ -79,3 +79,15 @@ export type DistributionHistorySearchForm = {
   productionYear: string;
   plantationArea: string;
 }
+};
+
+export type CreateOrEditZoneFormType = {
+  zone_name: string;
+  total_plants: string;
+};
+
+export type FormsEditType = {
+  form_id: number;
+  form_name: string;
+  active_status: string;
+};
