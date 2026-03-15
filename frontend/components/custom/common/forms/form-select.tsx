@@ -14,6 +14,7 @@ export type CustomSelectProps<T extends FieldValues> = {
     className ?: string
     triggerClassName?: string;  
     placeholder : string
+    onValueChange?: (value: string) => void;
 } 
 
 
@@ -25,7 +26,8 @@ export default function CustomSelect<T extends FieldValues> (
         label,
         className,
         triggerClassName,
-        placeholder
+        placeholder,
+        onValueChange
     } : CustomSelectProps<T>){
         
         return(
@@ -33,7 +35,11 @@ export default function CustomSelect<T extends FieldValues> (
                 <FormItem className={cn("", className)}>
                     {label && <FormLabel className="text-sm">{label}</FormLabel>}
 
-                    <Select value={field.value} onValueChange={field.onChange}>
+                    <Select value={field.value} 
+                        onValueChange={(value) => {
+                                    field.onChange(value);
+                                    onValueChange?.(value);
+                        }}>
                         <FormControl>
                             <SelectTrigger className={cn("w-full min-w-[180px] border truncate", "sm:min-w-[180px]", "focus:border-[#2B9B9B] focus-visible:ring-0", triggerClassName)} >
                                 <SelectValue className="truncate"  placeholder={placeholder}/>
