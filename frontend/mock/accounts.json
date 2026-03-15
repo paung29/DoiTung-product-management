@@ -1,0 +1,23 @@
+[
+  {
+    "account_id": "ACC001",
+    "name": "Admin User",
+    "email": "admin@doitung.com",
+    "password": "hashed_password_123",
+    "role_on_db": "ADMIN"
+  },
+  {
+    "account_id": "ACC002",
+    "name": "Staff User 1",
+    "email": "staff1@doitung.com",
+    "password": "hashed_password_456",
+    "role_on_db": "STAFF"
+  },
+  {
+    "account_id": "ACC003",
+    "name": "Staff User 2",
+    "email": "staff2@doitung.com",
+    "password": "hashed_password_789",
+    "role_on_db": "STAFF"
+  }
+]

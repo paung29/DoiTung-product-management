@@ -1,0 +1,38 @@
+[
+  {
+    "cluster_id": "CLUSTER001",
+    "pole_id": "POLE001",
+    "cluster_no": 1,
+    "unique_code_id": "C-00001"
+  },
+  {
+    "cluster_id": "CLUSTER002",
+    "pole_id": "POLE001",
+    "cluster_no": 2,
+    "unique_code_id": "C-00002"
+  },
+  {
+    "cluster_id": "CLUSTER003",
+    "pole_id": "POLE002",
+    "cluster_no": 1,
+    "unique_code_id": "C-00003"
+  },
+  {
+    "cluster_id": "CLUSTER004",
+    "pole_id": "POLE003",
+    "cluster_no": 1,
+    "unique_code_id": "C-00004"
+  },
+  {
+    "cluster_id": "CLUSTER005",
+    "pole_id": "POLE004",
+    "cluster_no": 1,
+    "unique_code_id": "C-00005"
+  },
+  {
+    "cluster_id": "CLUSTER006",
+    "pole_id": "POLE005",
+    "cluster_no": 1,
+    "unique_code_id": "C-00006"
+  }
+]

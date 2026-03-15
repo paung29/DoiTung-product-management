@@ -1,0 +1,42 @@
+[
+  {
+    "pre_harvest_form_id": "PRE001",
+    "cluster_id": "CLUSTER001",
+    "recorded_by": "ACC002",
+    "recorded_date": "2026-06-10",
+    "number_of_pods": 8,
+    "pre_harvest_pods": 7,
+    "rotten_pods": 1,
+    "details": "Good pod maturation"
+  },
+  {
+    "pre_harvest_form_id": "PRE002",
+    "cluster_id": "CLUSTER002",
+    "recorded_by": "ACC003",
+    "recorded_date": "2026-06-12",
+    "number_of_pods": 7,
+    "pre_harvest_pods": 6,
+    "rotten_pods": 1,
+    "details": "Acceptable pod condition"
+  },
+  {
+    "pre_harvest_form_id": "PRE003",
+    "cluster_id": "CLUSTER003",
+    "recorded_by": "ACC002",
+    "recorded_date": "2026-06-15",
+    "number_of_pods": 9,
+    "pre_harvest_pods": 8,
+    "rotten_pods": 1,
+    "details": "High yield expected"
+  },
+  {
+    "pre_harvest_form_id": "PRE004",
+    "cluster_id": "CLUSTER004",
+    "recorded_by": "ACC003",
+    "recorded_date": "2026-06-18",
+    "number_of_pods": 6,
+    "pre_harvest_pods": 5,
+    "rotten_pods": 1,
+    "details": "Lower pod count but healthy"
+  }
+]

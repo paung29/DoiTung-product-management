@@ -1,0 +1,38 @@
+[
+  {
+    "pollen_form_id": "PLN001",
+    "cluster_id": "CLUSTER001",
+    "recorded_by": "ACC002",
+    "recorded_date": "2026-02-10",
+    "unsaturated_pollination": 5,
+    "good_flowers": 10,
+    "condition": "natural"
+  },
+  {
+    "pollen_form_id": "PLN002",
+    "cluster_id": "CLUSTER002",
+    "recorded_by": "ACC003",
+    "recorded_date": "2026-02-12",
+    "unsaturated_pollination": 3,
+    "good_flowers": 13,
+    "condition": "natural"
+  },
+  {
+    "pollen_form_id": "PLN003",
+    "cluster_id": "CLUSTER003",
+    "recorded_by": "ACC002",
+    "recorded_date": "2026-02-15",
+    "unsaturated_pollination": 6,
+    "good_flowers": 9,
+    "condition": "natural"
+  },
+  {
+    "pollen_form_id": "PLN004",
+    "cluster_id": "CLUSTER004",
+    "recorded_by": "ACC003",
+    "recorded_date": "2026-02-18",
+    "unsaturated_pollination": 4,
+    "good_flowers": 6,
+    "condition": "manual"
+  }
+]

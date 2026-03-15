@@ -1,0 +1,46 @@
+[
+  {
+    "cluster_form_id": "CF001",
+    "cluster_id": "CLUSTER001",
+    "recorded_by": "ACC002",
+    "recorded_date": "2026-02-10",
+    "number_of_pistil_id": 45,
+    "grade": "A",
+    "inspection_type_grum": 150,
+    "price_per_gram": 18.5,
+    "details": "High quality cluster with good development"
+  },
+  {
+    "cluster_form_id": "CF002",
+    "cluster_id": "CLUSTER002",
+    "recorded_by": "ACC002",
+    "recorded_date": "2026-02-12",
+    "number_of_pistil_id": 38,
+    "grade": "B",
+    "inspection_type_grum": 120,
+    "price_per_gram": 16.75,
+    "details": "Moderate quality cluster"
+  },
+  {
+    "cluster_form_id": "CF003",
+    "cluster_id": "CLUSTER003",
+    "recorded_by": "ACC003",
+    "recorded_date": "2026-02-15",
+    "number_of_pistil_id": 52,
+    "grade": "A+",
+    "inspection_type_grum": 180,
+    "price_per_gram": 22.0,
+    "details": "Excellent quality cluster"
+  },
+  {
+    "cluster_form_id": "CF004",
+    "cluster_id": "CLUSTER004",
+    "recorded_by": "ACC002",
+    "recorded_date": "2026-02-18",
+    "number_of_pistil_id": 35,
+    "grade": "C",
+    "inspection_type_grum": 95,
+    "price_per_gram": 14.5,
+    "details": "Lower quality cluster with some defects"
+  }
+]
