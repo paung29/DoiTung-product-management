@@ -40,7 +40,8 @@ function ClusterRecordingForm() {
             <StaffFormTitle isRequired={true} title={"Location"} />
 
             <CustomSelect
-              className="bg-staff-form-field w-full appearance-none rounded-lg px-4 py-3 pr-10 text-sm text-[#2d201b] outline-none"
+              triggerClassName="bg-staff-form-field"
+              className="w-full appearance-none rounded-lg px-4 py-3 pr-10 text-sm text-[#2d201b] outline-none"
               control={form.control}
               path="location"
               placeholder="Select Location"

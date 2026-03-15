@@ -51,4 +51,15 @@ export type PreHarvestRecordingFormType = {
 export type HarvestAndGradingSearchForm = {
   location: string;
   pole_id: string;
-}
+};
+
+export type CreateOrEditZoneFormType = {
+  zone_name: string;
+  total_plants: string;
+};
+
+export type FormsEditType = {
+  form_id: number;
+  form_name: string;
+  active_status: string;
+};
