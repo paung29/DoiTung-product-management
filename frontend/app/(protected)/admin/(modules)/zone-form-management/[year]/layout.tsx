@@ -1,16 +1,19 @@
+"use client";
+import { TabSelection } from "@/components/custom/admin/zone&form/tab-selection";
 import ZoneAndFormLayoutComponent from "@/components/custom/admin/zone&form/zone-and-form-layout";
+import { useParams } from "next/navigation";
 
-async function ZoneAndFormManagementPage({
-  params,
+function ZoneAndFormManagementPage({
   children,
 }: {
-  params: Promise<{ year: string }>;
   children: React.ReactNode;
 }) {
-  const resolvedParams = await params;
+  const param = useParams();
+  const year = param.year as string;
   return (
     <>
-      <ZoneAndFormLayoutComponent selectedYear={resolvedParams.year}>
+      <ZoneAndFormLayoutComponent selectedYear={year}>
+        <TabSelection />
         {children}
       </ZoneAndFormLayoutComponent>
     </>

@@ -19,7 +19,7 @@ function YearManagementPage() {
   return (
     <>
       <div className="flex flex-col gap-4">
-        <button className="bg-success m-4 w-60 self-end rounded-lg px-4 py-2 text-white">
+        <button className="bg-success mt-4 w-60 self-end rounded-lg px-4 py-2 text-white">
           Add New Year +
         </button>
         <YearTable yearTableData={yearData} />
