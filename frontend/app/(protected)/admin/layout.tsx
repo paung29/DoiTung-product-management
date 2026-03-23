@@ -5,13 +5,9 @@ import Menu, { MenuItem } from "@/components/custom/staff/menu";
 import {
   ChartColumn,
   FileChartColumn,
-  Folder,
-  History,
-  Home,
   LayoutDashboardIcon,
   MapPin,
   Package,
-  User,
   Users2,
 } from "lucide-react";
 import Image from "next/image";
@@ -21,6 +17,7 @@ export default function ProtectedLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const currentYear = new Date().getFullYear();
   const adminMenuItems: MenuItem[] = [
     {
       label: "Dashboard",
@@ -40,7 +37,7 @@ export default function ProtectedLayout({
     {
       label: "Zone & Form\nManagement",
       icon: MapPin,
-      href: "/admin/zone-form-management",
+      href: `/admin/zone-form-management/${currentYear}/year`,
     },
     {
       label: "Inventory & \nDistribution",
