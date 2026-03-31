@@ -1,8 +1,8 @@
 "use client";
 
-import { on } from "events";
 import { Search, Plus } from "lucide-react";
 import { useState } from "react";
+import CustomButton from "../common/custom-button";
 
 type Props = {
   onSearch: (keyword: string) => void;
@@ -31,20 +31,19 @@ export default function ToolBar({ onSearch, onCreate }: Props) {
       </div>
 
       {/* Search button */}
-      <button
+      <CustomButton
+        label="Search"
         onClick={submit}
-        className="rounded-xl bg-[#6B4423] px-10 py-3 font-medium text-white hover:opacity-90 active:opacity-80"
-      >
-        Search
-      </button>
+        className="bg-[#6B4423] px-10 text-white hover:opacity-90"
+      />
 
-      <button
+      {/* Create User button */}
+      <CustomButton
+        label="Create User"
+        icon={Plus}
         onClick={onCreate}
-        className="flex items-center gap-2 rounded-xl bg-[#6B4423] px-7 py-3 font-medium text-white hover:opacity-90 active:opacity-80"
-      >
-        <Plus size={18} />
-        Create User
-      </button>
+        className="bg-[#6B4423] px-7 text-white hover:opacity-90"
+      />
     </div>
   );
 }

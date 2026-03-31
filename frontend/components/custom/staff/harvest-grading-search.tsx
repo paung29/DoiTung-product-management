@@ -4,9 +4,20 @@ import { Option } from "@/lib/types/model/option";
 import CustomSelect from "../common/forms/form-select";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
-import { HarvestAndGradingSearchForm } from "@/lib/types/model/type";
 import FormsInput from "../common/forms/form-input";
 import CustomButton from "../common/custom-button";
+
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+const harvestSearchSchema = z.object({
+  location: z.string().min(1, "Location is required"),
+  pole_id: z
+    .string()
+    .min(1, "Pole ID is required")
+    .regex(/^P-\d+$/, "Pole ID must be like P-00001"),
+});
+
+type HarvestAndGradingSearchForm = z.infer<typeof harvestSearchSchema>;
 
 export default function HarvestAndGradingSearch() {
   const onSubmit = (data: HarvestAndGradingSearchForm) => {
@@ -14,6 +25,7 @@ export default function HarvestAndGradingSearch() {
   };
 
   const form = useForm<HarvestAndGradingSearchForm>({
+    resolver: zodResolver(harvestSearchSchema),
     defaultValues: {
       location: "",
       pole_id: "",

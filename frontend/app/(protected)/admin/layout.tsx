@@ -22,7 +22,7 @@ export default function ProtectedLayout({
     {
       label: "Dashboard",
       icon: LayoutDashboardIcon,
-      href: "/admin/dashboard",
+      href: "/admin",
     },
     {
       label: "User Management",

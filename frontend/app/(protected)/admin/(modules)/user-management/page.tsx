@@ -5,19 +5,9 @@ import accounts from "@/mock/accounts.json";
 import StatusCard from "@/components/custom/admin/statusCard";
 import CreateUserModal from "@/components/custom/admin/create-user-modal";
 import UsersTable from "@/components/custom/admin/users-table";
-import DeleteConfirmationDialog from "@/components/custom/admin/delete-confirmation-dialog";
 import { Account, getUserStatus } from "@/lib/types/model/account";
+import { CreateUserFormData } from "@/lib/types/model/type";
 import { Shield, UserCog, Users } from "lucide-react";
-
-interface CreateUserFormData {
-  name: string;
-  email: string;
-  password: string;
-  role: string;
-  status: string;
-  phone: string;
-  department: string;
-}
 
 function UserManage() {
   const { totalUsers, adminUsers, staffUsers } = getUserStatus();
@@ -25,49 +15,17 @@ function UserManage() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<Account | null>(null);
-  const [deleteConfirmation, setDeleteConfirmation] = useState<{
-    isOpen: boolean;
-    userId: string | null;
-    userName: string;
-  }>({
-    isOpen: false,
-    userId: null,
-    userName: "",
-  });
+
   const filtered = users;
 
   const handleCreateUser = (data: CreateUserFormData) => {
     console.log("Creating user:", data);
-    // TODO: API call
   };
 
   const handleEditUser = (user: Account) => {
     console.log("Editing user:", user);
     setEditingUser(user);
     setIsModalOpen(true);
-  };
-
-  const handleDeleteUser = (userId: string) => {
-    const user = users.find((u) => u.account_id === userId);
-    if (user) {
-      setDeleteConfirmation({
-        isOpen: true,
-        userId,
-        userName: user.name,
-      });
-    }
-  };
-
-  const handleConfirmDelete = () => {
-    if (deleteConfirmation.userId) {
-      console.log("Deleting user:", deleteConfirmation.userId);
-      // TODO:  API call
-    }
-    setDeleteConfirmation({ isOpen: false, userId: null, userName: "" });
-  };
-
-  const handleCancelDelete = () => {
-    setDeleteConfirmation({ isOpen: false, userId: null, userName: "" });
   };
 
   return (
@@ -100,11 +58,7 @@ function UserManage() {
           Showing {filtered.length} users
         </div>
 
-        <UsersTable
-          users={filtered}
-          onEdit={handleEditUser}
-          onDelete={handleDeleteUser}
-        />
+        <UsersTable users={filtered} onEdit={handleEditUser} />
       </div>
 
       <CreateUserModal
@@ -115,13 +69,6 @@ function UserManage() {
         }}
         onSubmit={handleCreateUser}
         editingUser={editingUser}
-      />
-
-      <DeleteConfirmationDialog
-        isOpen={deleteConfirmation.isOpen}
-        onConfirm={handleConfirmDelete}
-        onCancel={handleCancelDelete}
-        userName={deleteConfirmation.userName}
       />
     </div>
   );
