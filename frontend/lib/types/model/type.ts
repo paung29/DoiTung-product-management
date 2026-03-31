@@ -1,3 +1,14 @@
+// Form Types for User Management
+export type CreateUserFormData = {
+  name: string;
+  email: string;
+  password: string;
+  role: string;
+  status: string;
+  phone: string;
+  department: string;
+};
+
 export type ClusterSearchForm = {
   location: string;
   pole_id: string;
@@ -53,6 +64,22 @@ export type HarvestAndGradingSearchForm = {
   pole_id: string;
 };
 
+export type GradeEntry = {
+  grade: string;
+  minSize: string;
+  maxSize: string;
+  podsCount: string;
+  weight: string;
+};
+
+export type HarvestGradingRecordingFormData = {
+  gradeA_plus: GradeEntry;
+  gradeA: GradeEntry;
+  gradeB: GradeEntry;
+  gradeC: GradeEntry;
+  gradeD_plus: GradeEntry;
+};
+
 export type ActiveYearFrom = {
   year: string;
 };
@@ -90,3 +117,67 @@ export type FormsEditType = {
   form_name: string;
   active_status: string;
 };
+
+// Record Models
+export type HarvestGradingRecord = {
+  id: string;
+  no: number;
+  location: string;
+  poleNumber: string;
+  recordedDate: string;
+  editedDate: string;
+  status: "complete" | "incomplete" | "pending";
+};
+
+// Chart Types
+export interface ChartDataPoint {
+  year: string;
+  totalPods?: number;
+  abnormalPods?: number;
+  goodFlowers?: number;
+  deadFlowers?: number;
+  damagedClusters?: number;
+  rottenClusters?: number;
+  totalFlowerCluster?: number;
+  rottenFlowerCluster?: number;
+  damagedFlowerCluster?: number;
+  remainingFlowerCluster?: number;
+  totalFlowers?: number;
+  damageFlowers?: number;
+  goodPods?: number;
+  unsuccessfulPollination?: number;
+  defectivePods?: number;
+  totalPollinated?: number;
+  harvestedPods?: number;
+  gradeD?: number;
+  gradeD_plus?: number;
+  gradeA?: number;
+  gradeA_plus?: number;
+  gradeB?: number;
+  gradeBPlus?: number;
+  gradeC?: number;
+  nonproductivePoles?: number;
+  productivePoles?: number;
+  freshYield?: number;
+  driedYield?: number;
+  targetYield?: number;
+  estimatedYield?: number;
+  actualYield?: number;
+  efficiency?: number;
+  estimatedWeightPerPod?: number;
+  actualWeightPerPod?: number;
+  driedPodAfterProcessing?: number;
+  freshPodBeforeProcessing?: number;
+}
+
+export interface TooltipPayloadItem {
+  name: string;
+  value: number;
+  color: string;
+  payload?: ChartDataPoint;
+}
+
+export interface CustomTooltipProps {
+  active?: boolean;
+  payload?: TooltipPayloadItem[];
+}

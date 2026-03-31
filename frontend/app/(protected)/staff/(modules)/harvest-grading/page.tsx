@@ -4,7 +4,7 @@ import { useState } from "react";
 import HarvestGradingRecordingCard from "@/components/custom/staff/harvest-grading-recording-card";
 import HarvestAndGradingSearch from "@/components/custom/staff/harvest-grading-search";
 import HarvestGradingRecordingForm from "@/components/custom/staff/form/harvest-grading-recording-form";
-import type { HarvestGradingRecord } from "@/components/custom/staff/harvest-grading-recording-card";
+import type { HarvestGradingRecord } from "@/lib/types/model/type";
 
 export default function HarvestGradingEntryPage() {
   const [selectedRecord, setSelectedRecord] =

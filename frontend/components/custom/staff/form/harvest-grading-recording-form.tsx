@@ -4,68 +4,77 @@ import { Form } from "@/components/ui/form";
 import FormsInput from "../../common/forms/form-input";
 import CustomButton from "../../common/custom-button";
 import { X, Check } from "lucide-react";
-import type { HarvestGradingRecord } from "../harvest-grading-recording-card";
-
-interface GradeEntry {
-  grade: string;
-  minSize: string;
-  maxSize: string;
-  podsCount: string;
-  weight: string;
-}
-
-interface HarvestGradingRecordingFormData {
-  gradeA_plus: GradeEntry;
-  gradeA: GradeEntry;
-  gradeB: GradeEntry;
-  gradeC: GradeEntry;
-  gradeD_plus: GradeEntry;
-}
+import type { HarvestGradingRecord } from "@/lib/types/model/type";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 interface HarvestGradingRecordingFormProps {
   record?: HarvestGradingRecord | null;
   onBack?: () => void;
 }
 
+const gradeEntrySchema = z.object({
+  grade: z.string(),
+  podsCount: z
+    .any()
+    .transform((val) =>
+      typeof val === "string" ? parseInt(val, 10) : Number(val),
+    )
+    .refine((val): val is number => !isNaN(val), "Must be a valid number")
+    .refine(
+      (val): val is number => Number.isInteger(val),
+      "Must be a whole number",
+    )
+    .refine((val): val is number => val >= 0, "Must be ≥ 0"),
+  weight: z
+    .any()
+    .transform((val) =>
+      typeof val === "string" ? parseFloat(val) : Number(val),
+    )
+    .refine((val): val is number => !isNaN(val), "Must be a valid number")
+    .refine((val): val is number => val >= 0, "Must be ≥ 0"),
+});
+
+const harvestSchema = z.object({
+  gradeA_plus: gradeEntrySchema,
+  gradeA: gradeEntrySchema,
+  gradeB: gradeEntrySchema,
+  gradeC: gradeEntrySchema,
+  gradeD_plus: gradeEntrySchema,
+});
+
+type HarvestGradingRecordingFormData = z.infer<typeof harvestSchema>;
+
 export default function HarvestGradingRecordingForm({
   onBack = () => {},
 }: HarvestGradingRecordingFormProps) {
   const form = useForm<HarvestGradingRecordingFormData>({
+    resolver: zodResolver(harvestSchema),
     defaultValues: {
       gradeA_plus: {
         grade: "A+ (18+)",
-        minSize: "",
-        maxSize: "",
-        podsCount: "0",
-        weight: "0.0",
+        podsCount: 1,
+        weight: 0.0,
       },
       gradeA: {
         grade: "A (15-18)",
-        minSize: "",
-        maxSize: "",
-        podsCount: "0",
-        weight: "0.0",
+        podsCount: 1,
+        weight: 0.0,
       },
       gradeB: {
         grade: "B (12-15)",
-        minSize: "",
-        maxSize: "",
-        podsCount: "0",
-        weight: "0.0",
+        podsCount: 0,
+        weight: 0.0,
       },
       gradeC: {
         grade: "C (10-12)",
-        minSize: "",
-        maxSize: "",
-        podsCount: "0",
-        weight: "0.0",
+        podsCount: 0,
+        weight: 0.0,
       },
       gradeD_plus: {
         grade: "D+ (<10)",
-        minSize: "",
-        maxSize: "",
-        podsCount: "0",
-        weight: "0.0",
+        podsCount: 0,
+        weight: 0.0,
       },
     },
   });
@@ -118,7 +127,7 @@ export default function HarvestGradingRecordingForm({
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-6 rounded-b-2xl border-2 border-[#8a6752] bg-[#faf3e0] p-4 sm:p-8"
+          className="bg-secondary space-y-6 rounded-b-2xl border-2 border-[#8a6752] p-4 sm:p-8"
         >
           {/* Grade Enry Section */}
           <div className="space-y-4">
@@ -171,7 +180,7 @@ export default function HarvestGradingRecordingForm({
             </div>
           </div>
 
-          <div className="flex flex-col gap-3 border-t pt-6 sm:flex-row sm:justify-center">
+          <div className="flex flex-col gap-3 border-t pt-6 sm:flex-col sm:justify-center">
             <CustomButton
               label="Cancel"
               icon={X}

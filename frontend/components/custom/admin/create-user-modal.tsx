@@ -2,19 +2,63 @@
 
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@/components/ui/form";
 import { X } from "lucide-react";
 import { Account } from "@/lib/types/model/account";
 
-interface CreateUserFormData {
-  name: string;
-  email: string;
-  password: string;
-  role: string;
-  status: string;
-  phone: string;
-  department: string;
-}
+import CustomButton from "../common/custom-button";
+import FormsInput from "../common/forms/form-input";
+import { z } from "zod";
+
+const CreateUserSchema = z.object({
+  name: z
+    .string()
+    .min(1, "Name is required")
+    .min(2, "Name must be at least 2 characters")
+    .max(50, "Name must not exceed 50 characters")
+    .regex(/^[a-zA-Z\s]+$/, "Name can only contain letters and spaces"),
+
+  email: z
+    .string()
+    .min(1, "Email is required")
+    .email("Please enter a valid email address")
+    .max(100, "Email must not exceed 100 characters"),
+
+  password: z
+    .string()
+    .min(1, "Password is required")
+    .min(6, "Password must be at least 6 characters")
+    .max(100, "Password must not exceed 100 characters"),
+
+  role: z
+    .string()
+    .min(1, "Role is required")
+    .refine(
+      (val) => ["ADMIN", "STAFF"].includes(val),
+      "Role must be either ADMIN or STAFF",
+    ),
+
+  status: z
+    .string()
+    .min(1, "Status is required")
+    .refine(
+      (val) => ["Active", "Inactive"].includes(val),
+      "Status must be either Active or Inactive",
+    ),
+
+  phone: z
+    .string()
+    .optional()
+    .refine(
+      (val) => !val || /^[0-9\-+\s()]+$/.test(val),
+      "Phone number format is invalid",
+    ),
+
+  department: z.string().optional(),
+});
+
+type CreateUserFormData = z.infer<typeof CreateUserSchema>;
 
 interface CreateUserModalProps {
   isOpen: boolean;
@@ -30,6 +74,7 @@ export default function CreateUserModal({
   editingUser = null,
 }: CreateUserModalProps) {
   const form = useForm<CreateUserFormData>({
+    resolver: zodResolver(CreateUserSchema),
     defaultValues: {
       name: "",
       email: "",
@@ -41,7 +86,6 @@ export default function CreateUserModal({
     },
   });
 
-  // Update form values when editing user changes
   useEffect(() => {
     if (editingUser) {
       form.reset({
@@ -88,12 +132,12 @@ export default function CreateUserModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
       <div className="relative w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
         {/* Close Button */}
-        <button
+        <CustomButton
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
-        >
-          <X size={24} />
-        </button>
+          icon={X}
+          className="absolute top-4 right-4 bg-transparent p-0 hover:bg-transparent"
+          label=""
+        />
 
         {/* Title */}
         <h2 className="mb-6 text-2xl font-semibold text-gray-900">
@@ -113,42 +157,30 @@ export default function CreateUserModal({
             className="space-y-4"
           >
             {/* Name */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Name <span className="text-red-500">*</span>
-              </label>
-              <input
-                {...form.register("name", { required: true })}
-                placeholder="John Doe"
-                className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-yellow-900 focus:ring-1 focus:ring-yellow-900 focus:outline-none"
-              />
-            </div>
+            <FormsInput
+              control={form.control}
+              path="name"
+              label="Name"
+              placeholder="John Doe"
+            />
 
             {/* Email */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Email <span className="text-red-500">*</span>
-              </label>
-              <input
-                {...form.register("email", { required: true })}
-                type="email"
-                placeholder="john@doitung.com"
-                className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-yellow-900 focus:ring-1 focus:ring-yellow-900 focus:outline-none"
-              />
-            </div>
+            <FormsInput
+              control={form.control}
+              path="email"
+              label="Email"
+              placeholder="john@doitung.com"
+              type="email"
+            />
 
             {/* Password */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Password <span className="text-red-500">*</span>
-              </label>
-              <input
-                {...form.register("password", { required: true })}
-                type="password"
-                placeholder="Enter password"
-                className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-yellow-900 focus:ring-1 focus:ring-yellow-900 focus:outline-none"
-              />
-            </div>
+            <FormsInput
+              control={form.control}
+              path="password"
+              label="Password"
+              placeholder="Enter password"
+              type="password"
+            />
 
             {/* Role */}
             <div>
@@ -185,44 +217,25 @@ export default function CreateUserModal({
             </div>
 
             {/* Phone */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Phone
-              </label>
-              <input
-                {...form.register("phone")}
-                placeholder="081-234-5678"
-                className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-yellow-900 focus:ring-1 focus:ring-yellow-900 focus:outline-none"
-              />
-            </div>
-
-            {/* Department */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Department
-              </label>
-              <input
-                {...form.register("department")}
-                placeholder="Management"
-                className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-yellow-900 focus:ring-1 focus:ring-yellow-900 focus:outline-none"
-              />
-            </div>
+            <FormsInput
+              control={form.control}
+              path="phone"
+              label="Phone"
+              placeholder="081-234-5678"
+            />
 
             {/* Buttons */}
             <div className="flex gap-4 pt-6">
-              <button
-                type="button"
+              <CustomButton
+                label="Cancel"
                 onClick={onClose}
-                className="flex-1 rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-700 hover:bg-gray-50"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                className="flex-1 rounded-lg bg-yellow-900 px-4 py-2 text-white hover:bg-yellow-950"
-              >
-                {editingUser ? "Update" : "Create"}
-              </button>
+                className="flex-1 border border-gray-300 bg-white text-gray-700 hover:bg-gray-50"
+              />
+              <CustomButton
+                label={editingUser ? "Update" : "Create"}
+                onClick={form.handleSubmit(handleSubmit)}
+                className="flex-1 bg-yellow-900 text-white hover:bg-yellow-950"
+              />
             </div>
           </form>
         </Form>

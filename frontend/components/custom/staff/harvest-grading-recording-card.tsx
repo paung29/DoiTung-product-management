@@ -3,18 +3,7 @@
 import { Card } from "@/components/ui/card";
 import CustomButton from "../common/custom-button";
 import { Edit } from "lucide-react";
-
-interface HarvestGradingRecord {
-  id: string;
-  no: number;
-  location: string;
-  poleNumber: string;
-  recordedDate: string;
-  editedDate: string;
-  status: "complete" | "incomplete" | "pending";
-}
-
-export type { HarvestGradingRecord };
+import { HarvestGradingRecord } from "@/lib/types/model/type";
 
 interface HarvestGradingRecordingCardProps {
   records?: HarvestGradingRecord[];
@@ -25,7 +14,7 @@ export default function HarvestGradingRecordingCard({
   records = [],
   onEdit = () => {},
 }: HarvestGradingRecordingCardProps) {
-  // Default data
+  // Default
   const defaultRecords: HarvestGradingRecord[] = [
     {
       id: "1",
