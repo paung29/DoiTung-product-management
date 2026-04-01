@@ -2,7 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 import imgClusterForm from "@/public/StaffImage/cluster.svg";
 import imgFlowerForm from "@/public/StaffImage/flower.svg";
@@ -24,7 +24,11 @@ interface FormCard {
 
 function StaffHome() {
   const router = useRouter();
+  const params = useParams();
   const language: Lang = "en";
+
+  const year = params.year as string;
+  
 
   const getText = (key: string): string => {
     const translations: Record<Lang, Record<string, string>> = {
@@ -62,37 +66,37 @@ function StaffHome() {
       id: "cluster",
       titleKey: "clusterRecording",
       image: imgClusterForm,
-      path: "/staff/cluster",
+      path: `/staff/${year}/cluster`,
     },
     {
       id: "flower",
       titleKey: "flowerCluster",
       image: imgFlowerForm,
-      path: "/staff/flower",
+      path: `/staff/${year}/flower`,
     },
     {
       id: "pollination",
       titleKey: "pollinationForm",
       image: imgPollinationForm,
-      path: "/staff/pollination",
+      path: `/staff/${year}/pollination`,
     },
     {
       id: "pod",
       titleKey: "podSetting",
       image: imgPodForm,
-      path: "/staff/pod",
+      path: `/staff/${year}/pod`,
     },
     {
       id: "pre-harvest",
       titleKey: "preHarvest",
       image: imgPreharvestForm,
-      path: "/staff/pre-harvest",
+      path: `/staff/${year}/pre-harvest`,
     },
     {
       id: "harvest",
       titleKey: "harvestGrading",
       image: imgHarvestForm,
-      path: "/staff/harvest-grading",
+      path: `/staff/${year}/harvest-grading`,
     },
   ];
 

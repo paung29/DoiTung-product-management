@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import React from "react";
 import BackButton from "../../common/back-button";
 import FormIconTitles from "../../common/form-icon-titles";
@@ -21,6 +21,8 @@ function FormPageShell({
   children,
 }: FormPageShellProps) {
   const router = useRouter();
+  const param = useParams();
+  
 
   return (
     <>

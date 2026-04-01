@@ -30,8 +30,8 @@ export default function ClusterSearch() {
   return (
     <Form {...form}>
       
-        <form  className="w-full p-2 sm:p-4 mt-4">
-          <div  className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5 lg:items-end">
+        <form  className="w-full p-4 sm:p-6 mt-4">
+          <div  className="grid grid-cols-1 gap-y-5 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 xl:items-end">
             <CustomSelect className="w-full" control={form.control} path="location"  label="Location" placeholder="Select Location"
             options={[
               {id : "-1", value : "Select All"},
@@ -47,8 +47,8 @@ export default function ClusterSearch() {
               ...progressStatusOptions
             ]} />
 
-            <div className="w-full flex lg:justify-end">
-              <CustomButton label="Search" onClick={form.handleSubmit(onSubmit)} className="btn-primary  w-full lg:w-[180px]"/>
+            <div className="w-full flex items-end justify-end">
+              <CustomButton label="Search" onClick={form.handleSubmit(onSubmit)} className="btn-primary  w-full sm:w-[200px]"/>
             </div>
           </div>
 
