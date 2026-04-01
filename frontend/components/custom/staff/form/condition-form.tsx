@@ -2,6 +2,7 @@
 "use client";
 
 import { FormControl, FormField, FormItem } from "@/components/ui/form";
+import { ConditionOptions } from "@/lib/types/model/type";
 
 import { cn } from "@/lib/utils";
 import { Control, FieldValues, Path } from "react-hook-form";
@@ -19,13 +20,9 @@ export default function FormRadioCards<T extends FieldValues>({
   path,
   className,
 }: FormRadioCardsProps<T>) {
-  //Condition Options
-  const options = [
-    { id: "GOOD", value: "Good" },
-    { id: "INSECT", value: "Insect (Damaged Cluster)" },
-    { id: "ROTTEN", value: "Rotten (Damaged Cluster)" },
-  ];
 
+  const options = ConditionOptions
+  
   return (
     <FormField
       control={control}

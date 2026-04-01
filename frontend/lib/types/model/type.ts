@@ -9,6 +9,12 @@ export type CreateUserFormData = {
   department: string;
 };
 
+export const ConditionOptions = [
+    { id: "GOOD", value: "Good" },
+    { id: "INSECT", value: "Insect (Damaged Cluster)" },
+    { id: "ROTTEN", value: "Rotten (Damaged Cluster)" },
+  ];
+
 export type ClusterSearchForm = {
   location: string;
   pole_id: string;
@@ -22,6 +28,13 @@ export type ClusterRecordingFormType = {
   cluster_id: string;
   condition: string;
 };
+
+export type ClusterEditingView = {
+  location: string;
+  pole_id: string;
+  cluster_id: string;
+};
+
 
 export type FlowerRecordingFormType = {
   location: string;

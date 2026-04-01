@@ -1,7 +1,49 @@
 "use client";
 
-import FormPageShell from "@/components/custom/staff/form/form-page-shell";
-import { Plane } from "lucide-react";
+import BackButton from "@/components/custom/common/back-button";
+import CustomButton from "@/components/custom/common/custom-button";
+import FormIconTitles from "@/components/custom/common/form-icon-titles";
+import { ClipboardList, Flower2, LucideIcon, Package, Plane, Sprout } from "lucide-react";
+import { useParams, usePathname, useRouter } from "next/navigation";
+
+type PageConfig = {
+  title: string;
+  subtitle: string;
+  icon: LucideIcon;
+};
+
+const pageConfigMap: Record<string, PageConfig> = {
+  cluster: {
+    title: "Cluster Recording",
+    subtitle: "Record flower cluster data",
+    icon: Plane,
+  },
+  flower: {
+    title: "Flower Recording",
+    subtitle: "Record flower data",
+    icon: Flower2,
+  },
+  pollination: {
+    title: "Pollination Recording",
+    subtitle: "Record pollination data",
+    icon: ClipboardList,
+  },
+  pod: {
+    title: "Pod Setting",
+    subtitle: "Record pod setting data",
+    icon: Package,
+  },
+  "pre-harvest": {
+    title: "Pre-Harvest Recording",
+    subtitle: "Record pre-harvest data",
+    icon: Sprout,
+  },
+  "harvest-grading": {
+    title: "Harvest and Grading",
+    subtitle: "Record harvest and grading data",
+    icon: ClipboardList,
+  },
+};
 
 export default function StaffLayout({
   children,
@@ -12,30 +54,63 @@ export default function StaffLayout({
     window.history.back();
   };
 
+  const pathname = usePathname();
+  const router = useRouter();
+  const params = useParams();
+  const year = params.year as string;
+
+  const cleanPath = pathname.replace(/\/$/, "");
+
+  let currentModule = "";
+
+  if (cleanPath.includes("/cluster")) currentModule = "cluster";
+  else if (cleanPath.includes("/flower")) currentModule = "flower";
+  else if (cleanPath.includes("/pollination")) currentModule = "pollination";
+  else if (cleanPath.includes("/pod")) currentModule = "pod";
+  else if (cleanPath.includes("/pre-harvest")) currentModule = "pre-harvest";
+  else if (cleanPath.includes("/harvest-grading")) currentModule = "harvest-grading";
+
+   const { title, subtitle, icon } = pageConfigMap[currentModule] || {
+    title: "Staff Form",
+    subtitle: "Manage form data",
+    icon: ClipboardList,
+  };
+
+  const isClusterListPage = cleanPath === `/staff/${year}/cluster`;
+
+  const handleAdd = () => {
+    router.push(`/staff/${year}/cluster/cluster-form`);
+  };
+
+
   return (
-    // <div className="border rounded-md p-4 mt-10 ms-10 me-10" style={{ borderColor: "#6B4423" }}>
-    //     <div className="border-b-2" style={{ borderColor: "#6B4423" }}>
-    //         <div>
-    //             <h1>Cluster Recording</h1>
-    //             <h1>Record flower cluster data</h1>
-    //         </div>
 
-    //         <CustomButton label="Back" icon={ArrowLeft} onClick={handleBackClick} bgColor=""/>
-    //     </div>
+    <div className="bg-staff-backdrop border-primary-button
+                        mx-0 sm:mx-auto
+                        my-0 sm:my-15
+                        min-h-screen
+                        w-full sm:max-w-[80%]
+                        rounded-none sm:rounded-2xl
+                        border shadow-2xl">
+        <div className="bg-secondary border-primary-button
+                          flex h-16 items-center justify-between
+                          border-b
+                          px-4 sm:px-10
+                          rounded-none sm:rounded-t-2xl">
+          <FormIconTitles title={title} subtitle={subtitle} icon={icon} />
 
-    //     <main>
-    //         {children}
-    //     </main>
-    // </div>
+          <div className="flex items-center gap-3">
 
-    // eslint-disable-next-line react/no-children-prop
-    <FormPageShell
-      title={"Cluster Recording"}
-      subtitle={"Record flower cluster data"}
-      icon={Plane}
-      backHref={""}
-      // eslint-disable-next-line react/no-children-prop
-      children={children}
-    />
+            {isClusterListPage && (
+              <CustomButton label="Add" onClick={handleAdd} className="bg-green-700"/>
+            )}
+
+            <BackButton />
+          </div>
+
+        </div>
+        <div className="px-4 py-4 sm:px-10 sm:py-10">{children}</div>
+      </div>
+    
   );
 }

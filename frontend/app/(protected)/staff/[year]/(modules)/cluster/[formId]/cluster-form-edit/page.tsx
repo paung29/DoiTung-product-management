@@ -8,12 +8,16 @@ import FormCard from "@/components/custom/staff/form/form-card";
 import { StaffFormTitle } from "@/components/custom/staff/form/staff-form-title";
 import { Form } from "@/components/ui/form";
 import { Option } from "@/lib/types/model/option";
-import { ClusterRecordingFormType } from "@/lib/types/model/type";
+import { ClusterEditingView, ClusterRecordingFormType, ConditionOptions } from "@/lib/types/model/type";
 import { CircleCheck, CircleX } from "lucide-react";
+import { useParams } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
-function ClusterForm() {
+function ClusterFormEdit() {
+
+  const params = useParams();
+  const FormId = params.formId as string;
   
   const onSubmit = (data: ClusterRecordingFormType) => {
     console.log(data);
@@ -26,9 +30,20 @@ function ClusterForm() {
     { id: "zone-4", value: "Zone 4" },
   ];
 
+  const DummyData : ClusterRecordingFormType = {
+
+      location : "zone-1",
+      pole_id : "P-001",
+      cluster_id : "C-001",
+      condition : ConditionOptions[1].id
+    }
+  
+
   const [location, setLocation] = useState("");
 
-  const form = useForm<ClusterRecordingFormType>({});
+  const form = useForm<ClusterRecordingFormType>({
+    defaultValues : DummyData
+  });
 
   return (
     <Form {...form}>
@@ -104,4 +119,4 @@ function ClusterForm() {
   );
 }
 
-export default ClusterForm;
+export default ClusterFormEdit;
