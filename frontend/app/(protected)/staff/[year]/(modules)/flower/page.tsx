@@ -1,8 +1,21 @@
+"use client"
+
 import ClusterSearch from "@/components/custom/staff/cluster-search";
 import StaffContent from "../cluster/layout";
 import ClusterRecordingCard from "@/components/custom/staff/cluster-recording-card";
+import { useParams, useRouter } from "next/navigation";
 
 export default function FlowerEntryPage() {
+
+  const router = useRouter();
+  const params = useParams();
+  const year = params.year as string;
+  const Id = params.formId as string;
+
+  const onClick = () => {
+    router.push(`/staff/${year}/flower/1/flower-form`)
+  }
+
     return(
         <div className="space-y-4 sm:space-y-6">
               
@@ -13,12 +26,12 @@ export default function FlowerEntryPage() {
         
               <StaffContent>
                 <div className="space-y-4">
-                  <ClusterRecordingCard />
-                  <ClusterRecordingCard />
-                  <ClusterRecordingCard />
-                  <ClusterRecordingCard />
-                  <ClusterRecordingCard />
-                  <ClusterRecordingCard />
+                  <ClusterRecordingCard onEdit={onClick} />
+                  <ClusterRecordingCard onEdit={onClick} />
+                  <ClusterRecordingCard onEdit={onClick} />
+                  <ClusterRecordingCard onEdit={onClick} />
+                  <ClusterRecordingCard onEdit={onClick} />
+                  <ClusterRecordingCard onEdit={onClick} />
                 </div>
               </StaffContent>
         </div>

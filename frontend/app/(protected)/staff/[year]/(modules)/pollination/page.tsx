@@ -1,10 +1,39 @@
-import PollinationForm from "./pollination-form/page";
+"use client"
 
-export default function PollinationEntryPage() {
-  return (
-    <>
+import { useParams, useRouter } from "next/navigation";
+import StaffContent from "../cluster/layout";
+import ClusterSearch from "@/components/custom/staff/cluster-search";
+import ClusterRecordingCard from "@/components/custom/staff/cluster-recording-card";
 
-      <PollinationForm />
-    </>
-  );
+export default function FlowerEntryPage() {
+
+  const router = useRouter();
+  const params = useParams();
+  const year = params.year as string;
+  const Id = params.formId as string;
+
+  const onClick = () => {
+    router.push(`/staff/${year}/pollination/1/pollination-form`)
+  }
+
+    return(
+        <div className="space-y-4 sm:space-y-6">
+              
+        
+              <StaffContent>
+                <ClusterSearch />
+              </StaffContent>
+        
+              <StaffContent>
+                <div className="space-y-4">
+                  <ClusterRecordingCard onEdit={onClick} />
+                  <ClusterRecordingCard onEdit={onClick} />
+                  <ClusterRecordingCard onEdit={onClick} />
+                  <ClusterRecordingCard onEdit={onClick} />
+                  <ClusterRecordingCard onEdit={onClick} />
+                  <ClusterRecordingCard onEdit={onClick} />
+                </div>
+              </StaffContent>
+        </div>
+    )
 }
