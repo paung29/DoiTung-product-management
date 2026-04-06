@@ -4,14 +4,15 @@ import { LucideIcon } from "lucide-react";
 
 type CustomButtonProps = {
     label: string;
-    onClick: () => void;
+    onClick?: () => void;
     icon ?: LucideIcon;
     className?: string;
+    type?: "button" | "submit" | "reset";
 }
 
-export default function CustomButton({label, onClick, icon : Icon, className = ""}: CustomButtonProps) {
+export default function CustomButton({label, onClick, icon : Icon, className = "", type = "button"}: CustomButtonProps) {
     return (
-        <Button  onClick={onClick} className={`text-white hover:opacity-90 transition ${className}`}>
+        <Button type={type}  onClick={onClick} className={`text-white hover:opacity-90 transition ${className}`}>
             <h1>{label}</h1>
             {Icon && <Icon />}
         </Button>

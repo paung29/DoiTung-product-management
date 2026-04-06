@@ -12,6 +12,7 @@ import FormsInput from "../common/forms/form-input";
 
 import { Eye, EyeOff } from "lucide-react";
 import { z } from "zod";
+import { useRouter } from "next/navigation";
 
 const LoginSchema = z.object({
   email: z
@@ -22,7 +23,6 @@ const LoginSchema = z.object({
   password: z
     .string()
     .min(1, "Password is required")
-    .min(6, "Password must be at least 6 characters"),
 });
 
 type LoginFormData = z.infer<typeof LoginSchema>;
@@ -40,11 +40,17 @@ export function LoginForm() {
     },
   });
 
+  const router = useRouter();
+
   const onSubmit = async (data: LoginFormData) => {
     try {
       setError(null);
       setIsLoading(true);
-
+      if (data.password === "admin") {
+        router.push("/admin")
+      }else {
+        router.push("/staff/2025")
+      }
       console.log("Login data:", data);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Login failed");
