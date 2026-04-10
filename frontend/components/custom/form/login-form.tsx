@@ -13,6 +13,8 @@ import FormsInput from "../common/forms/form-input";
 import { Eye, EyeOff } from "lucide-react";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
+import { baseUrl } from "@/lib/utl";
+import { useAuthStore } from "@/lib/store/user-store";
 
 const LoginSchema = z.object({
   email: z
@@ -25,9 +27,20 @@ const LoginSchema = z.object({
     .min(1, "Password is required")
 });
 
+type UserInfoResponse = {
+    id : number;
+    email : string;
+    role : string;
+} 
+
 type LoginFormData = z.infer<typeof LoginSchema>;
 
+
 export function LoginForm() {
+
+
+  const setUser = useAuthStore((state) => state.setUser);
+
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -46,12 +59,49 @@ export function LoginForm() {
     try {
       setError(null);
       setIsLoading(true);
-      if (data.password === "admin") {
+      
+      const response = await fetch(`${baseUrl}/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          email: data.email,
+          password: data.password
+        })
+      })
+
+      const result = await response.json();
+
+      if(!response.ok) {
+        setError(result.message || "Login failed");
+        return;
+      }
+
+      const userInfoResponse = await fetch(`${baseUrl}/auth/me`, {
+        method: "GET",
+        credentials: "include"
+      })
+
+      if (!userInfoResponse.ok) {
+        setError("Failed to load account");
+        return;
+      }
+
+      const userInfoResult : UserInfoResponse = await userInfoResponse.json() as UserInfoResponse;
+
+      
+      console.log("User info:", userInfoResult);
+      setUser(userInfoResult);
+
+      if (userInfoResult.role === "ADMIN") {
         router.push("/admin")
-      }else {
+      } else {
         router.push("/staff/2025")
       }
-      console.log("Login data:", data);
+
+
     } catch (err) {
       setError(err instanceof Error ? err.message : "Login failed");
       console.error("Login error:", err);

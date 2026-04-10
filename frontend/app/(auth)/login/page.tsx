@@ -4,6 +4,8 @@ import LoginForm from "@/components/custom/form/login-form";
 import { LoginPhoto } from "@/components/custom/login/login-photo";
 
 export default function LoginPage() {
+
+
   return (
     <>
       <div className="flex flex-col h-screen">
