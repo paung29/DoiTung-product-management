@@ -210,3 +210,7 @@ export const WareHouseFormSchema = z.object({
 });
 
 export type WareHouseForm = z.infer<typeof WareHouseFormSchema>
+
+export type YearApiResponse = {
+    years: string[];
+}

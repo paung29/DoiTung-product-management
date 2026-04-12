@@ -98,7 +98,7 @@ export function LoginForm() {
       if (userInfoResult.role === "ADMIN") {
         router.push("/admin")
       } else {
-        router.push("/staff/2025")
+        router.push("/staff")
       }
 
 
