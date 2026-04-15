@@ -1,6 +1,8 @@
+import CreateYearButton from "@/components/custom/admin/zone&form/create-year-button";
 import YearTable, {
   YearTableDataType,
 } from "@/components/custom/admin/zone&form/year-table";
+import CustomButton from "@/components/custom/common/custom-button";
 import React from "react";
 
 function YearManagementPage() {
@@ -18,10 +20,10 @@ function YearManagementPage() {
   ];
   return (
     <>
-      <div className="flex flex-col gap-4">
-        <button className="bg-success mt-4 w-60 self-end rounded-lg px-4 py-2 text-white">
-          Add New Year +
-        </button>
+      <div className="flex flex-col">
+        <div className="flex h-[80px] flex-row items-end justify-end p-4">
+          <CreateYearButton />
+        </div>
         <YearTable yearTableData={yearData} />
       </div>
     </>
