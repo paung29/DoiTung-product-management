@@ -7,28 +7,70 @@ import ConditionForm from "@/components/custom/staff/form/condition-form";
 import FormCard from "@/components/custom/staff/form/form-card";
 import { StaffFormTitle } from "@/components/custom/staff/form/staff-form-title";
 import { Form } from "@/components/ui/form";
-import { Option } from "@/lib/types/model/option";
-import { ClusterRecordingFormType } from "@/lib/types/model/type";
+import { LocationOptionType, Option } from "@/lib/types/model/option";
+import { ClusterRecordingFormType, Zone, ZoneApiResponse } from "@/lib/types/model/type";
+import { baseUrl } from "@/lib/utl";
 import { CircleCheck, CircleX } from "lucide-react";
-import { useState } from "react";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 function ClusterForm() {
+
+  const [zones, setZones] = useState<Zone[]>([])
+
+  const params = useParams();
+  const year = params.year as string;
   
   const onSubmit = (data: ClusterRecordingFormType) => {
     console.log(data);
   };
 
-  const locations: Option[] = [
-    { id: "zone-1", value: "Zone 1" },
-    { id: "zone-2", value: "Zone 2" },
-    { id: "zone-3", value: "Zone 3" },
-    { id: "zone-4", value: "Zone 4" },
-  ];
+  const form = useForm<ClusterRecordingFormType>({
+    defaultValues: {
+      location: "",
+      pole_id: "",
+      cluster_id: "",
+      condition: ""
+    }
+  });
 
-  const [location, setLocation] = useState("");
 
-  const form = useForm<ClusterRecordingFormType>({});
+  useEffect(() => {
+    const fetchZones = async () => {
+      try{
+         const response = await fetch(`${baseUrl}/zones/get-all-zones?year=${year}`, {
+            method: "GET",
+            headers: {
+            "Content-Type": "application/json",
+          },
+            credentials: "include"
+         })
+
+         if (!response.ok) {
+           throw new Error("Failed to fetch zones");
+         }
+
+         const data : ZoneApiResponse= await response.json()
+
+         setZones(data.zones ?? []);
+
+      }catch(error){
+        console.error("Error fetching zones:", error);
+        setZones([]);
+      }
+    };
+
+    if (year) {
+      fetchZones();
+    }
+
+  }, [year]);
+
+  const locationOptions: Option[] = (zones ?? []).map((zone) => ({
+    id: String(zone.zoneId),
+    value: String(zone.zoneId),
+  }));
 
   return (
     <Form {...form}>
@@ -44,7 +86,7 @@ function ClusterForm() {
               control={form.control}
               path="location"
               placeholder="Select Location"
-              options={locations}
+              options={locationOptions}
             />
           </FormCard>
         </div>

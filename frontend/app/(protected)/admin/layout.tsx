@@ -2,6 +2,8 @@
 
 import LanguageSwitch from "@/components/custom/staff/language-switch";
 import Menu, { MenuItem } from "@/components/custom/staff/menu";
+import { useAuthStore } from "@/lib/store/user-store";
+import { baseUrl } from "@/lib/utl";
 import {
   ChartColumn,
   FileChartColumn,
@@ -11,12 +13,25 @@ import {
   Users2,
 } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+
+type UserInfoResponse = {
+  id: number;
+  email: string;
+  role: string;
+};
 
 export default function ProtectedLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+
+  const router = useRouter();
+  const setUser = useAuthStore((state) => state.setUser);
+  const [loading, setLoading] = useState(true);
+  
   const currentYear = new Date().getFullYear();
   const adminMenuItems: MenuItem[] = [
     {
@@ -50,6 +65,38 @@ export default function ProtectedLayout({
       href: "/admin/reports-export",
     },
   ];
+
+  useEffect(() => {
+    const checkAdmin = async () => {
+      try {
+        const res = await fetch(`${baseUrl}/auth/me`, {
+          method: "GET",
+          credentials: "include",
+        });
+
+        if (!res.ok) {
+          router.replace("/login");
+          return;
+        }
+
+        const user: UserInfoResponse = await res.json();
+        setUser(user);
+
+        if (user.role !== "ADMIN") {
+          router.replace("/login");
+          return;
+        }
+
+        setLoading(false);
+      } catch (error) {
+        router.replace("/login");
+      }
+    };
+
+    checkAdmin();
+  }, [router, setUser]);
+
+  if (loading) return null;
 
   return (
     <div className="bg-staff-backdrop min-h-screen">

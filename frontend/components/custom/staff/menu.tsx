@@ -4,6 +4,9 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { Home, Folder, History, User, LogOut, LucideIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import CustomButton from "../common/custom-button";
+import { useAuthStore } from "@/lib/store/user-store";
+import { baseUrl } from "@/lib/utl";
 
 const HEADER_HEIGHT = 80;
 
@@ -36,7 +39,12 @@ export default function Menu({ menuItems, title }: MenuProps) {
   const closeMenu = () => setIsOpen(false);
   const toggleMenu = () => setIsOpen((v) => !v);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await fetch(`${baseUrl}/auth/logout`, {
+      method: "POST",
+      credentials: "include",
+    });
+    useAuthStore.getState().setUser(null);
     closeMenu();
     router.push("/login");
   };
@@ -83,13 +91,15 @@ export default function Menu({ menuItems, title }: MenuProps) {
 
           {/* Logout Button */}
           <div className="border-t border-black/10 p-4">
-            <button
+
+            <CustomButton label="Logout" onClick={handleLogout}/>
+            {/* <button
               onClick={handleLogout}
               className="flex w-full items-center gap-4 rounded-xl bg-red-600 px-4 py-3 text-lg font-medium text-white transition hover:bg-red-700"
             >
               <LogOut className="h-6 w-6" />
               <span>Logout</span>
-            </button>
+            </button> */}
           </div>
         </nav>
       </aside>
