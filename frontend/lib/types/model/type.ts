@@ -10,10 +10,10 @@ export type CreateUserFormData = {
 };
 
 export const ConditionOptions = [
-    { id: "GOOD", value: "Good" },
-    { id: "INSECT", value: "Insect (Damaged Cluster)" },
-    { id: "ROTTEN", value: "Rotten (Damaged Cluster)" },
-  ];
+  { id: "GOOD", value: "Good" },
+  { id: "INSECT", value: "Insect (Damaged Cluster)" },
+  { id: "ROTTEN", value: "Rotten (Damaged Cluster)" },
+];
 
 export type ClusterSearchForm = {
   location: string;
@@ -34,7 +34,6 @@ export type ClusterEditingView = {
   pole_id: string;
   cluster_id: string;
 };
-
 
 export type FlowerRecordingFormType = {
   location: string;
@@ -194,3 +193,7 @@ export interface CustomTooltipProps {
   active?: boolean;
   payload?: TooltipPayloadItem[];
 }
+
+export type CreateYearFormType = {
+  year: number;
+};
