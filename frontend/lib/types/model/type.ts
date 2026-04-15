@@ -25,6 +25,7 @@ export type ClusterSearchForm = {
 };
 
 export type ClusterRecordingFormType = {
+  year: number,
   location: string;
   pole_id: string;
   cluster_id: string;
@@ -214,3 +215,13 @@ export type WareHouseForm = z.infer<typeof WareHouseFormSchema>
 export type YearApiResponse = {
     years: string[];
 }
+
+export type Zone = {
+    zoneId: string;
+    zoneName: string;
+};
+
+export type ZoneApiResponse = {
+  zones :  Zone[] | null;
+}
+
