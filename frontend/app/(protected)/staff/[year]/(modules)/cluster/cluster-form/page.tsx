@@ -11,7 +11,7 @@ import { LocationOptionType, Option } from "@/lib/types/model/option";
 import { ClusterRecordingFormType, Zone, ZoneApiResponse } from "@/lib/types/model/type";
 import { baseUrl } from "@/lib/utl";
 import { CircleCheck, CircleX } from "lucide-react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -21,16 +21,39 @@ function ClusterForm() {
 
   const params = useParams();
   const year = params.year as string;
+  const router = useRouter();
   
-  const onSubmit = (data: ClusterRecordingFormType) => {
-    console.log(data);
+  const onSubmit = async (data: ClusterRecordingFormType) => {
+
+    const reformData = {
+      year : Number(year),
+      zoneNo : Number(data.zoneNo),
+      poleNo : Number(data.poleNo),
+      clusterNo : Number(data.clusterNo),
+      condition : data.condition
+    }
+
+    const response = await fetch(`${baseUrl}/clusters/create`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(reformData),
+      credentials: "include"
+    })
+
+    const result = await response.json();
+    console.log(result)
+    
+    router.replace(`/staff/${year}/cluster`)
+    
   };
 
   const form = useForm<ClusterRecordingFormType>({
     defaultValues: {
-      location: "",
-      pole_id: "",
-      cluster_id: "",
+      year: 0,
+      poleNo: "",
+      clusterNo: "",
       condition: ""
     }
   });
@@ -84,7 +107,7 @@ function ClusterForm() {
               triggerClassName="bg-staff-form-field"
               className="w-full appearance-none rounded-lg px-4 py-3 pr-10 text-sm text-[#2d201b] outline-none"
               control={form.control}
-              path="location"
+              path="zoneNo"
               placeholder="Select Location"
               options={locationOptions}
             />
@@ -97,7 +120,7 @@ function ClusterForm() {
             <StaffFormTitle isRequired={true} title={"Pole Number"} />
             <FormsInput
               control={form.control}
-              path={"pole_id"}
+              path="poleNo"
               placeholder="eg., P-001"
               className="bg-staff-form-field rounded-lg"
             />
@@ -107,7 +130,7 @@ function ClusterForm() {
             <StaffFormTitle isRequired={true} title={"Cluster Number"} />
             <FormsInput
               control={form.control}
-              path={"cluster_id"}
+              path="clusterNo"
               placeholder="eg., C-001"
               className="bg-staff-form-field rounded-lg"
             />

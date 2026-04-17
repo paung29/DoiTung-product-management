@@ -26,9 +26,9 @@ export type ClusterSearchForm = {
 
 export type ClusterRecordingFormType = {
   year: number,
-  location: string;
-  pole_id: string;
-  cluster_id: string;
+  zoneNo: string
+  poleNo: string;
+  clusterNo: string;
   condition: string;
 };
 
