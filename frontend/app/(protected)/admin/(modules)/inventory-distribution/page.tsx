@@ -42,7 +42,7 @@ export default function InventoryAndWarehouses() {
         <TabsContent value="overview">
           <div>Overview UI here</div>
         </TabsContent>
-        
+
         <TabsContent value="warehouse">
           <WareHouse />
         </TabsContent>

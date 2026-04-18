@@ -1,22 +1,31 @@
 "use client";
 import { ChevronDown, Layers } from "lucide-react";
 import React, { ReactNode, useState } from "react";
-import YearPickerDialog from "./year-pick-dialogue";
+import YearPickerDialog from "./year/year-pick-dialogue";
 import { useRouter } from "next/navigation";
 
 type Props = {
   children?: ReactNode;
   selectedYear?: string;
+  setSelectedYear?: (year: string) => void;
+  isYearTab?: boolean;
 };
 
-function ZoneAndFormLayoutComponent({ children, selectedYear }: Props) {
+function ZoneAndFormLayoutComponent({
+  children,
+  selectedYear,
+  setSelectedYear,
+  isYearTab,
+}: Props) {
   const router = useRouter();
 
   const [open, setOpen] = useState(false);
+  const [year, setYear] = useState(selectedYear);
 
   const handleConfirmYear = (year: string) => {
     setOpen(false);
-    router.push(`/admin/zone-form-management/${year}/form`);
+    setYear(year);
+    setSelectedYear && setSelectedYear(year);
   };
 
   return (
@@ -36,29 +45,30 @@ function ZoneAndFormLayoutComponent({ children, selectedYear }: Props) {
           </p>
         </div>
 
-        <div className="bg-primary-button flex h-[120px] w-[180px] flex-col items-center justify-between rounded-2xl p-4">
-          <p className="text-lg font-semibold text-white">Active Year</p>
+        {isYearTab || (
+          <div className="bg-primary-button flex h-[120px] w-[180px] flex-col items-center justify-between rounded-2xl p-4">
+            <p className="text-lg font-semibold text-white">Active Year</p>
 
-          <button
-            type="button"
-            onClick={() => setOpen(true)}
-            className="flex h-[50px] w-full items-center justify-center rounded-2xl bg-white px-4 text-lg font-semibold text-black shadow-md"
-          >
-            <div className="flex items-center gap-2">
-              {selectedYear || "Select"}
-              <ChevronDown className="size-6 items-end" />
-            </div>
-          </button>
-        </div>
+            <button
+              type="button"
+              onClick={() => setOpen(true)}
+              className="flex h-[50px] w-full items-center justify-center rounded-2xl bg-white px-4 text-lg font-semibold text-black shadow-md"
+            >
+              <div className="flex items-center gap-2">
+                {year || "Select"}
+                <ChevronDown className="size-6 items-end" />
+              </div>
+            </button>
+          </div>
+        )}
       </div>
-
       <div className="mt-6">
         {children}
         <YearPickerDialog
           open={open}
           onClose={() => setOpen(false)}
           onConfirm={handleConfirmYear}
-          defaultYear={selectedYear}
+          defaultYear={year}
         />
       </div>
     </div>

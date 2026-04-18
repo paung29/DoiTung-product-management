@@ -1,11 +1,9 @@
-import CreateYearButton from "@/components/custom/admin/zone&form/create-year-button";
+import CreateYearButton from "@/components/custom/admin/zone&form/year/create-year-button";
 import YearTable, {
   YearTableDataType,
-} from "@/components/custom/admin/zone&form/year-table";
-import CustomButton from "@/components/custom/common/custom-button";
-import React from "react";
+} from "@/components/custom/admin/zone&form/year/year-table";
 
-function YearManagementPage() {
+function YearManagementTab() {
   const yearData: YearTableDataType[] = [
     {
       year: "2023",
@@ -30,4 +28,4 @@ function YearManagementPage() {
   );
 }
 
-export default YearManagementPage;
+export default YearManagementTab;

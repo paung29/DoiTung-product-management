@@ -1,11 +1,10 @@
 import FormTable, {
   FormTableDataType,
-} from "@/components/custom/admin/zone&form/form-table";
+} from "@/components/custom/admin/zone&form/form/form-table";
 import ZoneTotalCard from "@/components/custom/admin/zone&form/zone-total-card";
 import { Activity } from "lucide-react";
-import React from "react";
 
-function FormManagementPage() {
+function FormManagementTab({ selectedYear }: { selectedYear?: string }) {
   const formTableData: FormTableDataType[] = [
     {
       form_id: 1,
@@ -34,7 +33,7 @@ function FormManagementPage() {
       active_status: false,
     },
   ];
-  return (
+  return selectedYear ? (
     <>
       <div className="mt-4 flex flex-col gap-4">
         <ZoneTotalCard
@@ -45,7 +44,13 @@ function FormManagementPage() {
         <FormTable formTableData={formTableData} />
       </div>
     </>
+  ) : (
+    <div>
+      <p className="text-center text-lg font-medium text-gray-500">
+        Please select a year to manage forms.
+      </p>
+    </div>
   );
 }
 
-export default FormManagementPage;
+export default FormManagementTab;

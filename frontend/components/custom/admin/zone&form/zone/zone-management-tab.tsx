@@ -1,13 +1,13 @@
-import { CreateOrEditZoneButton } from "@/components/custom/admin/zone&form/create-new-zone-button";
+import { CreateOrEditZoneButton } from "@/components/custom/admin/zone&form/zone/create-new-zone-button";
 import {
   ZoneTable,
   ZoneTableDataType,
-} from "@/components/custom/admin/zone&form/zone-table";
+} from "@/components/custom/admin/zone&form/zone/zone-table";
 import ZoneTotalCard from "@/components/custom/admin/zone&form/zone-total-card";
 
 import { Flower, MapPin } from "lucide-react";
 
-function ZoneManagementPage() {
+function ZoneManagementTab({ selectedYear }: { selectedYear?: string }) {
   const zoneTableData: ZoneTableDataType[] = [
     {
       zone_name: "Zone 1",
@@ -22,7 +22,7 @@ function ZoneManagementPage() {
       total_plants: 30,
     },
   ];
-  return (
+  return selectedYear ? (
     <>
       <div className="flex flex-col gap-4 pt-4">
         <div className="flex flex-row items-end">
@@ -36,7 +36,13 @@ function ZoneManagementPage() {
         <ZoneTable zoneTableData={zoneTableData} />
       </div>
     </>
+  ) : (
+    <div>
+      <p className="text-center text-lg font-medium text-gray-500">
+        Please select a year to manage zones.
+      </p>
+    </div>
   );
 }
 
-export default ZoneManagementPage;
+export default ZoneManagementTab;

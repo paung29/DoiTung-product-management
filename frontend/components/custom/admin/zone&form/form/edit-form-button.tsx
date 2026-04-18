@@ -15,9 +15,9 @@ import { Form } from "@/components/ui/form";
 import { FormsEditType } from "@/lib/types/model/type";
 import React from "react";
 import { useForm } from "react-hook-form";
-import FormsInput from "../../common/forms/form-input";
+import FormsInput from "../../../common/forms/form-input";
 import { Edit } from "lucide-react";
-import CustomSelect from "../../common/forms/form-select";
+import CustomSelect from "../../../common/forms/form-select";
 
 export function EditFormButton({
   form_id,

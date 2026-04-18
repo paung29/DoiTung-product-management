@@ -27,11 +27,10 @@ export default function ProtectedLayout({
 }: {
   children: React.ReactNode;
 }) {
-
   const router = useRouter();
   const setUser = useAuthStore((state) => state.setUser);
   const [loading, setLoading] = useState(true);
-  
+
   const currentYear = new Date().getFullYear();
   const adminMenuItems: MenuItem[] = [
     {
@@ -52,7 +51,7 @@ export default function ProtectedLayout({
     {
       label: "Zone & Form\nManagement",
       icon: MapPin,
-      href: `/admin/zone-form-management/${currentYear}/year`,
+      href: `/admin/zone-form-management`,
     },
     {
       label: "Inventory & \nDistribution",
