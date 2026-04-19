@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Table,
   TableBody,
@@ -7,48 +6,38 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { CreateOrEditZoneButton } from "./create-new-zone-button";
-import { DeleteZoneButton } from "./delete-zone-button";
 
-export type ZoneTableDataType = {
-  zone_name: string;
-  total_plants: number;
+export type YearTableDataType = {
+  year: string;
+  totalZone: number;
+  totalPole: number;
 };
 
-export function ZoneTable({
-  zoneTableData,
-}: {
-  zoneTableData: ZoneTableDataType[];
-}) {
+function YearTable({ yearTableData }: { yearTableData: YearTableDataType[] }) {
   return (
     <div className="border-primary-button overflow-hidden rounded-2xl border">
       <Table className="gap-20">
         <TableHeader>
           <TableRow className="[&_th]:text-primary-button hover:bg-secondary bg-secondary border-primary-button [&_th]:py-4 [&_th]:text-center [&_th]:font-semibold">
-            <TableHead>Zone Name</TableHead>
-            <TableHead>Total Plants</TableHead>
-            <TableHead>View Zone Report</TableHead>
+            <TableHead className="">Year</TableHead>
+            <TableHead>Total Zone</TableHead>
+            <TableHead>Total Pole</TableHead>
             <TableHead>Action</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {zoneTableData.map((item) => (
+          {yearTableData.map((item) => (
             <TableRow
               className="bg-white text-center [&_td]:py-3"
-              key={item.zone_name}
+              key={item.year}
             >
-              <TableCell className="font-medium">{item.zone_name}</TableCell>
-              <TableCell>{item.total_plants}</TableCell>
+              <TableCell className="font-medium">{item.year}</TableCell>
+              <TableCell>{item.totalZone}</TableCell>
+              <TableCell>{item.totalPole}</TableCell>
               <TableCell>
                 <button className="bg-primary-button rounded-lg px-4 py-2 text-white">
                   View Report
                 </button>
-              </TableCell>
-              <TableCell>
-                <div className="flex flex-row justify-center gap-2">
-                  <CreateOrEditZoneButton isEdit={true} />
-                  <DeleteZoneButton />
-                </div>
               </TableCell>
             </TableRow>
           ))}
@@ -57,3 +46,5 @@ export function ZoneTable({
     </div>
   );
 }
+
+export default YearTable;

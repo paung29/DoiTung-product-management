@@ -16,7 +16,7 @@ import { Form } from "@/components/ui/form";
 import { CreateOrEditZoneFormType } from "@/lib/types/model/type";
 import React from "react";
 import { useForm } from "react-hook-form";
-import FormsInput from "../../common/forms/form-input";
+import FormsInput from "../../../common/forms/form-input";
 import { Edit } from "lucide-react";
 
 export function CreateOrEditZoneButton({

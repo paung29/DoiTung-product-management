@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { FieldGroup } from "@/components/ui/field";
-import FormsInput from "../../common/forms/form-input";
+import FormsInput from "../../../common/forms/form-input";
 import { Form } from "@/components/ui/form";
 
 function CreateYearButton() {
