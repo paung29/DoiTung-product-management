@@ -7,38 +7,48 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { CreateOrEditZoneButton } from "./create-new-zone-button";
+import { DeleteZoneButton } from "../delete-zone-button";
 
-export type YearTableDataType = {
-  year: string;
-  totalZone: number;
-  totalPole: number;
+export type ZoneTableDataType = {
+  zone_name: string;
+  total_plants: number;
 };
 
-function YearTable({ yearTableData }: { yearTableData: YearTableDataType[] }) {
+export function ZoneTable({
+  zoneTableData,
+}: {
+  zoneTableData: ZoneTableDataType[];
+}) {
   return (
     <div className="border-primary-button overflow-hidden rounded-2xl border">
       <Table className="gap-20">
         <TableHeader>
           <TableRow className="[&_th]:text-primary-button hover:bg-secondary bg-secondary border-primary-button [&_th]:py-4 [&_th]:text-center [&_th]:font-semibold">
-            <TableHead className="">Year</TableHead>
-            <TableHead>Total Zone</TableHead>
-            <TableHead>Total Pole</TableHead>
+            <TableHead>Zone Name</TableHead>
+            <TableHead>Total Plants</TableHead>
+            <TableHead>View Zone Report</TableHead>
             <TableHead>Action</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {yearTableData.map((item) => (
+          {zoneTableData.map((item) => (
             <TableRow
               className="bg-white text-center [&_td]:py-3"
-              key={item.year}
+              key={item.zone_name}
             >
-              <TableCell className="font-medium">{item.year}</TableCell>
-              <TableCell>{item.totalZone}</TableCell>
-              <TableCell>{item.totalPole}</TableCell>
+              <TableCell className="font-medium">{item.zone_name}</TableCell>
+              <TableCell>{item.total_plants}</TableCell>
               <TableCell>
                 <button className="bg-primary-button rounded-lg px-4 py-2 text-white">
                   View Report
                 </button>
+              </TableCell>
+              <TableCell>
+                <div className="flex flex-row justify-center gap-2">
+                  <CreateOrEditZoneButton isEdit={true} />
+                  <DeleteZoneButton />
+                </div>
               </TableCell>
             </TableRow>
           ))}
@@ -47,5 +57,3 @@ function YearTable({ yearTableData }: { yearTableData: YearTableDataType[] }) {
     </div>
   );
 }
-
-export default YearTable;

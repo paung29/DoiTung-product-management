@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@/components/ui/form";
 import { z } from "zod";
-import CustomSelect from "../../common/forms/form-select";
+import CustomSelect from "../../../common/forms/form-select";
 import { useRouter } from "next/navigation";
 
 const yearSchema = z.object({
@@ -46,7 +46,6 @@ export default function YearPickerDialog({
   const handleSubmit = (values: YearFormValues) => {
     console.log("Selected year:", values.year);
     onConfirm(values.year);
-    router.push(`/admin/zone-form-management/${values.year}/form`);
   };
 
   return (
