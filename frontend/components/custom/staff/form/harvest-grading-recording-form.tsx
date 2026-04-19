@@ -5,7 +5,7 @@ import FormsInput from "../../common/forms/form-input";
 import CustomButton from "../../common/custom-button";
 import { X, Check } from "lucide-react";
 import type { HarvestGradingRecord } from "@/lib/types/model/type";
-import { z } from "zod";
+import { record, z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 interface HarvestGradingRecordingFormProps {
@@ -41,11 +41,13 @@ const harvestSchema = z.object({
   gradeB: gradeEntrySchema,
   gradeC: gradeEntrySchema,
   gradeD_plus: gradeEntrySchema,
+  rejected: gradeEntrySchema,
 });
 
 type HarvestGradingRecordingFormData = z.infer<typeof harvestSchema>;
 
 export default function HarvestGradingRecordingForm({
+  record,
   onBack = () => {},
 }: HarvestGradingRecordingFormProps) {
   const form = useForm<HarvestGradingRecordingFormData>({
@@ -73,6 +75,11 @@ export default function HarvestGradingRecordingForm({
       },
       gradeD_plus: {
         grade: "D+ (<10)",
+        podsCount: 0,
+        weight: 0.0,
+      },
+      rejected: {
+        grade: "Rejected/Undersized ",
         podsCount: 0,
         weight: 0.0,
       },
@@ -119,19 +126,48 @@ export default function HarvestGradingRecordingForm({
       podsPath: "gradeD_plus.podsCount" as const,
       weightPath: "gradeD_plus.weight" as const,
     },
+    {
+      key: "rejected" as const,
+      label: "Rejected/Undersized (<10)",
+      podsPath: "rejected.podsCount" as const,
+      weightPath: "rejected.weight" as const,
+    },
   ];
 
   return (
-    <div className="mx-auto max-w-5xl">
-      {/* Form Container */}
+    <div className="mx-auto max-w-5xl space-y-4">
+      {/* Location and Pole Number Display Box */}
+      <div className="space-y-4 rounded-lg border-2 border-[#8a6752] bg-[#FAF3E0] p-4 sm:p-8">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+          <div>
+            <label className="mb-2 flex items-center gap-2 text-sm font-semibold text-[#8a6752] sm:text-base">
+              <span className="h-2 w-2 rounded-full bg-[#8a6752]" />
+              Location
+            </label>
+            <div className="rounded bg-gray-300 p-3 text-sm text-gray-600 sm:p-4 sm:text-base">
+              {record?.location || "N/A"}
+            </div>
+          </div>
+
+          <div>
+            <label className="mb-2 flex items-center gap-2 text-sm font-semibold text-[#8a6752] sm:text-base">
+              Pole Number <span className="text-red-600">*</span>
+            </label>
+            <div className="rounded bg-gray-300 p-3 text-sm text-gray-600 sm:p-4 sm:text-base">
+              {record?.poleNumber || "N/A"}
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* Grade Entry Form Box */}
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="bg-secondary space-y-6 rounded-b-2xl border-2 border-[#8a6752] p-4 sm:p-8"
+          className="space-y-6 rounded-lg rounded-b-2xl border-2 border-[#8a6752] bg-[#FAF3E0] sm:p-8"
         >
           {/* Grade Enry Section */}
           <div className="space-y-4">
-            <h3 className="flex items-center gap-2 text-base font-semibold text-gray-800 sm:text-lg">
+            <h3 className="flex items-center gap-2 text-base font-semibold text-[#8a6752] sm:text-lg">
               <span className="h-2 w-2 rounded-full bg-[#8a6752]" />
               Grade Entry
             </h3>
@@ -140,17 +176,17 @@ export default function HarvestGradingRecordingForm({
               {grades.map((gradeItem) => (
                 <div
                   key={gradeItem.key}
-                  className="space-y-3 rounded-lg bg-white p-4 sm:p-5"
+                  className="space-y-3 rounded-lg p-4 sm:p-5"
                 >
                   {/* Grade */}
-                  <p className="text-sm font-semibold text-gray-800 sm:text-base">
+                  <p className="text-sm font-semibold text-[#8a6752] sm:text-base">
                     {gradeItem.label}
                   </p>
 
                   {/* Input  Grid */}
                   <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <div>
-                      <label className="mb-2 block text-xs font-medium text-gray-700 sm:text-sm">
+                      <label className="mb-2 block text-xs font-medium text-[#8a6752] sm:text-sm">
                         Number of Pods
                       </label>
                       <FormsInput
@@ -158,12 +194,12 @@ export default function HarvestGradingRecordingForm({
                         path={gradeItem.podsPath}
                         placeholder="0"
                         type="number"
-                        className="w-full"
+                        className="w-full bg-white"
                       />
                     </div>
 
                     <div>
-                      <label className="mb-2 block text-xs font-medium text-gray-700 sm:text-sm">
+                      <label className="mb-2 block text-xs font-medium text-[#8a6752] sm:text-sm">
                         Weight (g)
                       </label>
                       <FormsInput
@@ -171,7 +207,7 @@ export default function HarvestGradingRecordingForm({
                         path={gradeItem.weightPath}
                         placeholder="0.0"
                         type="number"
-                        className="w-full"
+                        className="w-full bg-white"
                       />
                     </div>
                   </div>
@@ -180,7 +216,7 @@ export default function HarvestGradingRecordingForm({
             </div>
           </div>
 
-          <div className="flex flex-col gap-3 border-t pt-6 sm:flex-col sm:justify-center">
+          <div className="flex flex-col gap-3 border-t border-[#8a6752] pt-6 sm:flex-col sm:justify-center">
             <CustomButton
               label="Cancel"
               icon={X}

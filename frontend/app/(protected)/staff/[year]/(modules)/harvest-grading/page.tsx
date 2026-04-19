@@ -82,10 +82,7 @@ export default function HarvestGradingEntryPage() {
 
   return (
     <>
-      <div className="px-2 py-4 sm:px-4">
-        <h1 className="mb-4 text-2xl font-bold text-gray-800">
-          Harvest Grading Entry Page
-        </h1>
+      <div className="px-2 py-2 sm:px-4">
         <HarvestAndGradingSearch />
 
         <div className="mt-6 space-y-2">

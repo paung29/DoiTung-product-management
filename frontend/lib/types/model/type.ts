@@ -25,7 +25,7 @@ export type ClusterSearchForm = {
 };
 
 export type ClusterRecordingFormType = {
-  year: number,
+  year: number;
   location: string;
   pole_id: string;
   cluster_id: string;
@@ -198,31 +198,30 @@ export interface CustomTooltipProps {
 }
 
 export const WareHouseSearchSchema = z.object({
-  name: z.string().optional()
+  name: z.string().optional(),
 });
 
-export type WareHouseSearch = z.infer<typeof WareHouseSearchSchema>
-
+export type WareHouseSearch = z.infer<typeof WareHouseSearchSchema>;
 
 export const WareHouseFormSchema = z.object({
   name: z.string().min(1, "Warehouse name is required"),
-  active: z.enum(["true", "false"])
+  active: z.enum(["true", "false"]),
 });
 
-export type WareHouseForm = z.infer<typeof WareHouseFormSchema>
+export type WareHouseForm = z.infer<typeof WareHouseFormSchema>;
 
 export type YearApiResponse = {
-    years: string[];
-}
+  years: string[];
+};
 
 export type Zone = {
-    zoneId: string;
-    zoneName: string;
+  zoneId: string;
+  zoneName: string;
 };
 
 export type ZoneApiResponse = {
-  zones :  Zone[] | null;
-}
+  zones: Zone[] | null;
+};
 
 export type CreateYearFormType = {
   year: number;
