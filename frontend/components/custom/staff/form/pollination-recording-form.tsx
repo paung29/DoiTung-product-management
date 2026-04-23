@@ -1,13 +1,10 @@
 "use client";
-import React, { useState } from "react";
 import FormCard from "./form-card";
 
 import ConditionForm from "./condition-form";
 import { Form } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
-import { PollinationRecordingFormType } from "@/lib/types/model/type";
-
-import { Option } from "@/lib/types/model/option";
+import { GetPollinationFormApiResponse, PollinationRecordingFormType } from "@/lib/types/model/type";
 
 import FormsInput from "../../common/forms/form-input";
 import CustomButton from "../../common/custom-button";
@@ -15,13 +12,66 @@ import { CircleCheck, CircleX } from "lucide-react";
 import { StaffFormTitle } from "./staff-form-title";
 import StaffDisable from "./staff-disable";
 import StaffSmallTitle from "./staff-small-title";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { baseUrl } from "@/lib/utl";
 
 function PollinationRecordingForm() {
+
+
+  const router = useRouter();
+  const params = useParams();
+
+  const [Pollintaion, setPollintaion] = useState<GetPollinationFormApiResponse | null>(null)
+    
+  const clusterId = params.formId
+  const year = params.year
+
+  const hasData = Pollintaion?.numberPods !== 0 ||
+                  Pollintaion?.unsuccessfulPollination !== 0 ||
+                  Pollintaion?.condition !== "";
+
+  const isReadOnly = Pollintaion?.pollinationFormDone === false && hasData;
+
   const onSubmit = (data: PollinationRecordingFormType) => {
     console.log(data);
   };
 
-  const form = useForm<PollinationRecordingFormType>({});
+  const form = useForm<PollinationRecordingFormType>({
+    defaultValues : {
+      numberPods: 0,
+      unsuccessfulPollination : 0,
+      condition: "",
+    }
+  });
+
+  const numberOfPods = Number(form.watch("numberPods") ?? 0);
+  const unsuccessfulPollination = Number(form.watch("unsuccessfulPollination") ?? 0);
+  const condition = form.watch("condition");
+
+  const totalFlowers = Number(Pollintaion?.totalFlowers ?? 0);
+  const goodFlowers = numberOfPods;
+  const badDroppedFlowers = unsuccessfulPollination;
+
+  useEffect(() => {
+      console.log("useEffect ran");
+      console.log("clusterId:", clusterId);
+      if(clusterId) {
+        async function load() {
+          const response = await fetch(`${baseUrl}/flowers/get-flower-form?clusterId=${clusterId}`, {
+            method: "GET",
+            credentials: "include"
+          })
+        
+          const result : GetPollinationFormApiResponse = await response.json();
+          setPollintaion(result)
+          console.log(result)
+        }
+  
+        load();
+      }
+    }, [clusterId])
+  
 
   return (
     <Form {...form}>
@@ -34,24 +84,24 @@ function PollinationRecordingForm() {
               <StaffDisable
                 isRow={true}
                 title={"Location"}
-                placeholder={"zone-1"}
+                placeholder={`${Pollintaion?.location}`}
               />
               <StaffDisable
                 isRow={true}
-                title={"Pole-Id"}
-                placeholder={"001"}
+                title={"Pole-Number"}
+                placeholder={`${Pollintaion?.poleNo}`}
               />
             </div>
             <div className="flex flex-col justify-between md:flex-row md:gap-10 md:py-4">
               <StaffDisable
                 isRow={true}
-                title={"Cluster-Id"}
-                placeholder={"001"}
+                title={"Cluster-Number"}
+                placeholder={`${Pollintaion?.clusterNo}`}
               />
               <StaffDisable
                 isRow={true}
                 title={"Total-Flower"}
-                placeholder={"10"}
+                placeholder={`${Pollintaion?.totalFlowers}`}
               />
             </div>
           </FormCard>
@@ -66,24 +116,32 @@ function PollinationRecordingForm() {
                 <StaffSmallTitle title="Number of Pods" />
                 <FormsInput
                   control={form.control}
-                  path={"number_of_pods"}
+                  path={"numberPods"}
                   placeholder="Enter Only Number"
                   className="bg-staff-form-field rounded-lg"
+                  readonly={isReadOnly}
                 />
               </div>
               <div className="w-full">
                 <StaffSmallTitle title="Unsuccessful Pollinaition" />
                 <FormsInput
                   control={form.control}
-                  path={"unsuccessful_pollination"}
+                  path={"unsuccessfulPollination"}
                   placeholder="Enter Only Number"
                   className="bg-staff-form-field rounded-lg"
+                  readonly={isReadOnly}
                 />
               </div>
             </div>
             <div className="flex flex-col py-2 md:flex-row md:gap-10">
-              <StaffDisable title={"Good Flowers"} placeholder={"1"} />
-              <StaffDisable title={"Bad/Dropped Flowers"} placeholder={"1"} />
+              <StaffDisable
+                title={"Good Flowers"}
+                placeholder={`${goodFlowers}`}
+              />
+              <StaffDisable
+                title={"Bad/Dropped Flowers"}
+                placeholder={`${badDroppedFlowers}`}
+              />
             </div>
           </FormCard>
         </div>
@@ -96,6 +154,7 @@ function PollinationRecordingForm() {
               control={form.control}
               path={"condition"}
               label="Condition"
+              readonly={isReadOnly}
             />
           </FormCard>
         </div>

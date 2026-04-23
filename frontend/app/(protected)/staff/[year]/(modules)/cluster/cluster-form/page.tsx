@@ -7,9 +7,10 @@ import ConditionForm from "@/components/custom/staff/form/condition-form";
 import FormCard from "@/components/custom/staff/form/form-card";
 import { StaffFormTitle } from "@/components/custom/staff/form/staff-form-title";
 import { Form } from "@/components/ui/form";
-import { LocationOptionType, Option } from "@/lib/types/model/option";
-import { ClusterRecordingFormType, Zone, ZoneApiResponse } from "@/lib/types/model/type";
+import { Option } from "@/lib/types/model/option";
+import { ClusterRecordingFormType, ClusterRecordingFormTypeSchema, Zone, ZoneApiResponse } from "@/lib/types/model/type";
 import { baseUrl } from "@/lib/utl";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { CircleCheck, CircleX } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -27,11 +28,13 @@ function ClusterForm() {
 
     const reformData = {
       year : Number(year),
-      zoneNo : Number(data.zoneNo),
+      zoneNo : Number(data.zoneNo)-1,
       poleNo : Number(data.poleNo),
       clusterNo : Number(data.clusterNo),
       condition : data.condition
     }
+
+    console.log(reformData)
 
     const response = await fetch(`${baseUrl}/clusters/create`, {
       method: "POST",
@@ -50,8 +53,9 @@ function ClusterForm() {
   };
 
   const form = useForm<ClusterRecordingFormType>({
+    resolver: zodResolver(ClusterRecordingFormTypeSchema),
     defaultValues: {
-      year: 0,
+      year: Number(year),
       poleNo: "",
       clusterNo: "",
       condition: ""
@@ -92,7 +96,7 @@ function ClusterForm() {
 
   const locationOptions: Option[] = (zones ?? []).map((zone) => ({
     id: String(zone.zoneId),
-    value: String(zone.zoneId),
+    value: String(zone.zoneName),
   }));
 
   return (
@@ -140,7 +144,7 @@ function ClusterForm() {
         {/* Condition */}
         <div className="pb-8">
           <FormCard>
-            <StaffFormTitle isRequired={true} title={"Location"} />
+            <StaffFormTitle isRequired={true} title={"Condition"} />
             <ConditionForm
               control={form.control}
               path={"condition"}

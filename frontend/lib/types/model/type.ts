@@ -24,13 +24,15 @@ export type ClusterSearchForm = {
   progress_status: string;
 };
 
-export type ClusterRecordingFormType = {
-  year: number,
-  zoneNo: string
-  poleNo: string;
-  clusterNo: string;
-  condition: string;
-};
+export const ClusterRecordingFormTypeSchema = z.object({
+  year: z.number(),
+  zoneNo: z.string({error : "Zone number is required"}).nonempty("Zone number is required"),
+  poleNo: z.string().nonempty("Pole number is required"),
+  clusterNo: z.string().nonempty("Cluster number is required"),
+  condition: z.string().nonempty("Condition is required"),
+})
+
+export type ClusterRecordingFormType = z.infer<typeof ClusterRecordingFormTypeSchema>;
 
 export type ClusterEditingView = {
   location: string;
@@ -38,22 +40,56 @@ export type ClusterEditingView = {
   cluster_id: string;
 };
 
-export type FlowerRecordingFormType = {
+export type ClusterApiItem = {
+  no: number;
+  clusterId: number;
   location: string;
-  pole_id: string;
-  cluster_id: string;
-  condition: string;
-  total_flowers: string;
+  poleNo: number;
+  clusterNo: number;
+  progressDone: number;
+  recordedDate: string;
 };
 
+export type ClusterApiResponse = {
+  clusters: ClusterApiItem[] | null;
+};
+
+export type GetClusterApiResponse = {
+  clusterId : number,
+  location : string,
+  poleNo: number,
+  clusterNo : number,
+  condition : string
+}
+
+export type GetPollinationFormApiResponse = {
+  clusterId : number,
+  location : string,
+  poleNo : number,
+  clusterNo : number,
+  totalFlowers : number,
+  numberPods : number,
+  unsuccessfulPollination : number,
+  goodFlowers : number,
+  badFlowers : number,
+  condition : string,
+  pollinationFormDone : boolean
+}
+
+export const FlowerRecordingFormTypeSchema = z.object({
+  clusterId: z.coerce.number(),
+  condition: z.string().nonempty("Condition is required"),
+  totalFlowers: z.coerce.number()
+})
+
+export type FlowerRecordingFormInput = z.input<typeof FlowerRecordingFormTypeSchema>;
+export type FlowerRecordingFormType = z.output<typeof FlowerRecordingFormTypeSchema>;
+
 export type PollinationRecordingFormType = {
-  location: string;
-  pole_id: string;
-  cluster_id: string;
+  clusterId: number;
+  numberPods: number;
+  unsuccessfulPollination: number;
   condition: string;
-  total_flowers: string;
-  number_of_pods: string;
-  unsuccessful_pollination: string;
 };
 
 export type PodRecordingFormType = {

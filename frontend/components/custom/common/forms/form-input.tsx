@@ -42,12 +42,15 @@ export default function FormsInput<T extends FieldValues>({
           <FormControl>
             <Input
               {...field}
+              value={field.value ?? ""}
               type={type}
               placeholder={placeholder || `Enter ${label || "input"}`}
-              className={cn("w-full", inputClassName)}
+              className={cn("w-full", inputClassName, readonly && "bg-gray-100 cursor-not-allowed")}
               readOnly={readonly}
+              
             />
           </FormControl>
+
           <FormMessage />
         </FormItem>
       )}

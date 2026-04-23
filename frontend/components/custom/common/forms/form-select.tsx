@@ -3,6 +3,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import {
   Select,
@@ -72,6 +73,7 @@ export default function CustomSelect<T extends FieldValues>({
               ))}
             </SelectContent>
           </Select>
+          <FormMessage />
         </FormItem>
       )}
     />
