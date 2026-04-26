@@ -3,7 +3,14 @@
 import BackButton from "@/components/custom/common/back-button";
 import CustomButton from "@/components/custom/common/custom-button";
 import FormIconTitles from "@/components/custom/common/form-icon-titles";
-import { ClipboardList, Flower2, LucideIcon, Package, Plane, Sprout } from "lucide-react";
+import {
+  ClipboardList,
+  Flower2,
+  LucideIcon,
+  Package,
+  Plane,
+  Sprout,
+} from "lucide-react";
 import { useParams, usePathname, useRouter } from "next/navigation";
 
 type PageConfig = {
@@ -68,9 +75,10 @@ export default function StaffLayout({
   else if (cleanPath.includes("/pollination")) currentModule = "pollination";
   else if (cleanPath.includes("/pod")) currentModule = "pod";
   else if (cleanPath.includes("/pre-harvest")) currentModule = "pre-harvest";
-  else if (cleanPath.includes("/harvest-grading")) currentModule = "harvest-grading";
+  else if (cleanPath.includes("/harvest-grading"))
+    currentModule = "harvest-grading";
 
-   const { title, subtitle, icon } = pageConfigMap[currentModule] || {
+  const { title, subtitle, icon } = pageConfigMap[currentModule] || {
     title: "Staff Form",
     subtitle: "Manage form data",
     icon: ClipboardList,
@@ -82,35 +90,24 @@ export default function StaffLayout({
     router.push(`/staff/${year}/cluster/cluster-form`);
   };
 
-
   return (
+    <div className="bg-staff-backdrop border-primary-button mx-0 my-0 min-h-screen w-full rounded-none border shadow-2xl sm:mx-auto sm:my-15 sm:max-w-[80%] sm:rounded-2xl">
+      <div className="bg-secondary border-primary-button flex h-16 items-center justify-between rounded-none border-b px-4 sm:rounded-t-2xl sm:px-10">
+        <FormIconTitles title={title} subtitle={subtitle} icon={icon} />
 
-    <div className="bg-staff-backdrop border-primary-button
-                        mx-0 sm:mx-auto
-                        my-0 sm:my-15
-                        min-h-screen
-                        w-full sm:max-w-[80%]
-                        rounded-none sm:rounded-2xl
-                        border shadow-2xl">
-        <div className="bg-secondary border-primary-button
-                          flex h-16 items-center justify-between
-                          border-b
-                          px-4 sm:px-10
-                          rounded-none sm:rounded-t-2xl">
-          <FormIconTitles title={title} subtitle={subtitle} icon={icon} />
+        <div className="flex items-center gap-3">
+          {isClusterListPage && (
+            <CustomButton
+              label="Add"
+              onClick={handleAdd}
+              className="bg-green-700"
+            />
+          )}
 
-          <div className="flex items-center gap-3">
-
-            {isClusterListPage && (
-              <CustomButton label="Add" onClick={handleAdd} className="bg-green-700"/>
-            )}
-
-            <BackButton />
-          </div>
-
+          <BackButton />
         </div>
-        <div className="px-4 py-4 sm:px-10 sm:py-10">{children}</div>
       </div>
-    
+      <div className="px-4 py-4 sm:px-10 sm:py-10">{children}</div>
+    </div>
   );
 }

@@ -1,3 +1,4 @@
+/* eslint-disable no-var */
 "use client";
 import AdminCustomTabs from "@/components/custom/admin/admin-custom-tabs";
 import FormManagementTab from "@/components/custom/admin/zone&form/form/form-management-tab";
