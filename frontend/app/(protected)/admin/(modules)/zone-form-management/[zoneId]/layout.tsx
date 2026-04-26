@@ -1,3 +1,4 @@
+/* eslint-disable no-var */
 "use client";
 import { MapPin } from "lucide-react";
 import { useParams } from "next/navigation";
