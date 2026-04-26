@@ -7,10 +7,18 @@ import { Form } from "@/components/ui/form";
 import { ClusterSearchForm } from "@/lib/types/model/type";
 import FormsInput from "../common/forms/form-input";
 import CustomButton from "../common/custom-button";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 
 
 
 export default function ClusterSearch() {
+
+  const router = useRouter();
+  const params = useParams();
+  const serarchParams = useSearchParams();
+
+  const year = params.year as string;
+  
 
   const onSubmit = (data : ClusterSearchForm) => {
     console.log("Cluster Search Data: ", data);
@@ -24,8 +32,6 @@ export default function ClusterSearch() {
         progress_status: ""
       }
     })
-
-  
 
   return (
     <Form {...form}>
