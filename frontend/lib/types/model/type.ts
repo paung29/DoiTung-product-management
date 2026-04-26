@@ -1,4 +1,4 @@
-import z from "zod";
+import z, { number, string } from "zod";
 
 // Form Types for User Management
 export type CreateUserFormData = {
@@ -24,13 +24,25 @@ export type ClusterSearchForm = {
   progress_status: string;
 };
 
-export type ClusterRecordingFormType = {
-  year: number;
-  location: string;
-  pole_id: string;
-  cluster_id: string;
-  condition: string;
-};
+
+export const ClusterRecordingFormTypeSchema = z.object({
+  year: z.number(),
+  zoneNo: z.string({error : "Zone number is required"}).nonempty("Zone number is required"),
+  poleNo: z.string().
+          nonempty("Pole Number is required").
+          transform((val) => Number(val)).
+          refine((val) => !isNaN(val), "Must be a number").
+          refine((val) => val > 0, "Must be 0 or positive"),
+  clusterNo: z.string().
+          nonempty("Cluster Number is required").
+          transform((val) => Number(val)).
+          refine((val) => !isNaN(val), "Must be a number").
+          refine((val) => val > 0, "Must be 0 or positive"),
+  condition: z.string().nonempty("Condition is required"),
+})
+
+export type ClusterRecordingFormInput = z.input<typeof ClusterRecordingFormTypeSchema>;
+export type ClusterRecordingFormType = z.infer<typeof ClusterRecordingFormTypeSchema>;
 
 export type ClusterEditingView = {
   location: string;
@@ -38,23 +50,72 @@ export type ClusterEditingView = {
   cluster_id: string;
 };
 
-export type FlowerRecordingFormType = {
+export type ClusterApiItem = {
+  no: number;
+  clusterId: number;
   location: string;
-  pole_id: string;
-  cluster_id: string;
-  condition: string;
-  total_flowers: string;
+  poleNo: number;
+  clusterNo: number;
+  progressDone: number;
+  recordedDate: string;
 };
 
-export type PollinationRecordingFormType = {
-  location: string;
-  pole_id: string;
-  cluster_id: string;
-  condition: string;
-  total_flowers: string;
-  number_of_pods: string;
-  unsuccessful_pollination: string;
+export type ClusterApiResponse = {
+  clusters: ClusterApiItem[] | null;
 };
+
+export type GetClusterApiResponse = {
+  clusterId : number,
+  location : string,
+  poleNo: number,
+  clusterNo : number,
+  condition : string
+}
+
+export type GetPollinationFormApiResponse = {
+  clusterId : number,
+  location : string,
+  poleNo : number,
+  clusterNo : number,
+  totalFlowers : number,
+  numberPods : number,
+  unsuccessfulPollination : number,
+  goodFlowers : number,
+  badFlowers : number,
+  condition : string,
+  pollinationFormDone : boolean
+}
+
+export const FlowerRecordingFormTypeSchema = z.object({
+  clusterId: z.coerce.number(),
+  condition: z.string().nonempty("Condition is required"),
+  totalFlowers: z.string().
+          nonempty("Total Flowers is required").
+          transform((val) => Number(val)).
+          refine((val) => !isNaN(val), "Must be a number").
+          refine((val) => val >= 0, "Must be 0 or positive"),
+})
+
+export type FlowerRecordingFormInput = z.input<typeof FlowerRecordingFormTypeSchema>;
+export type FlowerRecordingFormType = z.output<typeof FlowerRecordingFormTypeSchema>;
+
+export const PollinationRecordingFormSchema = z.object({
+  clusterId: z.coerce.number(),
+  numberPods: z.string({error : "Number of Pods is required"}).
+          nonempty("Number of Pods is required").
+          transform((val) => Number(val)).
+          refine((val) => !isNaN(val), "Must be a number").
+          refine((val) => val >= 0, "Must be 0 or positive"),
+  unsuccessfulPollination : z.string({error : "Unsuccessful Pollination is required"}).
+          nonempty("Unsuccessful Pollination is required").
+          transform((val) => Number(val)).
+          refine((val) => !isNaN(val), "Must be a number").
+          refine((val) => val >= 0, "Must be 0 or positive"),
+  condition: z.string().nonempty("Condition is required"),
+})
+
+export type PollinationRecordingFormInput = z.input<typeof PollinationRecordingFormSchema>;
+export type PollinationRecordingFormType = z.output<typeof PollinationRecordingFormSchema>;
 
 export type PodRecordingFormType = {
   location: string;

@@ -26,12 +26,7 @@ export default function PodEntryPage() {
                 
                       <StaffContent>
                         <div className="space-y-4">
-                          <ClusterRecordingCard onEdit={onClick} />
-                          <ClusterRecordingCard onEdit={onClick} />
-                          <ClusterRecordingCard onEdit={onClick} />
-                          <ClusterRecordingCard onEdit={onClick} />
-                          <ClusterRecordingCard onEdit={onClick} />
-                          <ClusterRecordingCard onEdit={onClick} />
+                          
                         </div>
                       </StaffContent>
                 </div>

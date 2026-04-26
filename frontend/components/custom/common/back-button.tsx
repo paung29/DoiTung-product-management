@@ -4,8 +4,14 @@ function BackButton() {
   const router = useRouter();
 
   const backFunction = () => {
-    router.back();
+
+    if (window.history.length > 1) {
+      router.back();
+    } else {
+      router.push("/staff"); 
+    }
   };
+
   return (
     <button
       type="button"

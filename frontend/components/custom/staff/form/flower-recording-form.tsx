@@ -1,26 +1,69 @@
 "use client";
-import React, { useState } from "react";
 import FormCard from "./form-card";
 
 import ConditionForm from "./condition-form";
 import { Form } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
-import { FlowerRecordingFormType } from "@/lib/types/model/type";
-
-import { Option } from "@/lib/types/model/option";
+import { FlowerRecordingFormInput, FlowerRecordingFormType, FlowerRecordingFormTypeSchema, GetClusterApiResponse } from "@/lib/types/model/type";
 
 import FormsInput from "../../common/forms/form-input";
 import CustomButton from "../../common/custom-button";
 import { CircleCheck, CircleX } from "lucide-react";
 import { StaffFormTitle } from "./staff-form-title";
 import StaffDisable from "./staff-disable";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useState } from "react";
+import { baseUrl } from "@/lib/utl";
+import { createCluster } from "@/lib/server-actions/create-flower-client";
 
 function FlowerRecordingForm() {
-  const onSubmit = (data: FlowerRecordingFormType) => {
-    console.log(data);
+
+  const [Cluster, setCluster] = useState<GetClusterApiResponse | null>(null)
+
+  const router = useRouter();
+  const params = useParams();
+  
+  const clusterId = params.formId
+  const year = params.year
+  
+  const onSubmit = async (data: FlowerRecordingFormType) => {
+    data.clusterId = Number(clusterId)
+    console.log(data)
+    const result = await createCluster(data);
+    console.log(data)
+    console.log(result);
+    
+    router.replace(`/staff/${year}/flower`)
   };
 
-  const form = useForm<FlowerRecordingFormType>({});
+  const form = useForm<FlowerRecordingFormInput, any, FlowerRecordingFormType>({
+    
+    resolver: zodResolver(FlowerRecordingFormTypeSchema),
+    defaultValues: {
+      clusterId: 0,
+      condition: "",
+      totalFlowers: "",
+    },
+});
+
+  useEffect(() => {
+    console.log("useEffect ran");
+    console.log("clusterId:", clusterId);
+    if(clusterId) {
+      async function load() {
+        const response = await fetch(`${baseUrl}/clusters/get-cluster-form?clusterId=${clusterId}`, {
+          method: "GET",
+          credentials: "include"
+        })
+        const result : GetClusterApiResponse = await response.json();
+        setCluster(result)
+        console.log(Cluster)
+      }
+
+      load();
+    }
+  }, [clusterId])
 
   return (
     <Form {...form}>
@@ -30,9 +73,9 @@ function FlowerRecordingForm() {
           <FormCard>
             <StaffFormTitle isRequired={false} title={"Cluster Information"} />
             <div className="flex flex-col justify-between gap-10 py-4 md:flex-row">
-              <StaffDisable title={"Location"} placeholder={"zone-1"} />
-              <StaffDisable title={"Pole-Id"} placeholder={"001"} />
-              <StaffDisable title={"Cluster-Id"} placeholder={"001"} />
+              <StaffDisable title={"Location"} placeholder={`${Cluster?.location}`} />
+              <StaffDisable title={"Pole-No"} placeholder={`${Cluster?.poleNo}`} />
+              <StaffDisable title={"Cluster-No"} placeholder={`${Cluster?.clusterNo}`} />
             </div>
           </FormCard>
         </div>
@@ -43,9 +86,10 @@ function FlowerRecordingForm() {
             <StaffFormTitle isRequired={true} title={"Flower Data"} />
             <p className="py-2">Total Flowers * </p>
             <FormsInput
+              type="number"
               control={form.control}
-              path={"total_flowers"}
-              placeholder="eg., P-001"
+              path={"totalFlowers"}
+              placeholder="Enter total Flowers"
               className="bg-staff-form-field rounded-lg"
             />
           </FormCard>

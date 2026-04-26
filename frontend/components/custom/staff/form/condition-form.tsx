@@ -1,17 +1,17 @@
 // components/common/forms/form-radio-cards.tsx
 "use client";
 
-import { FormControl, FormField, FormItem } from "@/components/ui/form";
+import { FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { ConditionOptions } from "@/lib/types/model/type";
 
 import { cn } from "@/lib/utils";
 import { Control, FieldValues, Path } from "react-hook-form";
 
 type FormRadioCardsProps<T extends FieldValues> = {
-  control: Control<T>;
+  control: Control<T, any, any>;
   path: Path<T>;
   label?: string;
-
+  readonly ?: boolean;
   className?: string;
 };
 
@@ -19,13 +19,14 @@ export default function FormRadioCards<T extends FieldValues>({
   control,
   path,
   className,
+  readonly
 }: FormRadioCardsProps<T>) {
 
   const options = ConditionOptions
   
   return (
     <FormField
-      control={control}
+      control={control as Control<T>}
       name={path}
       render={({ field }) => (
         <FormItem className={cn("w-full", className)}>
@@ -46,6 +47,7 @@ export default function FormRadioCards<T extends FieldValues>({
                       onChange={() => field.onChange(option.id)}
                       onBlur={field.onBlur}
                       className="h-5 w-5 accent-green-600"
+                      readOnly={readonly}
                     />
 
                     <span className="item-center">{option.value}</span>
@@ -54,6 +56,7 @@ export default function FormRadioCards<T extends FieldValues>({
               })}
             </div>
           </FormControl>
+          <FormMessage />
         </FormItem>
       )}
     />

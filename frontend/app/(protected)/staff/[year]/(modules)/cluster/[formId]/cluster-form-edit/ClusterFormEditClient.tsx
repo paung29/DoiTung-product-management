@@ -8,97 +8,42 @@ import FormCard from "@/components/custom/staff/form/form-card";
 import { StaffFormTitle } from "@/components/custom/staff/form/staff-form-title";
 import { Form } from "@/components/ui/form";
 import { Option } from "@/lib/types/model/option";
-import { ClusterRecordingFormInput, ClusterRecordingFormType, ClusterRecordingFormTypeSchema, Zone, ZoneApiResponse } from "@/lib/types/model/type";
-import { baseUrl } from "@/lib/utl";
+import { ClusterEditingView, ClusterRecordingFormInput, ClusterRecordingFormType, ClusterRecordingFormTypeSchema, ConditionOptions, GetClusterApiResponse } from "@/lib/types/model/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CircleCheck, CircleX } from "lucide-react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
-function ClusterForm() {
-
-  const [zones, setZones] = useState<Zone[]>([])
+function ClusterFormEdit({data} : {data : GetClusterApiResponse}) {
 
   const params = useParams();
   const year = params.year as string;
-  const router = useRouter();
+  const formId = params.formId as string;
   
-  const onSubmit = async (data: ClusterRecordingFormType) => {
-
-    const reformData = {
-      year : Number(year),
-      zoneNo : Number(data.zoneNo)-1,
-      poleNo : Number(data.poleNo),
-      clusterNo : Number(data.clusterNo),
-      condition : data.condition
-    }
-
-    console.log(reformData)
-
-    const response = await fetch(`${baseUrl}/clusters/create`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(reformData),
-      credentials: "include"
-    })
-
-    const result = await response.json();
-    console.log(result)
-    
-    router.replace(`/staff/${year}/cluster`)
-    
+  const onSubmit = (data: ClusterRecordingFormType) => {
+    console.log(data);
   };
 
+  const locations: Option[] = [
+    { id: "zone-1", value: "Zone 1" },
+    { id: "zone-2", value: "Zone 2" },
+    { id: "zone-3", value: "Zone 3" },
+    { id: "zone-4", value: "Zone 4" },
+  ];
+
   const form = useForm<ClusterRecordingFormInput, any, ClusterRecordingFormType>({
-    resolver: zodResolver(ClusterRecordingFormTypeSchema),
-    defaultValues: {
-      year: Number(year),
-      poleNo: "0",
-      clusterNo: "0",
-      condition: ""
+    resolver : zodResolver(ClusterRecordingFormTypeSchema),
+    defaultValues : {
+        year: Number(year),
+        zoneNo: data.location,
+        poleNo: String(data.poleNo),
+        clusterNo: String(data.clusterNo),
+        condition: String(data.condition),
     }
   });
 
-
-  useEffect(() => {
-    const fetchZones = async () => {
-      try{
-         const response = await fetch(`${baseUrl}/zones/get-all-zones?year=${year}`, {
-            method: "GET",
-            headers: {
-            "Content-Type": "application/json",
-          },
-            credentials: "include"
-         })
-
-         if (!response.ok) {
-           throw new Error("Failed to fetch zones");
-         }
-
-         const data : ZoneApiResponse= await response.json()
-
-         setZones(data.zones ?? []);
-
-      }catch(error){
-        console.error("Error fetching zones:", error);
-        setZones([]);
-      }
-    };
-
-    if (year) {
-      fetchZones();
-    }
-
-  }, [year]);
-
-  const locationOptions: Option[] = (zones ?? []).map((zone) => ({
-    id: String(zone.zoneId),
-    value: String(zone.zoneName),
-  }));
-
+ 
   return (
     <Form {...form}>
       <form className="flex flex-col">
@@ -113,7 +58,7 @@ function ClusterForm() {
               control={form.control}
               path="zoneNo"
               placeholder="Select Location"
-              options={locationOptions}
+              options={locations}
             />
           </FormCard>
         </div>
@@ -124,7 +69,7 @@ function ClusterForm() {
             <StaffFormTitle isRequired={true} title={"Pole Number"} />
             <FormsInput
               control={form.control}
-              path="poleNo"
+              path={"poleNo"}
               placeholder="eg., P-001"
               className="bg-staff-form-field rounded-lg"
             />
@@ -134,7 +79,7 @@ function ClusterForm() {
             <StaffFormTitle isRequired={true} title={"Cluster Number"} />
             <FormsInput
               control={form.control}
-              path="clusterNo"
+              path={"clusterNo"}
               placeholder="eg., C-001"
               className="bg-staff-form-field rounded-lg"
             />
@@ -173,4 +118,4 @@ function ClusterForm() {
   );
 }
 
-export default ClusterForm;
+export default ClusterFormEdit;
