@@ -61,7 +61,7 @@ function PodRecordingForm() {
         {/* Condition */}
         <div className="pb-8">
           <FormCard>
-            <StaffFormTitle isRequired={true} title={"Location"} />
+            <StaffFormTitle isRequired={true} title={"Condition"} />
             <ConditionForm
               control={form.control}
               path={"condition"}
