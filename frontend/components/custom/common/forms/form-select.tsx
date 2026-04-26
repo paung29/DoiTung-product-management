@@ -17,7 +17,7 @@ import { cn } from "@/lib/utils";
 import { Control, FieldValues, Path } from "react-hook-form";
 
 export type CustomSelectProps<T extends FieldValues> = {
-  control: Control<T>;
+  control: Control<T, any, any>;
   path: Path<T>;
   options: Option[];
   label?: string;
@@ -40,7 +40,7 @@ export default function CustomSelect<T extends FieldValues>({
 }: CustomSelectProps<T>) {
   return (
     <FormField
-      control={control}
+      control={control as Control<T>}
       name={path}
       render={({ field }) => (
         <FormItem className={cn("", className)}>

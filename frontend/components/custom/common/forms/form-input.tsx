@@ -11,7 +11,7 @@ import { HTMLInputTypeAttribute } from "react";
 import { Control, FieldValues, Path } from "react-hook-form";
 
 type FormsInputPops<T extends FieldValues> = {
-  control: Control<T>;
+  control: Control<T, any, any>;
   path: Path<T>;
   label?: string;
   type?: HTMLInputTypeAttribute;
@@ -33,7 +33,7 @@ export default function FormsInput<T extends FieldValues>({
 }: FormsInputPops<T>) {
   return (
     <FormField
-      control={control}
+      control={control as Control<T>}
       name={path}
       render={({ field }) => (
         <FormItem className={cn("w-full", className)}>

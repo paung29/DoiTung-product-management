@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import { Control, FieldValues, Path } from "react-hook-form";
 
 type FormRadioCardsProps<T extends FieldValues> = {
-  control: Control<T>;
+  control: Control<T, any, any>;
   path: Path<T>;
   label?: string;
   readonly ?: boolean;
@@ -26,7 +26,7 @@ export default function FormRadioCards<T extends FieldValues>({
   
   return (
     <FormField
-      control={control}
+      control={control as Control<T>}
       name={path}
       render={({ field }) => (
         <FormItem className={cn("w-full", className)}>

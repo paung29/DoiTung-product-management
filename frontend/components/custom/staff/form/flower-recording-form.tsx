@@ -34,7 +34,7 @@ function FlowerRecordingForm() {
     console.log(data)
     console.log(result);
     
-    router.push(`/staff/${year}/flower`)
+    router.replace(`/staff/${year}/flower`)
   };
 
   const form = useForm<FlowerRecordingFormInput, any, FlowerRecordingFormType>({
@@ -43,7 +43,7 @@ function FlowerRecordingForm() {
     defaultValues: {
       clusterId: 0,
       condition: "",
-      totalFlowers: 0,
+      totalFlowers: "",
     },
 });
 

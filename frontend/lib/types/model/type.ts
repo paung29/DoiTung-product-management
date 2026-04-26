@@ -1,4 +1,4 @@
-import z from "zod";
+import z, { number, string } from "zod";
 
 // Form Types for User Management
 export type CreateUserFormData = {
@@ -24,14 +24,24 @@ export type ClusterSearchForm = {
   progress_status: string;
 };
 
+
 export const ClusterRecordingFormTypeSchema = z.object({
   year: z.number(),
   zoneNo: z.string({error : "Zone number is required"}).nonempty("Zone number is required"),
-  poleNo: z.string().nonempty("Pole number is required"),
-  clusterNo: z.string().nonempty("Cluster number is required"),
+  poleNo: z.string().
+          nonempty("Pole Number is required").
+          transform((val) => Number(val)).
+          refine((val) => !isNaN(val), "Must be a number").
+          refine((val) => val > 0, "Must be 0 or positive"),
+  clusterNo: z.string().
+          nonempty("Cluster Number is required").
+          transform((val) => Number(val)).
+          refine((val) => !isNaN(val), "Must be a number").
+          refine((val) => val > 0, "Must be 0 or positive"),
   condition: z.string().nonempty("Condition is required"),
 })
 
+export type ClusterRecordingFormInput = z.input<typeof ClusterRecordingFormTypeSchema>;
 export type ClusterRecordingFormType = z.infer<typeof ClusterRecordingFormTypeSchema>;
 
 export type ClusterEditingView = {
@@ -79,18 +89,33 @@ export type GetPollinationFormApiResponse = {
 export const FlowerRecordingFormTypeSchema = z.object({
   clusterId: z.coerce.number(),
   condition: z.string().nonempty("Condition is required"),
-  totalFlowers: z.coerce.number()
+  totalFlowers: z.string().
+          nonempty("Total Flowers is required").
+          transform((val) => Number(val)).
+          refine((val) => !isNaN(val), "Must be a number").
+          refine((val) => val >= 0, "Must be 0 or positive"),
 })
 
 export type FlowerRecordingFormInput = z.input<typeof FlowerRecordingFormTypeSchema>;
 export type FlowerRecordingFormType = z.output<typeof FlowerRecordingFormTypeSchema>;
 
-export type PollinationRecordingFormType = {
-  clusterId: number;
-  numberPods: number;
-  unsuccessfulPollination: number;
-  condition: string;
-};
+export const PollinationRecordingFormSchema = z.object({
+  clusterId: z.coerce.number(),
+  numberPods: z.string({error : "Number of Pods is required"}).
+          nonempty("Number of Pods is required").
+          transform((val) => Number(val)).
+          refine((val) => !isNaN(val), "Must be a number").
+          refine((val) => val >= 0, "Must be 0 or positive"),
+  unsuccessfulPollination : z.string({error : "Unsuccessful Pollination is required"}).
+          nonempty("Unsuccessful Pollination is required").
+          transform((val) => Number(val)).
+          refine((val) => !isNaN(val), "Must be a number").
+          refine((val) => val >= 0, "Must be 0 or positive"),
+  condition: z.string().nonempty("Condition is required"),
+})
+
+export type PollinationRecordingFormInput = z.input<typeof PollinationRecordingFormSchema>;
+export type PollinationRecordingFormType = z.output<typeof PollinationRecordingFormSchema>;
 
 export type PodRecordingFormType = {
   location: string;
