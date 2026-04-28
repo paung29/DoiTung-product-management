@@ -50,6 +50,13 @@ export type ClusterEditingView = {
   cluster_id: string;
 };
 
+export const ClusterEditSchema = z.object({
+  clusterId: z.number(),
+  condition: z.string().nonempty("Condition is required"),
+})
+
+export type ClusterEditType = z.input<typeof ClusterEditSchema>;
+
 export type ClusterApiItem = {
   no: number;
   clusterId: number;
