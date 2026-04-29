@@ -41,18 +41,20 @@ function FlowerRecordingForm() {
     
     resolver: zodResolver(FlowerRecordingFormTypeSchema),
     defaultValues: {
-      clusterId: 0,
+      clusterId: Number(clusterId),
       condition: "",
       totalFlowers: "",
     },
 });
 
   useEffect(() => {
+    if (!clusterId) return;
+    
     console.log("useEffect ran");
     console.log("clusterId:", clusterId);
     if(clusterId) {
       async function load() {
-        const response = await fetch(`${baseUrl}/clusters/get-cluster-form?clusterId=${clusterId}`, {
+        const response = await fetch(`${baseUrl}/flowers/get-flower-form?clusterId=${clusterId}`, {
           method: "GET",
           credentials: "include"
         })
@@ -64,6 +66,16 @@ function FlowerRecordingForm() {
       load();
     }
   }, [clusterId])
+
+  useEffect(() => {
+    if (!Cluster) return;
+
+    form.reset({
+      clusterId: Number(clusterId),
+      condition: Cluster.condition ?? "",
+      totalFlowers: String(Cluster.totalFlowers ?? ""),
+    });
+  }, [Cluster, clusterId, form]);
 
   return (
     <Form {...form}>
@@ -89,7 +101,7 @@ function FlowerRecordingForm() {
               type="number"
               control={form.control}
               path={"totalFlowers"}
-              placeholder="Enter total Flowers"
+              placeholder={ "Enter Total Flowers"}
               className="bg-staff-form-field rounded-lg"
             />
           </FormCard>

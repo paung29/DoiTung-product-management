@@ -69,6 +69,7 @@ function ClusterFormEdit({data} : {data : GetClusterApiResponse}) {
               path="zoneNo"
               placeholder="Select Location"
               options={locations}
+              disabled={true}
             />
           </FormCard>
         </div>
@@ -82,6 +83,7 @@ function ClusterFormEdit({data} : {data : GetClusterApiResponse}) {
               path={"poleNo"}
               placeholder="eg., P-001"
               className="bg-staff-form-field rounded-lg"
+              readonly={true}
             />
           </FormCard>
           {/* Cluster Number */}
@@ -92,6 +94,7 @@ function ClusterFormEdit({data} : {data : GetClusterApiResponse}) {
               path={"clusterNo"}
               placeholder="eg., C-001"
               className="bg-staff-form-field rounded-lg"
+              readonly={true}
             />
           </FormCard>
         </div>

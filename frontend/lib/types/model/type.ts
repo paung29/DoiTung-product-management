@@ -76,7 +76,9 @@ export type GetClusterApiResponse = {
   location : string,
   poleNo: number,
   clusterNo : number,
-  condition : string
+  condition : string,
+  totalFlowers : number,
+  flowerFormDone : boolean
 }
 
 export type GetPollinationFormApiResponse = {
