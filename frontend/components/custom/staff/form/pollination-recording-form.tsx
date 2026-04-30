@@ -56,11 +56,14 @@ function PollinationRecordingForm() {
   });
 
   useEffect(() => {
+
+
+
       console.log("useEffect ran");
       console.log("clusterId:", clusterId);
       if(clusterId) {
         async function load() {
-          const response = await fetch(`${baseUrl}/flowers/get-flower-form?clusterId=${clusterId}`, {
+          const response = await fetch(`${baseUrl}/pollinations/get-pollination-form?clusterId=${clusterId}`, {
             method: "GET",
             credentials: "include"
           })
@@ -73,6 +76,19 @@ function PollinationRecordingForm() {
         load();
       }
     }, [clusterId])
+
+    useEffect(() => {
+
+      if (!Pollintaion || !clusterId) return;
+
+      form.reset({
+        clusterId: Number(clusterId),
+        numberPods: String(Pollintaion.numberPods ?? ""),
+        condition: Pollintaion.condition ?? "",
+        unsuccessfulPollination: String(Pollintaion.unsuccessfulPollination)
+      });
+
+  }, [Pollintaion, clusterId, form]);
   
 
   return (
