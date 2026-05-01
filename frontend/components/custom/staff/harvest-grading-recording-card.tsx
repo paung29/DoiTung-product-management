@@ -17,8 +17,7 @@ export default function HarvestGradingRecordingCard({
   // Default
   const defaultRecords: HarvestGradingRecord[] = [
     {
-      id: "1",
-      no: 1,
+      poleid: 0,
       location: "Phamee Zone 1, Phase 1",
       poleNumber: "P-00001",
       recordedDate: "15/01/2026",
@@ -59,14 +58,14 @@ export default function HarvestGradingRecordingCard({
     <div className="mx-auto max-w-6xl px-2 sm:px-4">
       {displayRecords.map((record) => (
         <Card
-          key={record.id}
+          key={record.poleNumber}
           className="card-vanilla mt-4 overflow-hidden rounded-lg p-3 shadow-sm sm:p-4"
         >
           {/* Top Section */}
           <div className="grid grid-cols-2 items-center gap-2 text-xs md:grid-cols-5 md:gap-4 md:text-sm">
             <div>
               <p className="text-muted-foreground text-xs">No.</p>
-              <p className="text-sm font-medium">{record.no}</p>
+              <p className="text-sm font-medium">{record.poleNumber}</p>
             </div>
 
             <div>

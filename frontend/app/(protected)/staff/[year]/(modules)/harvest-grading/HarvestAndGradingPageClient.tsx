@@ -1,31 +1,49 @@
-"use client"
+"use client";
 
-import ClusterSearch from "@/components/custom/staff/cluster-search";
-import StaffContent from "../cluster/layout";
-import ClusterRecordingCard from "@/components/custom/staff/cluster-recording-card";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
+import HarvestGradingRecordingCard from "@/components/custom/staff/harvest-grading-recording-card";
+import {
+  HarvestAndGradingItem,
+  HarvestGradingRecord,
+} from "@/lib/types/model/type";
 
-export default function HarvestAndGrading() {
+type Props = {
+  zoneNo: string
+  poles: HarvestAndGradingItem[];
+  year: string;
+};
 
+function mapToHarvestGradingRecord(
+  item: HarvestAndGradingItem
+): HarvestGradingRecord {
+  return {
+    poleid: item.poleId,
+    location: item.location,
+    poleNumber: item.poleNo.toString(),
+    recordedDate: item.createdAt,
+    editedDate: item.updatedAt,
+    status: item.harvestGradingFormDone ? "complete" : "incomplete",
+  };
+}
+
+export default function HarvestGradingList({ poles, year,zoneNo }: Props) {
   const router = useRouter();
-  const params = useParams();
-  const year = params.year as string;
-  const Id = params.formId as string;
 
+  const handleEditRecord = (record: HarvestGradingRecord) => {
+    router.push(`/staff/${year}/harvest-grading/${record.poleid}/harvest-grading-form?zoneNo=${zoneNo}`);
+  };
 
-    return(
-        <div className="space-y-4 sm:space-y-6">
-              
-        
-              <StaffContent>
-                <ClusterSearch />
-              </StaffContent>
-        
-              <StaffContent>
-                <div className="space-y-4">
-                  
-                </div>
-              </StaffContent>
-        </div>
-    )
+  const records = poles.map(mapToHarvestGradingRecord);
+
+  return (
+    <div className="mt-6 space-y-2">
+      {records.map((record) => (
+        <HarvestGradingRecordingCard
+          key={record.poleNumber}
+          records={[record]}
+          onEdit={handleEditRecord}
+        />
+      ))}
+    </div>
+  );
 }

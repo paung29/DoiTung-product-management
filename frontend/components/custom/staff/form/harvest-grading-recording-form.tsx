@@ -1,14 +1,19 @@
-import React from "react";
+"use client"
+
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import FormsInput from "../../common/forms/form-input";
 import CustomButton from "../../common/custom-button";
 import { X, Check } from "lucide-react";
-import type { HarvestGradingRecord } from "@/lib/types/model/type";
-import { record, z } from "zod";
+import type { HarvestGradingRecord, HarvestGradingRecordInput, HarvestGradingRecordResponse } from "@/lib/types/model/type";
+import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useParams, useRouter } from "next/navigation";
+import { createHarvestGrading } from "@/lib/server-actions/create-harvest-grading-client";
 
 interface HarvestGradingRecordingFormProps {
+  data : HarvestGradingRecordResponse,
+  zoneNo : number,
   record?: HarvestGradingRecord | null;
   onBack?: () => void;
 }
@@ -47,47 +52,58 @@ const harvestSchema = z.object({
 type HarvestGradingRecordingFormData = z.infer<typeof harvestSchema>;
 
 export default function HarvestGradingRecordingForm({
+  data,
+  zoneNo,
   record,
   onBack = () => {},
 }: HarvestGradingRecordingFormProps) {
+
+  const params = useParams();
+  const year = params.year
+  const zoneId = zoneNo
+
+  const router = useRouter();
+
   const form = useForm<HarvestGradingRecordingFormData>({
     resolver: zodResolver(harvestSchema),
     defaultValues: {
-      gradeA_plus: {
-        grade: "A+ (18+)",
-        podsCount: 1,
-        weight: 0.0,
-      },
-      gradeA: {
-        grade: "A (15-18)",
-        podsCount: 1,
-        weight: 0.0,
-      },
-      gradeB: {
-        grade: "B (12-15)",
-        podsCount: 0,
-        weight: 0.0,
-      },
-      gradeC: {
-        grade: "C (10-12)",
-        podsCount: 0,
-        weight: 0.0,
-      },
-      gradeD_plus: {
-        grade: "D+ (<10)",
-        podsCount: 0,
-        weight: 0.0,
-      },
-      rejected: {
-        grade: "Rejected/Undersized ",
-        podsCount: 0,
-        weight: 0.0,
-      },
+      gradeA_plus: { grade: "A_PLUS", podsCount: data.gradeAPlusCount, weight: data.gradeAPlusWeight },
+      gradeA: { grade: "A", podsCount: data.gradeACount, weight: data.gradeAWeight  },
+      gradeB: { grade: "B", podsCount: data.gradeBCount, weight: data.gradeBWeight  },
+      gradeC: { grade: "C", podsCount: data.gradeCCount, weight: data.gradeCWeight },
+      gradeD_plus: { grade: "D_PLUS", podsCount: data.gradeDPlusCount, weight: data.gradeDPlusWeight },
+      rejected: { grade: "REJECTED", podsCount: data.undersizedCount, weight: data.undersizedWeight },
     },
   });
 
-  const onSubmit = (data: HarvestGradingRecordingFormData) => {
+  const onSubmit = async (data: HarvestGradingRecordingFormData) => {
+
+    const reformData : HarvestGradingRecordInput = {
+      year: Number(year),
+      zoneNo: zoneId,
+      poleNo: Number(record?.poleNumber),
+      gradeAPlusCount: data.gradeA_plus.podsCount,
+      gradeAPlusWeight: data.gradeA_plus.weight,
+      gradeACount: data.gradeA.podsCount,
+      gradeAWeight: data.gradeA.weight,
+      gradeBCount: data.gradeB.podsCount,
+      gradeBWeight: data.gradeB.weight,
+      gradeCCount: data.gradeC.podsCount,
+      gradeCWeight: data.gradeC.weight,
+      gradeDPlusCount: data.gradeD_plus.podsCount,
+      gradeDPlusWeight: data.gradeD_plus.weight,
+      undersizedCount: data.rejected.podsCount,
+      undersizedWeight: data.rejected.weight,
+    }
     console.log("Form Data:", data);
+    console.log("Form Data:", reformData);
+
+    const result = await createHarvestGrading(reformData)
+    console.log(result)
+
+
+    router.replace(`/staff/${year}/harvest-grading?zoneNo=${zoneNo}`)
+    
   };
 
   const handleCancel = () => {
@@ -224,9 +240,9 @@ export default function HarvestGradingRecordingForm({
               className="w-full bg-red-600 px-6 py-2 text-white hover:bg-red-700 sm:w-auto sm:px-8"
             />
             <CustomButton
+              type="submit"
               label="Submit"
               icon={Check}
-              onClick={form.handleSubmit(onSubmit)}
               className="w-full bg-green-600 px-6 py-2 text-white hover:bg-green-700 sm:w-auto sm:px-8"
             />
           </div>

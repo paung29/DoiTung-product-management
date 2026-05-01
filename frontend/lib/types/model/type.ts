@@ -219,14 +219,51 @@ export type FormsEditType = {
 
 // Record Models
 export type HarvestGradingRecord = {
-  id: string;
-  no: number;
+  poleid: number;
   location: string;
   poleNumber: string;
   recordedDate: string;
   editedDate: string;
   status: "complete" | "incomplete" | "pending";
 };
+
+export type HarvestGradingRecordInput = {
+  year: number;
+  zoneNo: number;
+  poleNo: number;
+  gradeAPlusCount: number;
+  gradeAPlusWeight: number;
+  gradeACount: number;
+  gradeAWeight: number;
+  gradeBCount: number;
+  gradeBWeight: number;
+  gradeCCount: number;
+  gradeCWeight: number;
+  gradeDPlusCount: number;
+  gradeDPlusWeight: number;
+  undersizedCount: number;
+  undersizedWeight: number;
+}
+
+export type HarvestGradingRecordResponse = {
+  poleId: number;
+  year: number;
+  location: string;
+  poleNo: number;
+  gradeAPlusCount: number;
+  gradeAPlusWeight: number;
+  gradeACount: number;
+  gradeAWeight: number;
+  gradeBCount: number;
+  gradeBWeight: number;
+  gradeCCount: number;
+  gradeCWeight: number;
+  gradeDPlusCount: number;
+  gradeDPlusWeight: number;
+  undersizedCount: number;
+  undersizedWeight: number;
+  harvestGradingFormDone : boolean
+}
 
 // Chart Types
 export interface ChartDataPoint {
