@@ -25,7 +25,6 @@ export default async function Page({params, searchParams,} : {params : Promise<{
 
   console.log("fetching data")
   
-
   const apiData = response.ok ? await response.json() : { clusters: [] };
 
   const records = (apiData.clusters ?? []).map((item : ClusterApiItem) => ({

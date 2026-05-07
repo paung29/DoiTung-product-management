@@ -5,7 +5,7 @@ import FormCard from "./form-card";
 import ConditionForm from "./condition-form";
 import { Form } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
-import { PodRecordingFormType } from "@/lib/types/model/type";
+import { GetPodApiResponse, PodRecordingFormType } from "@/lib/types/model/type";
 
 import FormsInput from "../../common/forms/form-input";
 import CustomButton from "../../common/custom-button";
@@ -13,13 +13,27 @@ import { CircleCheck, CircleX } from "lucide-react";
 import { StaffFormTitle } from "./staff-form-title";
 import StaffDisable from "./staff-disable";
 import StaffSmallTitle from "./staff-small-title";
+import { useParams, useRouter } from "next/navigation";
 
-function PodRecordingForm() {
+function PodRecordingForm({record} : {record : GetPodApiResponse}) {
+
+  const router = useRouter();
+  const params = useParams();
+
+  const year = params.year
+  const formId = params.formId
+
+
   const onSubmit = (data: PodRecordingFormType) => {
     console.log(data);
   };
 
-  const form = useForm<PodRecordingFormType>({});
+  const form = useForm<PodRecordingFormType>({
+    defaultValues: {
+      condition: record.condition
+      
+    }
+  });
 
   return (
     <Form {...form}>
@@ -29,9 +43,9 @@ function PodRecordingForm() {
           <FormCard>
             <StaffFormTitle isRequired={false} title={"Cluster Information"} />
             <div className="flex flex-col justify-between gap-10 py-4 md:flex-row">
-              <StaffDisable title={"Location"} placeholder={"zone-1"} />
-              <StaffDisable title={"Pole-Id"} placeholder={"001"} />
-              <StaffDisable title={"Cluster-Id"} placeholder={"001"} />
+              <StaffDisable title={"Location"} placeholder={record.location} />
+              <StaffDisable title={"Pole-No"} placeholder={String(record.poleNo)} />
+              <StaffDisable title={"Cluster-No"} placeholder={String(record.clusterNo)} />
             </div>
           </FormCard>
         </div>
@@ -41,8 +55,8 @@ function PodRecordingForm() {
           <FormCard>
             <StaffFormTitle isRequired={true} title={"Pod Formation Data"} />
             <div className="flex flex-col md:flex-row md:gap-10 md:py-2">
-              <StaffDisable title={"Number of Pods Formed"} placeholder={"1"} />
-              <StaffDisable title={"Remaining Pods"} placeholder={"1"} />
+              <StaffDisable title={"Number of Pods Formed"} placeholder={String(record.numberPods)} />
+              <StaffDisable title={"Remaining Pods"} placeholder={String(record.remainingPods)} />
             </div>
             <div className="flex flex-col md:flex-row md:gap-10 md:py-2">
               <div className="flex-[0.5] md:pr-10">

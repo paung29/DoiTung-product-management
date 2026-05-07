@@ -13,7 +13,6 @@ function StaffHistory() {
       <div>
         <HarvestGradingRecordingCard />
         <HarvestGradingRecordingCard />
-        <ClusterRecordingCard />
       </div>
     </div>
   );

@@ -30,7 +30,7 @@ export default function HarvestGradingList({ poles, year,zoneNo }: Props) {
   const router = useRouter();
 
   const handleEditRecord = (record: HarvestGradingRecord) => {
-    router.push(`/staff/${year}/harvest-grading/${record.poleid}/harvest-grading-form?zoneNo=${zoneNo}`);
+    router.replace(`/staff/${year}/harvest-grading/${record.poleid}/harvest-grading-form?zoneNo=${zoneNo}`);
   };
 
   const records = poles.map(mapToHarvestGradingRecord);

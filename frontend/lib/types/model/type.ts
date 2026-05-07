@@ -126,6 +126,18 @@ export const PollinationRecordingFormSchema = z.object({
 export type PollinationRecordingFormInput = z.input<typeof PollinationRecordingFormSchema>;
 export type PollinationRecordingFormType = z.output<typeof PollinationRecordingFormSchema>;
 
+export type GetPodApiResponse = {
+  clusterId: number;
+  location: string;
+  poleNo: number;
+  clusterNo: number;
+  numberPods: number;
+  lostPods: number;
+  remainingPods: number;
+  condition: string;
+  podFormDone: boolean;
+}
+
 export type PodRecordingFormType = {
   location: string;
   pole_id: string;
