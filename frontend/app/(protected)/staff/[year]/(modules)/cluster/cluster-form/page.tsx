@@ -1,6 +1,7 @@
 "use client"
 
 import CustomButton from "@/components/custom/common/custom-button";
+import ApiError from "@/components/custom/common/error-handle";
 import FormsInput from "@/components/custom/common/forms/form-input";
 import CustomSelect from "@/components/custom/common/forms/form-select";
 import ConditionForm from "@/components/custom/staff/form/condition-form";
@@ -19,10 +20,13 @@ import { useForm } from "react-hook-form";
 function ClusterForm() {
 
   const [zones, setZones] = useState<Zone[]>([])
+  const [error, setError] = useState<String | null>()
 
   const params = useParams();
   const year = params.year as string;
   const router = useRouter();
+
+
   
   const onSubmit = async (data: ClusterRecordingFormType) => {
 
@@ -36,21 +40,36 @@ function ClusterForm() {
 
     console.log(reformData)
 
-    const response = await fetch(`${baseUrl}/clusters/create`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(reformData),
-      credentials: "include"
-    })
+    try{
+      const response = await fetch(`${baseUrl}/clusters/create`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(reformData),
+        credentials: "include"
+      })
 
-    const result = await response.json();
-    console.log(result)
-    
-    router.replace(`/staff/${year}/cluster`)
-    
+      const result = await response.json();
+
+      if(!response.ok) {
+        setError(result.message || "Failed to create")
+        return;
+      }
+
+      console.log(result)
+      router.replace(`/staff/${year}/cluster`)
+      } catch (error) {
+        setError("Cannot connect to server");
+      }
   };
+
+  const onCancel = () => {
+    form.resetField("poleNo")
+    form.resetField("clusterNo")
+    form.resetField("condition")
+    form.resetField("zoneNo")
+  }
 
   const form = useForm<ClusterRecordingFormInput, any, ClusterRecordingFormType>({
     resolver: zodResolver(ClusterRecordingFormTypeSchema),
@@ -101,6 +120,11 @@ function ClusterForm() {
 
   return (
     <Form {...form}>
+      {
+        error && (
+          <ApiError message={error.toString()}/>
+        )
+      }
       <form className="flex flex-col">
         {/* Location */}
         <div className="pb-8">
@@ -157,7 +181,7 @@ function ClusterForm() {
       <div className="flex flex-row items-center justify-around gap-4">
         <CustomButton
           label="Cancel"
-          onClick={() => console.log("Delete")}
+          onClick={onCancel}
           className="w-[180px] bg-red-600 hover:bg-red-700"
           icon={CircleX}
         />

@@ -20,6 +20,10 @@ export default async function Page({params,} : {params : {year : string, formId:
       }
   });
 
+  if (!response.ok) {
+    throw new Error("Failed to fetch pod form");
+  }
+
   const result : GetPodApiResponse  = await response.json();
   console.log(result)
   return(

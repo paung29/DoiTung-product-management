@@ -1,5 +1,11 @@
 import z, { number, string } from "zod";
 
+export type ApiError = {
+  errors : string | null,
+  message : string,
+  success : boolean
+}
+
 // Form Types for User Management
 export type CreateUserFormData = {
   name: string;
@@ -138,12 +144,33 @@ export type GetPodApiResponse = {
   podFormDone: boolean;
 }
 
+export type PodCreateForm = {
+  clusterId : number;
+  lostPods : number;
+  condition : string;
+}
+
+export const PodFormSchema = z.object({
+  lostPods: z
+    .string()
+    .min(1, "Lost pods is required")
+    .refine((value) => !isNaN(Number(value)), {
+      message: "Lost pods must be a number",
+    }),
+  condition: z
+    .string()
+    .min(1, "Condition is required"),
+});
+
+export type PodFormValues = z.infer<typeof PodFormSchema>;
+
 export type PodRecordingFormType = {
   location: string;
   pole_id: string;
   cluster_id: string;
   condition: string;
   lost_pods: string;
+  redmaing_pods : string;
 };
 
 export type PreHarvestRecordingFormType = {
@@ -155,6 +182,18 @@ export type PreHarvestRecordingFormType = {
   pods_removed: string;
   plants_with_pods_removed: string;
 };
+
+export type GetPreHarvestApiResponse = {
+  clusterId: number;
+  location: string;
+  poleNo: number;
+  clusterNo: number;
+  numberPods: number;
+  lostPods: number;
+  remainingPods: number;
+  condition: string;
+  podFormDone: boolean;
+}
 
 export type HarvestAndGradingResponse = {
   poles: HarvestAndGradingItem[]
