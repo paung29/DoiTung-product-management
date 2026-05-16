@@ -173,6 +173,41 @@ export type PodRecordingFormType = {
   redmaing_pods : string;
 };
 
+export const PreHarvestFormShcema = z.object({
+  clusterId: z.number(),
+  numberPodsSecondRound : z
+    .string()
+    .min(1, "Number of Pods (Round-2) is required")
+    .refine((value) => !isNaN(Number(value)), {
+      message: "Number of Pods (Round-2) must be a number",
+    }),
+  removedPods : z
+  .string()
+  .min(1, "Pods Removed is required")
+  .refine((value) => !isNaN(Number(value)), {
+    message: "Pods Removed must be a number",
+  }),
+  plantsRemoved : z
+  .string()
+  .min(1, "Plants With Pods Removed is required")
+  .refine((value) => !isNaN(Number(value)), {
+    message: "Plants With Pods Removed must be a number",
+  }),
+  condition: z
+    .string()
+    .min(1, "Condition is required"),
+})
+
+export type PreHarvestFormValue = z.infer<typeof PreHarvestFormShcema>
+
+export type CreatePreHarvestForm = {
+  clusterId : number,
+  numberPodsSecondRound : number,
+  removedPods : number,
+  plantsRemoved : number,
+  condition : string,
+}
+
 export type PreHarvestRecordingFormType = {
   location: string;
   pole_id: string;
@@ -188,11 +223,13 @@ export type GetPreHarvestApiResponse = {
   location: string;
   poleNo: number;
   clusterNo: number;
-  numberPods: number;
-  lostPods: number;
   remainingPods: number;
+  numberPodsSecondRound : number;
+  lostPodsBeforeHarvest : number;
+  removedPods: number;
+  plantsRemoved: number;
   condition: string;
-  podFormDone: boolean;
+  preHarvestFormDone: boolean;
 }
 
 export type HarvestAndGradingResponse = {
