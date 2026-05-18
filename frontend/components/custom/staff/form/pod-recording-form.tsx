@@ -92,6 +92,10 @@ function PodRecordingForm({record} : {record : GetPodApiResponse}) {
     
   };
 
+  const handleCancel = () => {
+    form.reset();
+  };
+
   return (
     <Form {...form}>
       <form className="flex flex-col">
@@ -154,7 +158,7 @@ function PodRecordingForm({record} : {record : GetPodApiResponse}) {
       <div className="flex flex-row items-center justify-around gap-4">
         <CustomButton
           label="Cancel"
-          onClick={() => console.log("Delete")}
+          onClick={handleCancel}
           className="w-[180px] bg-red-600 hover:bg-red-700"
           icon={CircleX}
         />

@@ -10,6 +10,9 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useParams, useRouter } from "next/navigation";
 import { createHarvestGrading } from "@/lib/server-actions/create-harvest-grading-client";
+import { useState } from "react";
+import { getErrorMessage } from "@/lib/types/model/function";
+import ApiErrorUI from "../../common/error-handle";
 
 interface HarvestGradingRecordingFormProps {
   data : HarvestGradingRecordResponse,
@@ -64,6 +67,8 @@ export default function HarvestGradingRecordingForm({
 
   const router = useRouter();
 
+  const [error, setError] = useState<String | null>()
+
   const form = useForm<HarvestGradingRecordingFormData>({
     resolver: zodResolver(harvestSchema),
     defaultValues: {
@@ -98,17 +103,24 @@ export default function HarvestGradingRecordingForm({
     console.log("Form Data:", data);
     console.log("Form Data:", reformData);
 
-    const result = await createHarvestGrading(reformData)
-    console.log(result)
-
-
-    router.replace(`/staff/${year}/harvest-grading?zoneNo=${zoneNo}`)
+    try{
+      const result = await createHarvestGrading(reformData)
+        console.log(result);
+  
+        if (result.success === false) {
+          setError(result.message);
+          return;
+        }
+        router.replace(`/staff/${year}/harvest-grading?zoneNo=${zoneNo}`)
+      }catch(error) {
+        console.error("submit error:", error);
+        setError(getErrorMessage(error));
+    }
     
   };
 
   const handleCancel = () => {
     form.reset();
-    onBack();
   };
 
   const grades = [
@@ -181,6 +193,7 @@ export default function HarvestGradingRecordingForm({
           onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-6 rounded-lg rounded-b-2xl border-2 border-[#8a6752] bg-[#FAF3E0] sm:p-8"
         >
+          <ApiErrorUI message={error ? error.toString() : null}/>
           {/* Grade Enry Section */}
           <div className="space-y-4">
             <h3 className="flex items-center gap-2 text-base font-semibold text-[#8a6752] sm:text-lg">

@@ -26,7 +26,6 @@ function ClusterForm() {
   const year = params.year as string;
   const router = useRouter();
 
-
   
   const onSubmit = async (data: ClusterRecordingFormType) => {
 

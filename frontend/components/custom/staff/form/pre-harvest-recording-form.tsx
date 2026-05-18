@@ -55,6 +55,10 @@ function PreHarvestRecordingForm({record} : {record : GetPreHarvestApiResponse})
     }
   };
 
+  const handleCancel = () => {
+    form.reset();
+  };
+
   const form = useForm<PreHarvestFormValue>({
     resolver: zodResolver(PreHarvestFormShcema),
     defaultValues : {
@@ -144,7 +148,7 @@ function PreHarvestRecordingForm({record} : {record : GetPreHarvestApiResponse})
       <div className="flex flex-row items-center justify-around gap-4">
         <CustomButton
           label="Cancel"
-          onClick={() => console.log("Delete")}
+          onClick={handleCancel}
           className="w-[180px] bg-red-600 hover:bg-red-700"
           icon={CircleX}
         />
