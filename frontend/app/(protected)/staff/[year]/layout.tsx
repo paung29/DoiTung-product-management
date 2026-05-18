@@ -4,24 +4,24 @@ import LanguageSwitch from "@/components/custom/staff/language-switch";
 import Menu, { MenuItem } from "@/components/custom/staff/menu";
 import { Folder, History, Home, User } from "lucide-react";
 import Image from "next/image";
+import { useParams } from "next/navigation";
 
 export default function ProtectedLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+
+  const params = useParams()
+  const year = params.year
+
   const staffMenuItems: MenuItem[] = [
     {
       label: "Home",
       icon: Home,
       href: "/staff",
     },
-    {
-      label: "Data Collection",
-      icon: Folder,
-      href: "/staff/data-collection",
-    },
-    { label: "History", icon: History, href: "/staff/history" },
+    { label: "History", icon: History, href: `/staff/${year}/history` },
     { label: "Profile & Settings", icon: User, href: "/staff/profile" },
   ];
 

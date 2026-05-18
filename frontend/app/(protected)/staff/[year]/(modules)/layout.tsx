@@ -46,7 +46,7 @@ const pageConfigMap: Record<string, PageConfig> = {
     icon: Sprout,
   },
   "harvest-grading": {
-    title: "Harvest and Grading",
+    title: "Harvest and Grading ",
     subtitle: "Record harvest and grading data",
     icon: ClipboardList,
   },
