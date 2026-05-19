@@ -7,8 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { CreateOrEditZoneButton } from "../create-new-zone-button";
-
+import { EditPreharvestButton } from "../edit-preharvest-button";
 export type PreharvestTableDataType = {
   preharvestId: number;
   poleNo: string;
@@ -72,7 +71,20 @@ export function PreharvestTable({
                 <TableCell>{item.recordedBy}</TableCell>
                 <TableCell>
                   <div className="flex flex-row justify-center gap-2">
-                    <CreateOrEditZoneButton isEdit={true} />
+                    <EditPreharvestButton
+                      preharvestData={{
+                        recordedDate: item.recordedDate,
+                        poleNo: String(item.poleNo),
+                        clusterId: String(item.clusterId),
+                        gradeA_round1: item.gradeARound1,
+                        numberOfPods_round2: item.numberOfPodsRound2,
+                        lostPodsBeforeHarvest: item.lostPodsBeforeHarvest,
+                        podRemoved: item.podRemoved,
+                        plantWithPodRemoved: item.plantWithPodRemoved,
+                        condition: item.condition,
+                        recordedBy: item.recordedBy,
+                      }}
+                    />
                   </div>
                 </TableCell>
               </TableRow>

@@ -7,7 +7,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { CreateOrEditZoneButton } from "../create-new-zone-button";
+import { EditPodButton } from "../edit-pod-button";
+import { DeleteZoneButton } from "../../delete-zone-button";
 
 export type PodTableDataType = {
   podId: number;
@@ -69,7 +70,19 @@ export function PodTable({
                 <TableCell>{item.recordedBy}</TableCell>
                 <TableCell>
                   <div className="flex flex-row justify-center gap-2">
-                    <CreateOrEditZoneButton isEdit={true} />
+                    <EditPodButton
+                      podData={{
+                        recordedDate: item.recordedDate,
+                        poleNo: item.poleNo,
+                        clusterId: item.clusterId,
+                        totalFlower: item.totalFlower,
+                        numberOfPod: item.numberOfPod,
+                        lostPods: item.lostPods,
+                        remainingPod: item.remainingPod,
+                        condition: item.condition,
+                        recordedBy: item.recordedBy,
+                      }}
+                    />
                   </div>
                 </TableCell>
               </TableRow>

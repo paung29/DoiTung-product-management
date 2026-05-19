@@ -2,6 +2,7 @@
 
 import { Account } from "@/lib/types/model/account";
 import { Edit } from "lucide-react";
+import CustomButton from "./../common/custom-button";
 import {
   Table,
   TableBody,
@@ -76,13 +77,12 @@ export default function UsersTable({
               {/* Actions */}
               <TableCell>
                 <div className="flex items-center justify-center gap-3">
-                  <button
+                  <CustomButton
+                    label=""
+                    icon={Edit}
                     onClick={() => onEdit(user)}
-                    className="rounded-lg p-2 text-gray-600 transition-colors hover:bg-yellow-900/10 hover:text-yellow-900"
-                    title="Edit user"
-                  >
-                    <Edit size={18} />
-                  </button>
+                    className="rounded-lg p-2 text-white transition-colors hover:bg-yellow-900/10 hover:text-yellow-900"
+                  />
                 </div>
               </TableCell>
             </TableRow>

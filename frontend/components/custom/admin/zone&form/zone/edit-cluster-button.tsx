@@ -17,31 +17,28 @@ import { useForm } from "react-hook-form";
 import FormsInput from "../../../common/forms/form-input";
 import { Edit } from "lucide-react";
 import CustomSelect from "../../../common/forms/form-select";
-import { FlowerTableDataType } from "./form/flower-table";
 
-type FlowerFormData = {
+export type ClusterFormData = {
   recordedDate: string;
-  poleNo: string;
+  poleId: string;
   clusterId: string;
-  totalFlower: number;
   condition: string;
   recordedBy: string;
 };
 
-export function EditFlowerButton({
-  flowerData,
+export function EditClusterButton({
+  clusterData,
 }: {
-  flowerData: FlowerTableDataType;
+  clusterData: ClusterFormData;
 }) {
-  const form = useForm<FlowerFormData>({
+  const form = useForm<ClusterFormData>({
     mode: "onChange",
     defaultValues: {
-      recordedDate: flowerData.recordedDate || "",
-      poleNo: flowerData.poleNo || "",
-      clusterId: flowerData.clusterId || "",
-      totalFlower: flowerData.totalFlower || 0,
-      condition: flowerData.condition || "",
-      recordedBy: flowerData.recordedBy || "",
+      recordedDate: clusterData.recordedDate || "",
+      poleId: clusterData.poleId || "",
+      clusterId: clusterData.clusterId || "",
+      condition: clusterData.condition || "",
+      recordedBy: clusterData.recordedBy || "",
     },
   });
 
@@ -50,31 +47,34 @@ export function EditFlowerButton({
   React.useEffect(() => {
     if (open) {
       form.reset({
-        recordedDate: flowerData.recordedDate,
-        poleNo: flowerData.poleNo,
-        clusterId: flowerData.clusterId,
-        totalFlower: flowerData.totalFlower,
-        condition: flowerData.condition,
-        recordedBy: flowerData.recordedBy,
+        recordedDate: clusterData.recordedDate,
+        poleId: clusterData.poleId,
+        clusterId: clusterData.clusterId,
+        condition: clusterData.condition,
+        recordedBy: clusterData.recordedBy,
       });
     }
-  }, [open, form, flowerData]);
+  }, [open, form, clusterData]);
 
-  const onSubmit = (data: FlowerFormData) => {
-    console.log("Updated Flower Form Data:", data);
+  const onSubmit = (data: ClusterFormData) => {
+    console.log("Updated Cluster Form Data:", data);
     setOpen(false);
   };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <CustomButton label="" icon={Edit} className="p-2" />
+        <CustomButton
+          label=""
+          icon={Edit}
+          className="border-primary-button flex h-8 w-8 items-center justify-center rounded-md p-2"
+        />
       </DialogTrigger>
 
       <DialogContent className="text-primary-button border-primary border bg-white sm:max-w-2xl">
         <DialogHeader className="bg-primary-button -mx-6 -mt-6 mb-6 rounded-t-lg px-6 py-4">
           <DialogTitle className="text-xl font-bold text-white">
-            Edit Flower Form
+            Edit Cluster Form
           </DialogTitle>
           <button
             onClick={() => setOpen(false)}
@@ -100,13 +100,13 @@ export function EditFlowerButton({
                 <FormsInput
                   inputClassName="bg-white border-primary-button border rounded-lg"
                   control={form.control}
-                  path="poleNo"
+                  path="poleId"
                   label="Pole ID"
                   placeholder="P-001"
                 />
               </div>
 
-              {/* Second Row: Cluster ID and Total Flower */}
+              {/* Second Row: */}
               <div className="mb-4 grid grid-cols-2 gap-4">
                 <FormsInput
                   inputClassName="bg-white border-primary-button border rounded-lg"
@@ -115,17 +115,11 @@ export function EditFlowerButton({
                   label="Cluster ID"
                   placeholder="C-001"
                 />
-                <FormsInput
-                  inputClassName="bg-white border-primary-button border rounded-lg"
-                  control={form.control}
-                  path="totalFlower"
-                  label="Total Flower"
-                  type="number"
-                  placeholder="10"
-                />
+
+                <div />
               </div>
 
-              {/* Third Row: Condition  */}
+              {/* Third Row: Condition */}
               <div className="mb-4">
                 <CustomSelect
                   triggerClassName="bg-white border-primary-button border rounded-lg"
@@ -156,13 +150,14 @@ export function EditFlowerButton({
               <DialogClose asChild>
                 <CustomButton
                   label="Cancel"
-                  className="bg-white text-gray-600 ring-1 ring-gray-200"
+                  className="bg-white text-gray-700 ring-1 ring-gray-200"
+                  onClick={() => setOpen(false)}
                 />
               </DialogClose>
               <CustomButton
                 label="Save Changes"
                 type="submit"
-                className="bg-primary-button font-semibold text-white"
+                className="bg-primary-button"
               />
             </DialogFooter>
           </form>

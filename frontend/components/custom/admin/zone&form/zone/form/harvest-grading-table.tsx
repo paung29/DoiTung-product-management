@@ -7,7 +7,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { CreateOrEditZoneButton } from "../create-new-zone-button";
+import { EditHarvestGradingButton } from "../edit-harvest&grading";
+import { DeleteZoneButton } from "../../delete-zone-button";
 
 export type HarvestGradingTableDataType = {
   harvestId: number;
@@ -117,7 +118,25 @@ export function HarvestGradingTable({
                 <TableCell>{item.recordedBy}</TableCell>
                 <TableCell>
                   <div className="flex flex-row justify-center gap-2">
-                    <CreateOrEditZoneButton isEdit={true} />
+                    <EditHarvestGradingButton
+                      harvestData={{
+                        recordedDate: item.recordedDate,
+                        poleNo: item.poleNo,
+                        gradeAPlus_noPod: item.gradeAPlus_noPod,
+                        gradeAPlus_weight: item.gradeAPlus_weight,
+                        gradeA_noPod: item.gradeA_noPod,
+                        gradeA_weight: item.gradeA_weight,
+                        gradeB_noPod: item.gradeB_noPod,
+                        gradeB_weight: item.gradeB_weight,
+                        gradeC_noPod: item.gradeC_noPod,
+                        gradeC_weight: item.gradeC_weight,
+                        gradeDPlus_noPod: item.gradeDPlus_noPod,
+                        gradeDPlus_weight: item.gradeDPlus_weight,
+                        rejected_noPod: item.rejectedUndersize_noPod,
+                        rejected_weight: item.rejectedUndersize_weight,
+                        recordedBy: item.recordedBy,
+                      }}
+                    />
                   </div>
                 </TableCell>
               </TableRow>

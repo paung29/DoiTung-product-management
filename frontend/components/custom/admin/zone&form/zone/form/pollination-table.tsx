@@ -7,8 +7,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { CreateOrEditZoneButton } from "../create-new-zone-button";
 import { DeleteZoneButton } from "../../delete-zone-button";
+import { EditPollinationButton } from "../edit-pollination-button";
 
 export type PollinationTableDataType = {
   pollinationId: number;
@@ -73,7 +73,7 @@ export function PollinationTable({
                 <TableCell>{item.recordedBy}</TableCell>
                 <TableCell>
                   <div className="flex flex-row justify-center gap-2">
-                    <CreateOrEditZoneButton isEdit={true} />
+                    <EditPollinationButton pollinationData={item} />
                   </div>
                 </TableCell>
               </TableRow>

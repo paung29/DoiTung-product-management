@@ -6,7 +6,6 @@ import StatusCard from "@/components/custom/admin/statusCard";
 import CreateUserModal from "@/components/custom/admin/create-user-modal";
 import UsersTable from "@/components/custom/admin/users-table";
 import { Account, getUserStatus } from "@/lib/types/model/account";
-import { CreateUserFormData } from "@/lib/types/model/type";
 import { Shield, UserCog, Users } from "lucide-react";
 
 function UserManage() {
@@ -18,8 +17,19 @@ function UserManage() {
 
   const filtered = users;
 
-  const handleCreateUser = (data: CreateUserFormData) => {
-    console.log("Creating user:", data);
+  type CreateOrEditUserPayload = {
+    name: string;
+    email: string;
+    role: string;
+    status: string;
+    phone?: string;
+    department?: string;
+    password?: string;
+    confirmPassword?: string;
+  };
+
+  const handleCreateUser = (data: CreateOrEditUserPayload) => {
+    console.log("Creating or updating user:", data);
   };
 
   const handleEditUser = (user: Account) => {

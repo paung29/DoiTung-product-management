@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/table";
 import { CreateOrEditZoneButton } from "./create-new-zone-button";
 import { DeleteZoneButton } from "../delete-zone-button";
+import CustomButton from "../../../common/custom-button";
 
 export type ZoneTableDataType = {
   zone_name: string;
@@ -40,9 +41,10 @@ export function ZoneTable({
               <TableCell className="font-medium">{item.zone_name}</TableCell>
               <TableCell>{item.total_plants}</TableCell>
               <TableCell>
-                <button className="bg-primary-button rounded-lg px-4 py-2 text-white">
-                  View Report
-                </button>
+                <CustomButton
+                  label="View Report"
+                  className="bg-primary-button rounded-lg px-4 py-2 text-white"
+                />
               </TableCell>
               <TableCell>
                 <div className="flex flex-row justify-center gap-2">

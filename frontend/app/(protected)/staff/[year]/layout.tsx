@@ -4,12 +4,16 @@ import LanguageSwitch from "@/components/custom/staff/language-switch";
 import Menu, { MenuItem } from "@/components/custom/staff/menu";
 import { Folder, History, Home, User } from "lucide-react";
 import Image from "next/image";
+import { useParams } from "next/navigation";
 
 export default function ProtectedLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const params = useParams();
+  const year = params.year as string;
+
   const staffMenuItems: MenuItem[] = [
     {
       label: "Home",
@@ -22,7 +26,7 @@ export default function ProtectedLayout({
       href: "/staff/data-collection",
     },
     { label: "History", icon: History, href: "/staff/history" },
-    { label: "Profile & Settings", icon: User, href: "/staff/profile" },
+    { label: "Profile & Settings", icon: User, href: `/staff/${year}/profile` },
   ];
 
   return (
@@ -56,7 +60,7 @@ export default function ProtectedLayout({
         </div>
       </header>
 
-      <main className="min-h-[calc(100vh-60px)] bg-[#f2f1ed] sm:min-h-[calc(100vh-64px)] md:min-h-[calc(100vh-80px)]">
+      <main className="bg-staff-backdrop min-h-[calc(100vh-60px)] sm:min-h-[calc(100vh-64px)] md:min-h-[calc(100vh-80px)]">
         {children}
       </main>
     </div>

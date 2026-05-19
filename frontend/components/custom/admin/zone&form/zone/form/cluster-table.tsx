@@ -7,8 +7,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { CreateOrEditZoneButton } from "../create-new-zone-button";
-import { DeleteZoneButton } from "../../delete-zone-button";
+import DeleteClusterButton from "../delete-cluster-button";
+import { EditClusterButton } from "../edit-cluster-button";
 
 export type ClusterTableDataType = {
   clusterId: number;
@@ -21,8 +21,10 @@ export type ClusterTableDataType = {
 
 export function ClusterTable({
   clusterTableData,
+  onDelete,
 }: {
   clusterTableData: ClusterTableDataType[];
+  onDelete?: (row: ClusterTableDataType) => void;
 }) {
   return (
     <div className="border-primary overflow-hidden rounded-3xl border bg-[#f8f3e8]">
@@ -33,8 +35,8 @@ export function ClusterTable({
         <TableHeader>
           <TableRow className="[&_th]:text-primary-button hover:bg-secondary bg-secondary border-primary-button [&_th]:py-4 [&_th]:text-center [&_th]:font-semibold">
             <TableHead>Date</TableHead>
-            <TableHead>Pole Id</TableHead>
-            <TableHead>Cluster Id</TableHead>
+            <TableHead>Pole ID</TableHead>
+            <TableHead>Cluster ID</TableHead>
             <TableHead>Condition</TableHead>
             <TableHead>RecordedBy</TableHead>
             <TableHead>Action</TableHead>
@@ -54,8 +56,22 @@ export function ClusterTable({
               <TableCell>{item.recordedBy}</TableCell>
               <TableCell>
                 <div className="flex flex-row justify-center gap-2">
-                  <CreateOrEditZoneButton isEdit={true} />
-                  <DeleteZoneButton />
+                  <EditClusterButton
+                    clusterData={{
+                      recordedDate: item.recordedDate,
+                      poleId: String(item.poleNo),
+                      clusterId: String(item.clusterId ?? item.clusterNo),
+                      condition: item.condition,
+                      recordedBy: item.recordedBy,
+                    }}
+                  />
+                  <DeleteClusterButton
+                    poleId={String(item.poleNo)}
+                    clusterId={String(item.clusterId ?? item.clusterNo)}
+                    onDelete={() =>
+                      onDelete ? onDelete(item) : console.log("Delete", item)
+                    }
+                  />
                 </div>
               </TableCell>
             </TableRow>
