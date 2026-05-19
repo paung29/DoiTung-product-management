@@ -1,5 +1,11 @@
 import z from "zod";
 
+export type ApiError = {
+  errors: string | null;
+  message: string;
+  success: boolean;
+};
+
 // Form Types for User Management
 export type CreateUserFormData = {
   name: string;
@@ -38,7 +44,16 @@ export type ClusterEditingView = {
   cluster_id: string;
 };
 
-export type FlowerRecordingFormType = {
+export const ClusterEditSchema = z.object({
+  clusterId: z.number(),
+  condition: z.string().nonempty("Condition is required"),
+});
+
+export type ClusterEditType = z.input<typeof ClusterEditSchema>;
+
+export type ClusterApiItem = {
+  no: number;
+  clusterId: number;
   location: string;
   pole_id: string;
   cluster_id: string;
@@ -56,12 +71,135 @@ export type PollinationRecordingFormType = {
   unsuccessful_pollination: string;
 };
 
+export type GetClusterApiResponse = {
+  clusterId: number;
+  location: string;
+  poleNo: number;
+  clusterNo: number;
+  condition: string;
+  totalFlowers: number;
+  flowerFormDone: boolean;
+};
+
+export const FlowerRecordingFormTypeSchema = z.object({
+  clusterId: z.coerce.number(),
+  condition: z.string().nonempty("Condition is required"),
+  totalFlowers: z
+    .string()
+    .nonempty("Total Flowers is required")
+    .transform((val) => Number(val))
+    .refine((val) => !isNaN(val), "Must be a number")
+    .refine((val) => val >= 0, "Must be 0 or positive"),
+});
+
+export type FlowerRecordingFormInput = z.input<
+  typeof FlowerRecordingFormTypeSchema
+>;
+export type FlowerRecordingFormType = z.output<
+  typeof FlowerRecordingFormTypeSchema
+>;
+
+export type GetPollinationFormApiResponse = {
+  clusterId: number;
+  location: string;
+  poleNo: number;
+  clusterNo: number;
+  totalFlowers: number;
+  numberPods: number;
+  unsuccessfulPollination: number;
+  goodFlowers: number;
+  badFlowers: number;
+  condition: string;
+  pollinationFormDone: boolean;
+};
+
+export const PollinationRecordingFormSchema = z.object({
+  clusterId: z.coerce.number(),
+  numberPods: z
+    .string({ error: "Number of Pods is required" })
+    .nonempty("Number of Pods is required")
+    .transform((val) => Number(val))
+    .refine((val) => !isNaN(val), "Must be a number")
+    .refine((val) => val >= 0, "Must be 0 or positive"),
+  unsuccessfulPollination: z
+    .string({ error: "Unsuccessful Pollination is required" })
+    .nonempty("Unsuccessful Pollination is required")
+    .transform((val) => Number(val))
+    .refine((val) => !isNaN(val), "Must be a number")
+    .refine((val) => val >= 0, "Must be 0 or positive"),
+  condition: z.string().nonempty("Condition is required"),
+});
+
+export type GetPodApiResponse = {
+  clusterId: number;
+  location: string;
+  poleNo: number;
+  clusterNo: number;
+  numberPods: number;
+  lostPods: number;
+  remainingPods: number;
+  condition: string;
+  podFormDone: boolean;
+};
+
+export type PodCreateForm = {
+  clusterId: number;
+  lostPods: number;
+  condition: string;
+};
+
+export const PodFormSchema = z.object({
+  lostPods: z
+    .string()
+    .min(1, "Lost pods is required")
+    .refine((value) => !isNaN(Number(value)), {
+      message: "Lost pods must be a number",
+    }),
+  condition: z.string().min(1, "Condition is required"),
+});
+
+export type PodFormValues = z.infer<typeof PodFormSchema>;
+
 export type PodRecordingFormType = {
   location: string;
   pole_id: string;
   cluster_id: string;
   condition: string;
   lost_pods: string;
+  redmaing_pods: string;
+};
+
+export const PreHarvestFormShcema = z.object({
+  clusterId: z.number(),
+  numberPodsSecondRound: z
+    .string()
+    .min(1, "Number of Pods (Round-2) is required")
+    .refine((value) => !isNaN(Number(value)), {
+      message: "Number of Pods (Round-2) must be a number",
+    }),
+  removedPods: z
+    .string()
+    .min(1, "Pods Removed is required")
+    .refine((value) => !isNaN(Number(value)), {
+      message: "Pods Removed must be a number",
+    }),
+  plantsRemoved: z
+    .string()
+    .min(1, "Plants With Pods Removed is required")
+    .refine((value) => !isNaN(Number(value)), {
+      message: "Plants With Pods Removed must be a number",
+    }),
+  condition: z.string().min(1, "Condition is required"),
+});
+
+export type PreHarvestFormValue = z.infer<typeof PreHarvestFormShcema>;
+
+export type CreatePreHarvestForm = {
+  clusterId: number;
+  numberPodsSecondRound: number;
+  removedPods: number;
+  plantsRemoved: number;
+  condition: string;
 };
 
 export type PreHarvestRecordingFormType = {
@@ -72,6 +210,34 @@ export type PreHarvestRecordingFormType = {
   number_of_pods_round_2: string;
   pods_removed: string;
   plants_with_pods_removed: string;
+};
+
+export type GetPreHarvestApiResponse = {
+  clusterId: number;
+  location: string;
+  poleNo: number;
+  clusterNo: number;
+  remainingPods: number;
+  numberPodsSecondRound: number;
+  lostPodsBeforeHarvest: number;
+  removedPods: number;
+  plantsRemoved: number;
+  condition: string;
+  preHarvestFormDone: boolean;
+};
+
+export type HarvestAndGradingResponse = {
+  poles: HarvestAndGradingItem[];
+};
+
+export type HarvestAndGradingItem = {
+  poleId: number;
+  zoneId: number;
+  location: string;
+  poleNo: number;
+  harvestGradingFormDone: boolean;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type HarvestAndGradingSearchForm = {
@@ -135,13 +301,50 @@ export type FormsEditType = {
 
 // Record Models
 export type HarvestGradingRecord = {
-  id: string;
-  no: number;
+  poleid: number;
   location: string;
   poleNumber: string;
   recordedDate: string;
   editedDate: string;
   status: "complete" | "incomplete" | "pending";
+};
+
+export type HarvestGradingRecordInput = {
+  year: number;
+  zoneNo: number;
+  poleNo: number;
+  gradeAPlusCount: number;
+  gradeAPlusWeight: number;
+  gradeACount: number;
+  gradeAWeight: number;
+  gradeBCount: number;
+  gradeBWeight: number;
+  gradeCCount: number;
+  gradeCWeight: number;
+  gradeDPlusCount: number;
+  gradeDPlusWeight: number;
+  undersizedCount: number;
+  undersizedWeight: number;
+};
+
+export type HarvestGradingRecordResponse = {
+  poleId: number;
+  year: number;
+  location: string;
+  poleNo: number;
+  gradeAPlusCount: number;
+  gradeAPlusWeight: number;
+  gradeACount: number;
+  gradeAWeight: number;
+  gradeBCount: number;
+  gradeBWeight: number;
+  gradeCCount: number;
+  gradeCWeight: number;
+  gradeDPlusCount: number;
+  gradeDPlusWeight: number;
+  undersizedCount: number;
+  undersizedWeight: number;
+  harvestGradingFormDone: boolean;
 };
 
 // Chart Types

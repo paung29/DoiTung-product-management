@@ -16,10 +16,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { baseUrl } from "@/lib/utl";
 import { createCluster } from "@/lib/server-actions/create-flower-client";
+import { getErrorMessage } from "@/lib/types/model/function";
+import { ApiError } from "next/dist/server/api-utils";
+import ApiErrorUI from "../../common/error-handle";
 
 function FlowerRecordingForm() {
 
   const [Cluster, setCluster] = useState<GetClusterApiResponse | null>(null)
+  const [error, setError] = useState<String | null>()
 
   const router = useRouter();
   const params = useParams();
@@ -30,29 +34,45 @@ function FlowerRecordingForm() {
   const onSubmit = async (data: FlowerRecordingFormType) => {
     data.clusterId = Number(clusterId)
     console.log(data)
-    const result = await createCluster(data);
-    console.log(data)
-    console.log(result);
+    try{
+      const result = await createCluster(data);
+      console.log(result);
+
+      if (result.success === false) {
+        setError(result.message);
+        return;
+      }
+
+      router.replace(`/staff/${year}/flower`)
+    }catch(error) {
+      console.error("submit error:", error);
+      setError(getErrorMessage(error));
+    }
     
-    router.replace(`/staff/${year}/flower`)
+  };
+
+  const handleCancel = () => {
+    form.reset();
   };
 
   const form = useForm<FlowerRecordingFormInput, any, FlowerRecordingFormType>({
     
     resolver: zodResolver(FlowerRecordingFormTypeSchema),
     defaultValues: {
-      clusterId: 0,
+      clusterId: Number(clusterId),
       condition: "",
       totalFlowers: "",
     },
 });
 
   useEffect(() => {
+    if (!clusterId) return;
+    
     console.log("useEffect ran");
     console.log("clusterId:", clusterId);
     if(clusterId) {
       async function load() {
-        const response = await fetch(`${baseUrl}/clusters/get-cluster-form?clusterId=${clusterId}`, {
+        const response = await fetch(`${baseUrl}/flowers/get-flower-form?clusterId=${clusterId}`, {
           method: "GET",
           credentials: "include"
         })
@@ -65,9 +85,20 @@ function FlowerRecordingForm() {
     }
   }, [clusterId])
 
+  useEffect(() => {
+    if (!Cluster) return;
+
+    form.reset({
+      clusterId: Number(clusterId),
+      condition: Cluster.condition ?? "",
+      totalFlowers: String(Cluster.totalFlowers ?? ""),
+    });
+  }, [Cluster, clusterId, form]);
+
   return (
     <Form {...form}>
       <form className="flex flex-col">
+        <ApiErrorUI message={error ? error.toString() : null}/>
         {/* Location */}
         <div className="pb-8">
           <FormCard>
@@ -89,7 +120,7 @@ function FlowerRecordingForm() {
               type="number"
               control={form.control}
               path={"totalFlowers"}
-              placeholder="Enter total Flowers"
+              placeholder={ "Enter Total Flowers"}
               className="bg-staff-form-field rounded-lg"
             />
           </FormCard>
@@ -98,7 +129,7 @@ function FlowerRecordingForm() {
         {/* Condition */}
         <div className="pb-8">
           <FormCard>
-            <StaffFormTitle isRequired={true} title={"Location"} />
+            <StaffFormTitle isRequired={true} title={"Condition"} />
             <ConditionForm
               control={form.control}
               path={"condition"}
@@ -111,7 +142,7 @@ function FlowerRecordingForm() {
       <div className="flex flex-row items-center justify-around gap-4">
         <CustomButton
           label="Cancel"
-          onClick={() => console.log("Delete")}
+          onClick={handleCancel}
           className="w-[180px] bg-red-600 hover:bg-red-700"
           icon={CircleX}
         />

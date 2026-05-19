@@ -96,9 +96,9 @@ export function LoginForm() {
       setUser(userInfoResult);
 
       if (userInfoResult.role === "ADMIN") {
-        router.push("/admin")
+        router.replace("/admin")
       } else {
-        router.push("/staff")
+        router.replace("/staff")
       }
 
 

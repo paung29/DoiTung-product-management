@@ -1,30 +1,55 @@
-"use client"
+"use server"
 
-import ClusterSearch from "@/components/custom/staff/cluster-search";
-import StaffContent from "../cluster/layout";
-import { useParams, useRouter } from "next/navigation";
+import ClusterEntryPage from "@/app/(protected)/staff/[year]/(modules)/cluster/ClusterPageClient";
+import { ClusterApiItem } from "@/lib/types/model/type";
+import { baseUrl } from "@/lib/utl";
+import { cookies } from "next/headers";
+ 
+export default async function Page({params, searchParams,} : {params : Promise<{year : string}>, searchParams: Promise<{ zoneNo?: string }>;}) {
 
-export default function PreHarvestEntryPage() {
+  const cookieStore = await cookies();
+  const cookieHeader = cookieStore.toString();
 
-  const router = useRouter();
-  const params = useParams();
-  const year = params.year as string;
-  const Id = params.formId as string;
+  const {year} = await params;
+  const { zoneNo } = await searchParams;
 
-  const onClick = () => {
-    router.push(`/staff/${year}/pre-harvest/1/pre-harvest-form`)
-  }
-    return(
-        <div className="space-y-4 sm:space-y-6">
-          <StaffContent>
-            <ClusterSearch />
-          </StaffContent>
-    
-          <StaffContent>
-            <div className="space-y-4">
-              
-            </div>
-          </StaffContent>   
-        </div>
-    )
+  const selectedZoneNo = zoneNo ?? "3";
+
+  const response = await fetch(`${baseUrl}/clusters/get-by-zone?year=${year}&zoneNo=${selectedZoneNo}`, {
+    credentials: "include",
+    method: "GET",
+    headers: {
+      Cookie : cookieHeader
+    }
+  });
+
+  console.log("fetching data")
+  
+
+  const apiData = response.ok ? await response.json() : { clusters: [] };
+
+  const records = (apiData.clusters ?? []).map((item : ClusterApiItem) => ({
+      id: String(item.clusterId),             
+      no: item.no,
+      location: item.location,
+      poleNumber: `${item.poleNo}`,
+      clusterId: `${item.clusterNo}`,
+      recordedDate: `${item.recordedDate}`,
+      progressDone: item.progressDone 
+}));
+
+  
+  console.log(apiData)
+
+  return (
+    <ClusterEntryPage
+      link="pre-harvest"
+      editLink="pre-harvest-form"
+      year={year}
+      defaultZoneNo={selectedZoneNo}
+      records={records}
+     />
+  );
+  
 }
+

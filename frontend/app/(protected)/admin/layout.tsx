@@ -44,11 +44,6 @@ export default function ProtectedLayout({
       href: "/admin/user-management",
     },
     {
-      label: "Production Analytics",
-      icon: ChartColumn,
-      href: "/admin/production-analytics",
-    },
-    {
       label: "Zone & Form\nManagement",
       icon: MapPin,
       href: `/admin/zone-form-management`,

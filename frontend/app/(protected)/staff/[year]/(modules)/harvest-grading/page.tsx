@@ -1,100 +1,44 @@
-"use client";
+"use server";
 
-import { useState } from "react";
-import HarvestGradingRecordingCard from "@/components/custom/staff/harvest-grading-recording-card";
 import HarvestAndGradingSearch from "@/components/custom/staff/harvest-grading-search";
-import HarvestGradingRecordingForm from "@/components/custom/staff/form/harvest-grading-recording-form";
-import type { HarvestGradingRecord } from "@/lib/types/model/type";
+import { HarvestAndGradingResponse, HarvestGradingRecord } from "@/lib/types/model/type";
+import { baseUrl } from "@/lib/utl";
+import { cookies } from "next/headers";
+import HarvestGradingList from "./HarvestAndGradingPageClient";
+import { redirect } from "next/navigation";
 
-export default function HarvestGradingEntryPage() {
-  const [selectedRecord, setSelectedRecord] =
-    useState<HarvestGradingRecord | null>(null);
-  const [showForm, setShowForm] = useState(false);
+export default async function HarvestGradingEntryPage({params, searchParams,} : {params : Promise<{year : string}>, searchParams: Promise<{ zoneNo?: string }>;}) {
 
-  const mockRecords: HarvestGradingRecord[] = [
-    {
-      id: "1",
-      no: 1,
-      location: "Phamee Zone 1, Phase 1",
-      poleNumber: "P-00001",
-      recordedDate: "15/01/2026",
-      editedDate: "20/01/2026",
-      status: "complete",
-    },
-    {
-      id: "2",
-      no: 2,
-      location: "Phamee Zone 2, Phase 1",
-      poleNumber: "P-00002",
-      recordedDate: "14/01/2026",
-      editedDate: "19/01/2026",
-      status: "complete",
-    },
-    {
-      id: "3",
-      no: 3,
-      location: "Phamee Zone 3, Phase 1",
-      poleNumber: "P-00003",
-      recordedDate: "13/01/2026",
-      editedDate: "18/01/2026",
-      status: "incomplete",
-    },
-    {
-      id: "4",
-      no: 4,
-      location: "Phamee Zone 4, Phase 1",
-      poleNumber: "P-00004",
-      recordedDate: "12/01/2026",
-      editedDate: "00/00/0000",
-      status: "complete",
-    },
-    {
-      id: "5",
-      no: 5,
-      location: "Phamee Zone 5, Phase 1",
-      poleNumber: "P-00005",
-      recordedDate: "11/01/2026",
-      editedDate: "16/01/2026",
-      status: "pending",
-    },
-  ];
+  const cookieStore = await cookies();
+  const cookieHeader = cookieStore.toString();
+  
+  const {year} = await params;
+  const { zoneNo } = await searchParams;
 
-  const handleEditRecord = (record: HarvestGradingRecord) => {
-    setSelectedRecord(record);
-    setShowForm(true);
-  };
-
-  const handleBackToList = () => {
-    setShowForm(false);
-    setSelectedRecord(null);
-  };
-
-  if (showForm) {
-    return (
-      <div className="px-2 py-4 sm:px-4">
-        <HarvestGradingRecordingForm
-          record={selectedRecord}
-          onBack={handleBackToList}
-        />
-      </div>
-    );
+  if (!zoneNo) {
+    redirect(`/staff/${year}/harvest-grading?zoneNo=3`);
   }
+  
+  const response = await fetch(`${baseUrl}/poles/get-by-zone?year=${year}&zoneNo=${zoneNo}`, {
+      credentials: "include",
+      method: "GET",
+      headers: {
+        Cookie : cookieHeader
+      }
+  });
+
+  const result : HarvestAndGradingResponse = await response.json()
+
+  console.log(result)
+
+
 
   return (
     <>
       <div className="px-2 py-2 sm:px-4">
         <HarvestAndGradingSearch />
 
-        <div className="mt-6 space-y-2">
-          {mockRecords.map((record) => (
-            <div key={record.id} onClick={() => handleEditRecord(record)}>
-              <HarvestGradingRecordingCard
-                records={[record]}
-                onEdit={handleEditRecord}
-              />
-            </div>
-          ))}
-        </div>
+        <HarvestGradingList zoneNo={zoneNo} poles={result.poles} year={year} />
       </div>
     </>
   );

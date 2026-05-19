@@ -35,7 +35,7 @@ export default function ClusterPageClient({
   };
 
   const onEdit = (record: ClusterRecord) => {
-    router.push(`/staff/${year}/${link}/${record.id}/${editLink}`);
+    router.replace(`/staff/${year}/${link}/${record.id}/${editLink}`);
   };
 
   return (

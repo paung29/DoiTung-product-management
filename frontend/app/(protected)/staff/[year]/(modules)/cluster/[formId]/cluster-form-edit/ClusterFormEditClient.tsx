@@ -7,12 +7,12 @@ import ConditionForm from "@/components/custom/staff/form/condition-form";
 import FormCard from "@/components/custom/staff/form/form-card";
 import { StaffFormTitle } from "@/components/custom/staff/form/staff-form-title";
 import { Form } from "@/components/ui/form";
+import { editCluster } from "@/lib/server-actions/edit-cluster-client";
 import { Option } from "@/lib/types/model/option";
-import { ClusterEditingView, ClusterRecordingFormInput, ClusterRecordingFormType, ClusterRecordingFormTypeSchema, ConditionOptions, GetClusterApiResponse } from "@/lib/types/model/type";
+import { ClusterEditingView, ClusterEditType, ClusterRecordingFormInput, ClusterRecordingFormType, ClusterRecordingFormTypeSchema, ConditionOptions, GetClusterApiResponse } from "@/lib/types/model/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CircleCheck, CircleX } from "lucide-react";
-import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 
 function ClusterFormEdit({data} : {data : GetClusterApiResponse}) {
@@ -20,9 +20,19 @@ function ClusterFormEdit({data} : {data : GetClusterApiResponse}) {
   const params = useParams();
   const year = params.year as string;
   const formId = params.formId as string;
+  const router = useRouter();
   
-  const onSubmit = (data: ClusterRecordingFormType) => {
-    console.log(data);
+  const onSubmit = async (data: ClusterRecordingFormType) => {
+
+    const form : ClusterEditType = {
+      clusterId: Number(formId),
+      condition: data.condition
+    }
+
+    const response = await editCluster(form)
+    console.log(response)
+
+    router.replace(`/staff/${year}/cluster`)
   };
 
   const locations: Option[] = [
@@ -59,6 +69,7 @@ function ClusterFormEdit({data} : {data : GetClusterApiResponse}) {
               path="zoneNo"
               placeholder="Select Location"
               options={locations}
+              disabled={true}
             />
           </FormCard>
         </div>
@@ -72,6 +83,7 @@ function ClusterFormEdit({data} : {data : GetClusterApiResponse}) {
               path={"poleNo"}
               placeholder="eg., P-001"
               className="bg-staff-form-field rounded-lg"
+              readonly={true}
             />
           </FormCard>
           {/* Cluster Number */}
@@ -82,6 +94,7 @@ function ClusterFormEdit({data} : {data : GetClusterApiResponse}) {
               path={"clusterNo"}
               placeholder="eg., C-001"
               className="bg-staff-form-field rounded-lg"
+              readonly={true}
             />
           </FormCard>
         </div>
