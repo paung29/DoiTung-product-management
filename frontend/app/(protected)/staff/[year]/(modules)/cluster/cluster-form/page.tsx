@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import CustomButton from "@/components/custom/common/custom-button";
 import ApiError from "@/components/custom/common/error-handle";
@@ -9,7 +9,13 @@ import FormCard from "@/components/custom/staff/form/form-card";
 import { StaffFormTitle } from "@/components/custom/staff/form/staff-form-title";
 import { Form } from "@/components/ui/form";
 import { Option } from "@/lib/types/model/option";
-import { ClusterRecordingFormInput, ClusterRecordingFormType, ClusterRecordingFormTypeSchema, Zone, ZoneApiResponse } from "@/lib/types/model/type";
+import {
+  ClusterRecordingFormInput,
+  ClusterRecordingFormType,
+  ClusterRecordingFormTypeSchema,
+  Zone,
+  ZoneApiResponse,
+} from "@/lib/types/model/type";
 import { baseUrl } from "@/lib/utl";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CircleCheck, CircleX } from "lucide-react";
@@ -18,89 +24,93 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 function ClusterForm() {
-
-  const [zones, setZones] = useState<Zone[]>([])
-  const [error, setError] = useState<String | null>()
+  const [zones, setZones] = useState<Zone[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-wrapper-object-types
+  const [error, setError] = useState<String | null>();
 
   const params = useParams();
   const year = params.year as string;
   const router = useRouter();
 
-  
   const onSubmit = async (data: ClusterRecordingFormType) => {
-
     const reformData = {
-      year : Number(year),
-      zoneNo : Number(data.zoneNo)-1,
-      poleNo : Number(data.poleNo),
-      clusterNo : Number(data.clusterNo),
-      condition : data.condition
-    }
+      year: Number(year),
+      zoneNo: Number(data.zoneNo) - 1,
+      poleNo: Number(data.poleNo),
+      clusterNo: Number(data.clusterNo),
+      condition: data.condition,
+    };
 
-    console.log(reformData)
+    console.log(reformData);
 
-    try{
+    try {
       const response = await fetch(`${baseUrl}/clusters/create`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(reformData),
-        credentials: "include"
-      })
+        credentials: "include",
+      });
 
       const result = await response.json();
 
-      if(!response.ok) {
-        setError(result.message || "Failed to create")
+      if (!response.ok) {
+        setError(result.message || "Failed to create");
         return;
       }
 
-      console.log(result)
-      router.replace(`/staff/${year}/cluster`)
-      } catch (error) {
-        setError("Cannot connect to server");
-      }
+      console.log(result);
+      router.replace(`/staff/${year}/cluster`);
+    } catch (error) {
+      setError("Cannot connect to server");
+    }
   };
 
   const onCancel = () => {
-    form.resetField("poleNo")
-    form.resetField("clusterNo")
-    form.resetField("condition")
-    form.resetField("zoneNo")
-  }
+    form.resetField("poleNo");
+    form.resetField("clusterNo");
+    form.resetField("condition");
+    form.resetField("zoneNo");
+  };
 
-  const form = useForm<ClusterRecordingFormInput, any, ClusterRecordingFormType>({
+  const form = useForm<
+    ClusterRecordingFormInput,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    any,
+    ClusterRecordingFormType
+  >({
     resolver: zodResolver(ClusterRecordingFormTypeSchema),
     defaultValues: {
       year: Number(year),
       poleNo: "0",
       clusterNo: "0",
-      condition: ""
-    }
+      condition: "",
+    },
   });
-
 
   useEffect(() => {
     const fetchZones = async () => {
-      try{
-         const response = await fetch(`${baseUrl}/zones/get-all-zones?year=${year}`, {
+      try {
+        const response = await fetch(
+          `${baseUrl}/zones/get-all-zones?year=${year}`,
+          {
             method: "GET",
             headers: {
-            "Content-Type": "application/json",
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
           },
-            credentials: "include"
-         })
+        );
 
-         if (!response.ok) {
-           throw new Error("Failed to fetch zones");
-         }
+        if (!response.ok) {
+          throw new Error("Failed to fetch zones");
+        }
 
-         const data : ZoneApiResponse= await response.json()
+        const data: ZoneApiResponse = await response.json();
 
-         setZones(data.zones ?? []);
-
-      }catch(error){
+        setZones(data.zones ?? []);
+      } catch (error) {
         console.error("Error fetching zones:", error);
         setZones([]);
       }
@@ -109,7 +119,6 @@ function ClusterForm() {
     if (year) {
       fetchZones();
     }
-
   }, [year]);
 
   const locationOptions: Option[] = (zones ?? []).map((zone) => ({
@@ -119,11 +128,7 @@ function ClusterForm() {
 
   return (
     <Form {...form}>
-      {
-        error && (
-          <ApiError message={error.toString()}/>
-        )
-      }
+      {error && <ApiError message={error.toString()} />}
       <form className="flex flex-col">
         {/* Location */}
         <div className="pb-8">
