@@ -31,7 +31,7 @@ function ClusterForm() {
 
     const reformData = {
       year : Number(year),
-      zoneNo : Number(data.zoneNo)-1,
+      zoneNo : Number(data.zoneNo),
       poleNo : Number(data.poleNo),
       clusterNo : Number(data.clusterNo),
       condition : data.condition
