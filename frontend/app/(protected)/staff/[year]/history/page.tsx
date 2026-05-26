@@ -44,7 +44,7 @@ interface FormCard {
   path: string;
 }
 
-function StaffHome() {
+function StaffHistory() {
   const router = useRouter();
   const params = useParams();
   const language: Lang = "en";
@@ -88,37 +88,37 @@ function StaffHome() {
       id: "cluster",
       titleKey: "clusterRecording",
       image: imgClusterForm,
-      path: `/staff/${year}/cluster`,
+      path: `/staff/${year}/history/cluster`,
     },
     {
       id: "flower",
       titleKey: "flowerCluster",
       image: imgFlowerForm,
-      path: `/staff/${year}/flower`,
+      path: `/staff/${year}/history/flower`,
     },
     {
       id: "pollination",
       titleKey: "pollinationForm",
       image: imgPollinationForm,
-      path: `/staff/${year}/pollination`,
+      path: `/staff/${year}/history/pollination`,
     },
     {
       id: "pod",
       titleKey: "podSetting",
       image: imgPodForm,
-      path: `/staff/${year}/pod`,
+      path: `/staff/${year}/history/pod`,
     },
     {
       id: "pre-harvest",
       titleKey: "preHarvest",
       image: imgPreharvestForm,
-      path: `/staff/${year}/pre-harvest`,
+      path: `/staff/${year}/history/pre-harvest`,
     },
     {
       id: "harvest",
       titleKey: "harvestGrading",
       image: imgHarvestForm,
-      path: `/staff/${year}/harvest-grading`,
+      path: `/staff/${year}/history/harvest-grading`,
     },
   ];
 
@@ -194,5 +194,5 @@ function StaffHome() {
   );
 }
 
-export default StaffHome;
+export default StaffHistory;
 

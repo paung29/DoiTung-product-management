@@ -58,7 +58,7 @@ const CreateUserSchema = z.object({
   department: z.string().optional(),
 });
 
-type CreateUserFormData = z.infer<typeof CreateUserSchema>;
+export type CreateUserFormData = z.infer<typeof CreateUserSchema>;
 
 interface CreateUserModalProps {
   isOpen: boolean;

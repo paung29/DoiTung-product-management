@@ -13,8 +13,8 @@ export type CreateUserFormData = {
   password: string;
   role: string;
   status: string;
-  phone: string;
-  department: string;
+  phone ?: string;
+  department ?: string;
 };
 
 export const ConditionOptions = [
@@ -86,6 +86,22 @@ export type GetClusterApiResponse = {
   totalFlowers : number,
   flowerFormDone : boolean
 }
+
+export type ClusterHistoryApiItem = {
+  no: number;
+  clusterId: number;
+  location: string;
+  poleNo: number;
+  clusterNo: number;
+  progressDone: number;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type ClusterHistoryApiResponse = {
+  clusterFormHistories: ClusterHistoryApiItem[] | null;
+};
+
 
 export const FlowerRecordingFormTypeSchema = z.object({
   clusterId: z.coerce.number(),
@@ -267,6 +283,15 @@ export type HarvestGradingRecordingFormData = {
   gradeD_plus: GradeEntry;
 };
 
+export type HarvestGradingHistory = {
+  poleId : number;
+  location : string;
+  poleNo : number;
+  harvestGradingFormDone : boolean;
+  createdAt : string;
+  updatedAt : string;
+}
+
 export type ActiveYearFrom = {
   year: string;
 };
@@ -413,8 +438,8 @@ export const WareHouseSearchSchema = z.object({
 export type WareHouseSearch = z.infer<typeof WareHouseSearchSchema>;
 
 export const WareHouseFormSchema = z.object({
-  name: z.string().min(1, "Warehouse name is required"),
-  active: z.enum(["true", "false"]),
+  warehouse_name: z.string().min(1, "Warehouse name is required"),
+  active_status: z.enum(["true", "false"]),
 });
 
 export type WareHouseForm = z.infer<typeof WareHouseFormSchema>;

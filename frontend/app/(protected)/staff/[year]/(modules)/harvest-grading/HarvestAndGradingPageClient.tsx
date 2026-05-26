@@ -13,7 +13,7 @@ type Props = {
   year: string;
 };
 
-function mapToHarvestGradingRecord(
+export function mapToHarvestGradingRecord(
   item: HarvestAndGradingItem
 ): HarvestGradingRecord {
   return {

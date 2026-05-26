@@ -6,8 +6,9 @@ import StatusCard from "@/components/custom/admin/statusCard";
 import CreateUserModal from "@/components/custom/admin/create-user-modal";
 import UsersTable from "@/components/custom/admin/users-table";
 import { Account, getUserStatus } from "@/lib/types/model/account";
-import { CreateUserFormData } from "@/lib/types/model/type";
 import { Shield, UserCog, Users } from "lucide-react";
+import { CreateUserFormData } from "@/lib/types/model/type";
+import { createUser } from "@/lib/server-actions/admin/create-user-client";
 
 function UserManage() {
   const { totalUsers, adminUsers, staffUsers } = getUserStatus();
@@ -18,8 +19,12 @@ function UserManage() {
 
   const filtered = users;
 
-  const handleCreateUser = (data: CreateUserFormData) => {
+  const handleCreateUser = async (data: CreateUserFormData) => {
+
     console.log("Creating user:", data);
+    const response = await createUser(data)
+    
+    console.log(response)
   };
 
   const handleEditUser = (user: Account) => {

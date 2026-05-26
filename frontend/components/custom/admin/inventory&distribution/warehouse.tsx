@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Option } from "@/lib/types/model/option";
 import CustomSelect from "../../common/forms/form-select";
+import { createWareHouse } from "@/lib/server-actions/admin/create-warehouse-client";
 
 export default function WareHouse() {
   const form = useForm<WareHouseSearch>({
@@ -62,8 +63,8 @@ function AddWareHouse() {
   const form = useForm<WareHouseForm>({
     resolver: zodResolver(WareHouseFormSchema),
     defaultValues: {
-      name: "",
-      active: "false",
+      warehouse_name: "",
+      active_status: "false",
     },
   });
 
@@ -72,8 +73,12 @@ function AddWareHouse() {
     { id: "false", value: "Inactive" },
   ];
 
-  const onSave = (form: WareHouseForm) => {
+  const onSave =  async (form: WareHouseForm) => {
     console.log(form);
+
+    const result = await createWareHouse(form)
+
+    console.log(result)
   };
 
   return (
@@ -94,13 +99,13 @@ function AddWareHouse() {
           <form className="flex flex-col gap-4">
             <FormsInput
               control={form.control}
-              path="name"
+              path="warehouse_name"
               placeholder="Warehouse name"
             />
 
             <CustomSelect
               control={form.control}
-              path="active"
+              path="active_status"
               options={ActiveStatus}
               placeholder="Status"
             />
