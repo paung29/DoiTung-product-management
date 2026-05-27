@@ -12,10 +12,26 @@ export type CreateUserFormData = {
   email: string;
   password: string;
   role: string;
-  status: string;
-  phone ?: string;
-  department ?: string;
+  active_status: boolean;
+  phone_no ?: string;
 };
+
+export type UpdateUserInfoFormData = {
+  user_id : number,
+  phone_no : string;
+  name: string;
+  role: string;
+  active_status: boolean;
+};
+
+export type AccountItem = {
+  user_id : number,
+  email : string,
+  name : string,
+  role : string,
+  phone_no : string,
+  active_status : boolean
+}
 
 export const ConditionOptions = [
   { id: "GOOD", value: "Good" },

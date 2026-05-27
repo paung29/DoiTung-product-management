@@ -7,20 +7,22 @@ export type Account = {
   email: string;
   password: string;
   role_on_db: Role;
+  phone_no : string;
+  status : string;
 };
 
-export function getAccounts(): Account[] {
-  return accounts as Account[];
+export function getAccounts({records} : {records : Account[]}): Account[] {
+  return records;
 }
 
-export function getUserStatus() {
-  const all = getAccounts();
+export function getUserStatus({records} : {records : Account[]}) {
+  const all = getAccounts({records : records});
   const totalUsers = all.length;
   const adminUsers = all.filter(
-    (account) => account.role_on_db === "admin",
+    (account) => account.role_on_db.toLocaleLowerCase() === "admin",
   ).length;
   const staffUsers = all.filter(
-    (account) => account.role_on_db === "staff",
+    (account) => account.role_on_db.toLocaleLowerCase() === "staff",
   ).length;
 
   return {
