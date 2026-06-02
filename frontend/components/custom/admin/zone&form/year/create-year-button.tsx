@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { FieldGroup } from "@/components/ui/field";
 import FormsInput from "../../../common/forms/form-input";
 import { Form } from "@/components/ui/form";
+import { createYear } from "@/lib/server-actions/admin/create-year-client";
 
 function CreateYearButton() {
   const form = useForm<CreateYearFormType>({
@@ -25,8 +26,15 @@ function CreateYearButton() {
   });
   const [open, setOpen] = React.useState(false);
 
-  const onSubmit = (data: CreateYearFormType) => {
-    console.log(data);
+  const onSubmit = async (data: CreateYearFormType) => {
+
+    const reformData : CreateYearFormType = {
+      year : Number(data.year)
+    }
+
+    const result = await createYear(reformData)
+    console.log(result);
+
     setOpen(false);
     form.reset();
   };
