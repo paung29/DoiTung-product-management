@@ -2,6 +2,7 @@
 
 import {
   WareHouseForm,
+  WareHouseFormCreate,
   WareHouseFormSchema,
   WareHouseSearch,
   WareHouseSearchSchema,
@@ -76,7 +77,12 @@ function AddWareHouse() {
   const onSave =  async (form: WareHouseForm) => {
     console.log(form);
 
-    const result = await createWareHouse(form)
+    const reformData : WareHouseFormCreate = {
+      warehouse_name : form.warehouse_name,
+      active_status : form.active_status === "true" ? true : false
+    }
+
+    const result = await createWareHouse(reformData)
 
     console.log(result)
   };

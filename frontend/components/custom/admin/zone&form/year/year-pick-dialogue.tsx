@@ -6,6 +6,7 @@ import { Form } from "@/components/ui/form";
 import { z } from "zod";
 import CustomSelect from "../../../common/forms/form-select";
 import { useRouter } from "next/navigation";
+import { YearApiResponse } from "@/lib/types/model/type";
 
 const yearSchema = z.object({
   year: z.string().min(1, "Please select a year"),
@@ -18,21 +19,19 @@ type YearPickerDialogProps = {
   onClose: () => void;
   onConfirm: (year: string) => void;
   defaultYear?: string;
+  yearRecords : YearApiResponse
 };
 
-const yearOptions = [
-  { id: "2024", value: "2024" },
-  { id: "2025", value: "2025" },
-  { id: "2026", value: "2026" },
-  { id: "2027", value: "2027" },
-];
-
 export default function YearPickerDialog({
+  yearRecords,
   open,
   onClose,
   onConfirm,
   defaultYear = "",
 }: YearPickerDialogProps) {
+
+  const yearOptions = yearRecords?.years?.map((year) => ({ id: year, value: year, })) ?? [];
+
   const form = useForm<YearFormValues>({
     resolver: zodResolver(yearSchema),
     defaultValues: {

@@ -1,11 +1,11 @@
 "use server"
 
-import { WareHouseForm } from "@/lib/types/model/type";
+import { WareHouseForm, WareHouseFormCreate } from "@/lib/types/model/type";
 import { baseUrl } from "@/lib/utl";
 import { cookies } from "next/headers";
 
 
-export async function createWareHouse(data : WareHouseForm) {
+export async function createWareHouse(data : WareHouseFormCreate) {
 
     const cookieStore = await cookies();
     const cookieHeader = cookieStore.toString();
