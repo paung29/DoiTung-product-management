@@ -1,3 +1,5 @@
+"use client"
+
 import { DistributionHistorySearchForm } from "@/lib/types/model/type";
 import { useForm } from "react-hook-form";
 import CustomDatePicker from "../../common/custom-date-picker";

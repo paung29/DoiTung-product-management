@@ -27,8 +27,13 @@ import {
 import { Option } from "@/lib/types/model/option";
 import CustomSelect from "../../common/forms/form-select";
 import { createWareHouse } from "@/lib/server-actions/admin/create-warehouse-client";
+import { useRouter } from "next/navigation";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 export default function WareHouse() {
+
+  const router = useRouter()
+
   const form = useForm<WareHouseSearch>({
     resolver: zodResolver(WareHouseSearchSchema),
     defaultValues: {
@@ -55,12 +60,12 @@ export default function WareHouse() {
         </form>
       </Form>
 
-      <AddWareHouse />
+      <AddWareHouse router={router}/>
     </div>
   );
 }
 
-function AddWareHouse() {
+function AddWareHouse({router} : {router : AppRouterInstance}) {
   const form = useForm<WareHouseForm>({
     resolver: zodResolver(WareHouseFormSchema),
     defaultValues: {
@@ -83,8 +88,8 @@ function AddWareHouse() {
     }
 
     const result = await createWareHouse(reformData)
-
     console.log(result)
+    router.replace("/admin/inventory-distribution/warehouse")
   };
 
   return (

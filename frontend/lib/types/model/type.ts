@@ -481,3 +481,4 @@ export type ZoneApiResponse = {
 export type CreateYearFormType = {
   year: number;
 };
+
