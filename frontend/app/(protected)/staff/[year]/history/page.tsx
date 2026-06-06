@@ -1,25 +1,3 @@
-// import ClusterRecordingCard from "@/components/custom/staff/cluster-recording-card";
-// import HarvestGradingRecordingCard from "@/components/custom/staff/harvest-grading-recording-card";
-// import HarvestAndGradingSearch from "@/components/custom/staff/harvest-grading-search";
-// import React from "react";
-
-// function StaffHistory() {
-//   return (
-//     <div>
-//       StaffHistory
-//       <div>
-//         <HarvestAndGradingSearch />
-//       </div>
-//       <div>
-//         <HarvestGradingRecordingCard />
-//         <HarvestGradingRecordingCard />
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default StaffHistory;
-
 "use client";
 
 import React from "react";
@@ -50,7 +28,6 @@ function StaffHistory() {
   const language: Lang = "en";
 
   const year = params.year as string;
-  
 
   const getText = (key: string): string => {
     const translations: Record<Lang, Record<string, string>> = {
