@@ -12,7 +12,7 @@ import { useState, useMemo } from "react";
 import CustomButton from "@/components/custom/common/custom-button";
 
 // Types
-interface CustomerHistoryData {
+export interface CustomerHistoryData {
   id: string;
   date: string;
   customer: string;
@@ -154,7 +154,7 @@ const CustomerTableRow = ({ data }: CustomerTableRowProps) => {
 };
 
 export default function CustomerTable({
-  data = MOCK_DATA,
+  data = [],
   itemsPerPage = 6,
 }: CustomerTableProps) {
   const [currentPage, setCurrentPage] = useState(1);

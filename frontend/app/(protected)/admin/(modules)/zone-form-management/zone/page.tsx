@@ -4,12 +4,12 @@ import { Account } from "@/lib/types/model/account";
 import { AccountItem, ClusterApiItem, YearApiResponse } from "@/lib/types/model/type";
 import { baseUrl } from "@/lib/utl";
 import { cookies } from "next/headers";
-import ZoneAndFormManagementPage from "./Zone-Managemet-Page-Client";
+import { YearTableDataType } from "@/components/custom/admin/zone&form/year/year-table";
+import { useZoneForm } from "../zone-form-context";
+import ZoneManagement from "./Zone-Management-Page-Client";
  
-export default async function Page({params, searchParams,} : {params : Promise<{year : string}>, searchParams: Promise<{ zoneNo?: string }>;}) {
+export default async function Page() {
 
-  const { year } = await params;
-  const { zoneNo } = await searchParams;
   const cookieStore = await cookies();
   const cookieHeader = cookieStore.toString();
 
@@ -25,13 +25,18 @@ export default async function Page({params, searchParams,} : {params : Promise<{
   
 
   const apiData: YearApiResponse = response.ok ? await response.json() : { years: [] };
-
-  console.log("year from route:", year);
-  console.log("zoneNo from query:", zoneNo);
+  
   console.log(apiData);
 
+    const records : YearTableDataType[] = apiData.years.map((item, index) => ({
+        year : String(item),
+        totalPole : 10,
+        totalZone : 10,
+    }));
+
+
   return (
-    <ZoneAndFormManagementPage yearsRecords={apiData}/>
+    <ZoneManagement yearRecords={apiData}/>
   );
   
 }

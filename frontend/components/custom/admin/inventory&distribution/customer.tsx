@@ -1,13 +1,13 @@
 import React from "react";
 import AddCustomerButton from "./add-customer-button";
 import SelectYearCard from "./select-year-card";
-import CustomerTable from "./customer-tabel";
+import CustomerTable, { CustomerHistoryData } from "./customer-tabel";
 
-function Customer() {
+function Customer({records} : {records : CustomerHistoryData[]}) {
   return (
     <div className="space-y-6">
       <AddCustomerButton />
-      <CustomerTable />
+      <CustomerTable data={records}/>
     </div>
   );
 }

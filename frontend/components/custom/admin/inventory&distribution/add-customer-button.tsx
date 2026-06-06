@@ -8,6 +8,8 @@ import { z } from "zod";
 import CustomButton from "@/components/custom/common/custom-button";
 import FormsInput from "@/components/custom/common/forms/form-input";
 import { Form } from "@/components/ui/form";
+import { createCustomer } from "@/lib/server-actions/admin/create-customer-client";
+import { useRouter } from "next/navigation";
 
 const customerSchema = z.object({
   company: z
@@ -25,7 +27,14 @@ const customerSchema = z.object({
 
 type CustomerFormData = z.infer<typeof customerSchema>;
 
+export type CustomerFormSubmit = {
+  customer_name : string,
+  note : string
+}
+
 export default function AddCustomerButton() {
+  const router = useRouter()
+  
   const [isOpen, setIsOpen] = useState(false);
   const [customers, setCustomers] = useState<CustomerFormData[]>([]);
 
@@ -37,11 +46,21 @@ export default function AddCustomerButton() {
     },
   });
 
-  const handleSave = (data: CustomerFormData) => {
+  const handleSave = async (data: CustomerFormData) => {
     setCustomers([...customers, data]);
     console.log("Customer saved:", data);
+
+    const reformData : CustomerFormSubmit = {
+      customer_name : data.company,
+      note : String(data.note)
+    }
+
+    const result = await createCustomer(reformData)
+    console.log(result)
+
     form.reset();
-    setIsOpen(false);
+    setIsOpen(false); 
+    router.replace("/admin/inventory-distribution/customer")
   };
 
   const handleCancel = () => {
