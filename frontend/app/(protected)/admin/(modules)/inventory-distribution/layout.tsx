@@ -10,6 +10,7 @@ const tabs = [
   { href: "/admin/inventory-distribution/warehouse", label: "Warehouse" },
   { href: "/admin/inventory-distribution/distribution", label: "Stock Distribution" },
   { href: "/admin/inventory-distribution/history", label: "Distribution History" },
+  { href: "/admin/inventory-distribution/customer", label: "Customer" },
 ];
 
 export default function InventoryLayout({
