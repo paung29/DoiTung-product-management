@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/table";
 import { Edit } from "lucide-react";
 
-interface WarehouseTableData {
+export interface WarehouseTableData {
   id: string;
   name: string;
   status: "ACTIVE" | "INACTIVE";
@@ -20,46 +20,46 @@ interface WarehouseTableData {
   remaining: string;
 }
 
-const warehouseData: WarehouseTableData[] = [
-  {
-    id: "1",
-    name: "PM Center – Phamee",
-    status: "ACTIVE",
-    stock: 20990,
-    totalWeight: "32290.00 g",
-    distributed: "8100 g",
-    remaining: "24190.00 g",
-  },
-  {
-    id: "2",
-    name: "Forest Plantation",
-    status: "ACTIVE",
-    stock: 20990,
-    totalWeight: "32290.00 g",
-    distributed: "8100 g",
-    remaining: "24190.00 g",
-  },
-  {
-    id: "3",
-    name: "Research Unit",
-    status: "ACTIVE",
-    stock: 20990,
-    totalWeight: "32290.00 g",
-    distributed: "8100 g",
-    remaining: "24190.00 g",
-  },
-  {
-    id: "4",
-    name: "SE Building I",
-    status: "ACTIVE",
-    stock: 5920,
-    totalWeight: "2500g",
-    distributed: "870g",
-    remaining: "1630g",
-  },
-];
+// const warehouseData: WarehouseTableData[] = [
+//   {
+//     id: "1",
+//     name: "PM Center – Phamee",
+//     status: "ACTIVE",
+//     stock: 20990,
+//     totalWeight: "32290.00 g",
+//     distributed: "8100 g",
+//     remaining: "24190.00 g",
+//   },
+//   {
+//     id: "2",
+//     name: "Forest Plantation",
+//     status: "ACTIVE",
+//     stock: 20990,
+//     totalWeight: "32290.00 g",
+//     distributed: "8100 g",
+//     remaining: "24190.00 g",
+//   },
+//   {
+//     id: "3",
+//     name: "Research Unit",
+//     status: "ACTIVE",
+//     stock: 20990,
+//     totalWeight: "32290.00 g",
+//     distributed: "8100 g",
+//     remaining: "24190.00 g",
+//   },
+//   {
+//     id: "4",
+//     name: "SE Building I",
+//     status: "ACTIVE",
+//     stock: 5920,
+//     totalWeight: "2500g",
+//     distributed: "870g",
+//     remaining: "1630g",
+//   },
+// ];
 
-export default function WarehouseTable() {
+export default function WarehouseTable({records} : {records : WarehouseTableData[]}) {
   return (
     <div className="overflow-hidden rounded-3xl border-2 border-[#8a6752] bg-[#faf3e0]">
       <Table>
@@ -89,7 +89,7 @@ export default function WarehouseTable() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {warehouseData.map((warehouse) => (
+          {records.map((warehouse) => (
             <TableRow
               key={warehouse.id}
               className="h-14 border-b border-[#e8dcc8] bg-white hover:bg-[#f5e8d9]"

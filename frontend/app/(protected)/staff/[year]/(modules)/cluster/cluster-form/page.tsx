@@ -34,12 +34,12 @@ function ClusterForm() {
 
   const onSubmit = async (data: ClusterRecordingFormType) => {
     const reformData = {
-      year: Number(year),
-      zoneNo: Number(data.zoneNo) - 1,
-      poleNo: Number(data.poleNo),
-      clusterNo: Number(data.clusterNo),
-      condition: data.condition,
-    };
+      year : Number(year),
+      zoneNo : Number(data.zoneNo),
+      poleNo : Number(data.poleNo),
+      clusterNo : Number(data.clusterNo),
+      condition : data.condition
+    }
 
     console.log(reformData);
 

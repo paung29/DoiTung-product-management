@@ -1,0 +1,47 @@
+// "use client";
+
+// import { useRouter } from "next/navigation";
+// import HarvestGradingRecordingCard from "@/components/custom/staff/harvest-grading-recording-card";
+// import {
+//   HarvestAndGradingItem,
+//   HarvestGradingRecord,
+// } from "@/lib/types/model/type";
+
+// type Props = {
+//   year: string;
+// };
+
+// export function mapToHarvestGradingRecord(
+//   item: HarvestAndGradingItem
+// ): HarvestGradingRecord {
+//   return {
+//     poleid: item.poleId,
+//     location: item.location,
+//     poleNumber: item.poleNo.toString(),
+//     recordedDate: item.createdAt,
+//     editedDate: item.updatedAt,
+//     status: item.harvestGradingFormDone ? "complete" : "incomplete",
+//   };
+// }
+
+// export default function HarvestGradingList( year : Props) {
+//   const router = useRouter();
+
+//   const handleEditRecord = (record: HarvestGradingRecord) => {
+//     router.replace(`/staff/${year}/harvest-grading/${record.poleid}/harvest-grading-form?zoneNo=${zoneNo}`);
+//   };
+
+//   const records = poles.map(mapToHarvestGradingRecord);
+
+//   return (
+//     <div className="mt-6 space-y-2">
+//       {records.map((record) => (
+//         <HarvestGradingRecordingCard
+//           key={record.poleNumber}
+//           records={[record]}
+//           onEdit={handleEditRecord}
+//         />
+//       ))}
+//     </div>
+//   );
+// }

@@ -40,9 +40,7 @@ export default function ClusterPageClient({
 
   return (
     <div className="space-y-4 sm:space-y-6">
-      <StaffContent>
-        <ClusterSearch />
-      </StaffContent>
+
 
       <StaffContent>
         <div className="space-y-4">

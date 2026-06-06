@@ -21,14 +21,16 @@ export default function UsersTable({
   onEdit = () => {},
 }: UsersTableProps) {
   const getRoleBadgeColor = (role: string) => {
-    return role === "admin"
+    return role.toLocaleLowerCase() === "admin"
       ? "bg-red-100 text-red-700"
       : "bg-green-100 text-green-700";
   };
 
   const getRoleLabel = (role: string) => {
-    return role === "admin" ? "Admin" : "Staff";
+    return role.toLocaleLowerCase() === "admin" ? "Admin" : "Staff";
   };
+
+  console.log(users)
 
   return (
     <div className="border-primary-button overflow-hidden rounded-2xl border">
@@ -68,8 +70,14 @@ export default function UsersTable({
 
               {/* Status */}
               <TableCell>
-                <span className="inline-flex items-center rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700">
-                  Active
+                <span
+                  className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${
+                    user.status
+                      ? "bg-green-100 text-green-700"
+                      : "bg-red-100 text-red-700"
+                  }`}
+                >
+                  {user.status ? "ACTIVE" : "INACTIVE"}
                 </span>
               </TableCell>
 

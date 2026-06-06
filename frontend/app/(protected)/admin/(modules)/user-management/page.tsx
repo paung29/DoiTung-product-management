@@ -1,77 +1,45 @@
-"use client";
-import { useState } from "react";
-import UserToolbar from "@/components/custom/admin/toolBar";
-import accounts from "@/mock/accounts.json";
-import StatusCard from "@/components/custom/admin/statusCard";
-import CreateUserModal from "@/components/custom/admin/create-user-modal";
-import UsersTable from "@/components/custom/admin/users-table";
-import { Account, getUserStatus } from "@/lib/types/model/account";
-import { CreateUserFormData } from "@/lib/types/model/type";
-import { Shield, UserCog, Users } from "lucide-react";
+"use server"
 
-function UserManage() {
-  const { totalUsers, adminUsers, staffUsers } = getUserStatus();
-  const users = accounts as Account[];
+import { Account } from "@/lib/types/model/account";
+import { AccountItem, ClusterApiItem } from "@/lib/types/model/type";
+import { baseUrl } from "@/lib/utl";
+import { cookies } from "next/headers";
+import UserManage from "./User-Management-Page-Client";
+ 
+export default async function Page({params, searchParams,} : {params : Promise<{year : string}>, searchParams: Promise<{ zoneNo?: string }>;}) {
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingUser, setEditingUser] = useState<Account | null>(null);
+  const cookieStore = await cookies();
+  const cookieHeader = cookieStore.toString();
 
-  const filtered = users;
+  const response = await fetch(`${baseUrl}/accounts/get-all`, {
+    credentials: "include",
+    method: "GET",
+    headers: {
+      Cookie : cookieHeader
+    }
+  });
 
-  const handleCreateUser = (data: CreateUserFormData) => {
-    console.log("Creating user:", data);
-  };
+  console.log("fetching data")
+  
 
-  const handleEditUser = (user: Account) => {
-    console.log("Editing user:", user);
-    setEditingUser(user);
-    setIsModalOpen(true);
-  };
+  const apiData = response.ok ? await response.json() : { accounts: [] };
+
+  const records : Account[]= (apiData.accounts ?? []).map((item : AccountItem) => ({
+    account_id: item.user_id,
+    name: item.name,
+    email: item.email,
+    password: "",
+    role_on_db: item.role,
+    phone_no : item.phone_no,
+    status : item.active_status
+  }));
+
+  console.log(apiData)
+  console.log(records)
 
   return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 justify-items-center gap-4 py-10 md:grid-cols-3">
-        <StatusCard
-          icon={<Users size={36} />}
-          value={totalUsers}
-          label="Total Users"
-        />
-        <StatusCard
-          icon={<UserCog size={36} />}
-          value={staffUsers}
-          label="Total Staff"
-        />
-        <StatusCard
-          icon={<Shield size={36} />}
-          value={adminUsers}
-          label="Admins"
-        />
-      </div>
-
-      <div className="space-y-6 px-10">
-        <UserToolbar
-          onSearch={() => {}}
-          onCreate={() => setIsModalOpen(true)}
-        />
-
-        <div className="text-sm text-yellow-900/70">
-          Showing {filtered.length} users
-        </div>
-
-        <UsersTable users={filtered} onEdit={handleEditUser} />
-      </div>
-
-      <CreateUserModal
-        isOpen={isModalOpen}
-        onClose={() => {
-          setIsModalOpen(false);
-          setEditingUser(null);
-        }}
-        onSubmit={handleCreateUser}
-        editingUser={editingUser}
-      />
-    </div>
+    <UserManage records={records}/>
   );
+  
 }
 
-export default UserManage;

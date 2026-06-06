@@ -39,26 +39,17 @@ const CreateUserSchema = z.object({
       "Role must be either ADMIN or STAFF",
     ),
 
-  status: z
-    .string()
-    .min(1, "Status is required")
-    .refine(
-      (val) => ["Active", "Inactive"].includes(val),
-      "Status must be either Active or Inactive",
-    ),
-
-  phone: z
+  active_status: z.boolean(),
+  phone_no: z
     .string()
     .optional()
     .refine(
       (val) => !val || /^[0-9\-+\s()]+$/.test(val),
       "Phone number format is invalid",
     ),
-
-  department: z.string().optional(),
 });
 
-type CreateUserFormData = z.infer<typeof CreateUserSchema>;
+export type CreateUserFormData = z.infer<typeof CreateUserSchema>;
 
 interface CreateUserModalProps {
   isOpen: boolean;
@@ -80,9 +71,7 @@ export default function CreateUserModal({
       email: "",
       password: "",
       role: "STAFF",
-      status: "Active",
-      phone: "",
-      department: "",
+      active_status: true
     },
   });
 
@@ -93,9 +82,8 @@ export default function CreateUserModal({
         email: editingUser.email,
         password: editingUser.password,
         role: editingUser.role_on_db.toUpperCase(),
-        status: "Active",
-        phone: "",
-        department: "",
+        active_status: true,
+        phone_no: editingUser.phone_no
       });
     } else {
       form.reset({
@@ -103,9 +91,8 @@ export default function CreateUserModal({
         email: "",
         password: "",
         role: "STAFF",
-        status: "Active",
-        phone: "",
-        department: "",
+        active_status: true,
+        phone_no: "",
       });
     }
   }, [editingUser, form]);
@@ -121,11 +108,6 @@ export default function CreateUserModal({
   const roleOptions = [
     { id: "ADMIN", value: "Admin" },
     { id: "STAFF", value: "Staff" },
-  ];
-
-  const statusOptions = [
-    { id: "Active", value: "Active" },
-    { id: "Inactive", value: "Inactive" },
   ];
 
   return (
@@ -205,21 +187,21 @@ export default function CreateUserModal({
                 Status
               </label>
               <select
-                {...form.register("status")}
+                value={String(form.watch("active_status"))}
+                onChange={(e) =>
+                  form.setValue("active_status", e.target.value === "true")
+                }
                 className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-yellow-900 focus:ring-1 focus:ring-yellow-900 focus:outline-none"
               >
-                {statusOptions.map((option) => (
-                  <option key={option.id} value={option.id}>
-                    {option.value}
-                  </option>
-                ))}
+                <option value="true">Active</option>
+                <option value="false">Inactive</option>
               </select>
             </div>
 
             {/* Phone */}
             <FormsInput
               control={form.control}
-              path="phone"
+              path="phone_no"
               label="Phone"
               placeholder="081-234-5678"
             />

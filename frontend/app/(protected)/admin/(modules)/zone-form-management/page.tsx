@@ -1,48 +1,38 @@
-/* eslint-disable no-var */
-"use client";
-import AdminCustomTabs from "@/components/custom/admin/admin-custom-tabs";
-import FormManagementTab from "@/components/custom/admin/zone&form/form/form-management-tab";
-import YearManagementTab from "@/components/custom/admin/zone&form/year/year-management-tab";
-import ZoneAndFormLayoutComponent from "@/components/custom/admin/zone&form/zone-and-form-layout";
-import ZoneManagementTab from "@/components/custom/admin/zone&form/zone/zone-management-tab";
-import { TabsContent } from "@/components/ui/tabs";
-import { Calendar, FileText, Icon, MapPin } from "lucide-react";
-import { useState } from "react";
+"use server"
 
-const zoneAndFormTabs = [
-  { id: "year", value: "Year Management", icon: Calendar },
-  { id: "zone", value: "Zone Management", icon: MapPin },
-  { id: "form", value: "Form Management", icon: FileText },
-];
+import { Account } from "@/lib/types/model/account";
+import { AccountItem, ClusterApiItem, YearApiResponse } from "@/lib/types/model/type";
+import { baseUrl } from "@/lib/utl";
+import { cookies } from "next/headers";
+import ZoneAndFormManagementPage from "./Zone-Managemet-Page-Client";
+ 
+export default async function Page({params, searchParams,} : {params : Promise<{year : string}>, searchParams: Promise<{ zoneNo?: string }>;}) {
 
-function ZoneAndFormManagementPage() {
-  var [activeTab, setActiveTab] = useState("year");
-  const [selectedYear, setSelectedYear] = useState("");
-  var isYearTab = activeTab === "year";
+  const { year } = await params;
+  const { zoneNo } = await searchParams;
+  const cookieStore = await cookies();
+  const cookieHeader = cookieStore.toString();
+
+  const response = await fetch(`${baseUrl}/years/get-all-years`, {
+    credentials: "include",
+    method: "GET",
+    headers: {
+      Cookie : cookieHeader
+    }
+  });
+
+  console.log("fetching data")
+  
+
+  const apiData: YearApiResponse = response.ok ? await response.json() : { years: [] };
+
+  console.log("year from route:", year);
+  console.log("zoneNo from query:", zoneNo);
+  console.log(apiData);
 
   return (
-    <ZoneAndFormLayoutComponent
-      selectedYear={selectedYear}
-      setSelectedYear={setSelectedYear}
-      isYearTab={isYearTab}
-    >
-      <AdminCustomTabs
-        tabs={zoneAndFormTabs}
-        value={activeTab}
-        onValueChange={setActiveTab}
-      >
-        <TabsContent value="year">
-          <YearManagementTab />
-        </TabsContent>
-        <TabsContent value="zone">
-          <ZoneManagementTab selectedYear={selectedYear} />
-        </TabsContent>
-        <TabsContent value="form">
-          <FormManagementTab selectedYear={selectedYear} />
-        </TabsContent>
-      </AdminCustomTabs>
-    </ZoneAndFormLayoutComponent>
+    <ZoneAndFormManagementPage yearsRecords={apiData}/>
   );
+  
 }
 
-export default ZoneAndFormManagementPage;

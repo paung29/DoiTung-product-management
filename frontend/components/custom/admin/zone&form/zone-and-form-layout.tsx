@@ -3,19 +3,23 @@ import { ChevronDown, Layers } from "lucide-react";
 import React, { ReactNode, useState } from "react";
 import YearPickerDialog from "./year/year-pick-dialogue";
 import { useRouter } from "next/navigation";
+import { YearApiResponse } from "@/lib/types/model/type";
 
 type Props = {
   children?: ReactNode;
   selectedYear?: string;
   setSelectedYear?: (year: string) => void;
   isYearTab?: boolean;
+  yearRecords : YearApiResponse
 };
 
 function ZoneAndFormLayoutComponent({
+
   children,
   selectedYear,
   setSelectedYear,
   isYearTab,
+  yearRecords
 }: Props) {
   const router = useRouter();
 
@@ -65,6 +69,7 @@ function ZoneAndFormLayoutComponent({
       <div className="mt-6">
         {children}
         <YearPickerDialog
+          yearRecords={yearRecords}
           open={open}
           onClose={() => setOpen(false)}
           onConfirm={handleConfirmYear}

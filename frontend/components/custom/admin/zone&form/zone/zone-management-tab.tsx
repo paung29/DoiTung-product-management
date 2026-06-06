@@ -8,6 +8,8 @@ import ZoneTotalCard from "@/components/custom/admin/zone&form/zone-total-card";
 import { Flower, MapPin } from "lucide-react";
 
 function ZoneManagementTab({ selectedYear }: { selectedYear?: string }) {
+
+  console.log("Selected Year for ")
   const zoneTableData: ZoneTableDataType[] = [
     {
       zone_name: "Zone 1",

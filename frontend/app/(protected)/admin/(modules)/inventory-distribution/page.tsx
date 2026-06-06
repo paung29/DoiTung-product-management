@@ -31,66 +31,17 @@ export default function InventoryAndWarehouses() {
 
   return (
     <>
-      <SelectYearCard
-        title="Inventory And WareHouse"
-        year={year}
-        onYearChange={setYear}
-      />
+      <StockOverviewCards />
 
-      <div className="px-10 py-6">
-        <AdminCustomTabs
-          tabs={inventoryAndWarehouseTabs}
-          value={activeTab}
-          onValueChange={setActiveTab}
-        >
-          <TabsContent value="overview">
-            <div className="py-6">
-              <StockOverviewCards />
+      <div className="my-6 grid grid-cols-2 gap-6">
 
-              <div className="my-6 grid grid-cols-2 gap-6">
-                <GradeGraph />
-                <GradeSummary />
-              </div>
+        <GradeGraph />
 
-              <div className="">
-                <StockMovementGraph />
-              </div>
-            </div>
-          </TabsContent>
+        <GradeSummary />
 
-          <TabsContent value="warehouse">
-            <div className="">
-              <WarehouseCard />
-            </div>
-            <div className="py-6">
-              <h2 className="text-lg font-normal text-gray-900">
-                <WareHouse />
-              </h2>
-
-              <div className="py-6">
-                <WarehouseTable />
-              </div>
-            </div>
-          </TabsContent>
-
-          <TabsContent value="distribution">
-            <InventorySaleForm />
-          </TabsContent>
-
-          <TabsContent value="history">
-            <div className="space-y-6 py-6">
-              <DistributionHistory />
-              <DistributionTable />
-            </div>
-          </TabsContent>
-
-          <TabsContent value="customer">
-            <div className="space-y-6 py-6">
-              <Customer />
-            </div>
-          </TabsContent>
-        </AdminCustomTabs>
       </div>
+
+      <StockMovementGraph />
     </>
   );
 }
