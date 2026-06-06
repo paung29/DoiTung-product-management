@@ -1,6 +1,7 @@
 "use client";
 
 import AdminCustomTabs from "@/components/custom/admin/admin-custom-tabs";
+import Customer from "@/components/custom/admin/inventory&distribution/customer";
 import DistributionHistory from "@/components/custom/admin/inventory&distribution/distribution-history";
 import DistributionTable from "@/components/custom/admin/inventory&distribution/distribution-tabel";
 import GradeGraph from "@/components/custom/admin/inventory&distribution/grade-graph";
@@ -21,6 +22,7 @@ const inventoryAndWarehouseTabs: Option[] = [
   { id: "warehouse", value: "Warehouse" },
   { id: "distribution", value: "Stock Distribution" },
   { id: "history", value: "Distribution History" },
+  { id: "customer", value: "Customer" },
 ];
 
 export default function InventoryAndWarehouses() {
@@ -79,6 +81,12 @@ export default function InventoryAndWarehouses() {
             <div className="space-y-6 py-6">
               <DistributionHistory />
               <DistributionTable />
+            </div>
+          </TabsContent>
+
+          <TabsContent value="customer">
+            <div className="space-y-6 py-6">
+              <Customer />
             </div>
           </TabsContent>
         </AdminCustomTabs>
