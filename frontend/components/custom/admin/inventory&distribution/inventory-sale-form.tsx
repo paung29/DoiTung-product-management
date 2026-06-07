@@ -1,7 +1,7 @@
 "use client";
 
 import { Form } from "@/components/ui/form";
-import { InventoryForm } from "@/lib/types/model/type";
+import { InventoryForm, YearApiResponse } from "@/lib/types/model/type";
 import { useForm } from "react-hook-form";
 import CustomDatePicker from "../../common/custom-date-picker";
 import CustomSelect from "../../common/forms/form-select";
@@ -9,6 +9,7 @@ import { Option } from "@/lib/types/model/option";
 import FormsInput from "../../common/forms/form-input";
 import { Button } from "@/components/ui/button";
 import CustomButton from "../../common/custom-button";
+import { useEffect, useRef } from "react";
 
 const categoryOptions: Option[] = [
   { id: "carry-over", value: "Carry Over" },
@@ -16,25 +17,53 @@ const categoryOptions: Option[] = [
   { id: "issued", value: "Issued" },
 ];
 
-const plantationYearOptions: Option[] = [
-  { id: "2024", value: "2024" },
-  { id: "2023", value: "2023" },
-  { id: "2022", value: "2022" },
-];
 
-const plantationAreaOptions: Option[] = [
-  { id: "PM", value: "PM Phamee" },
-  { id: "RD", value: "RD Research" },
-  { id: "SE", value: "SE Building 1" },
-];
+// const plantationAreaOptions: Option[] = [
+//   { id: "PM", value: "PM Phamee" },
+//   { id: "RD", value: "RD Research" },
+//   { id: "SE", value: "SE Building 1" },
+// ];
 
-export default function InventorySaleForm() {
-  const form = useForm<InventoryForm>({});
+export default function InventorySaleForm({years, plantationAreaOptions, customers} : {years : YearApiResponse, plantationAreaOptions : Option[] , customers : Option[]}) {
+
+  const plantationYearOptions: Option[] = years.years.map((year) => ({
+    id: year,
+    value: year,
+  }));
+
+  const form = useForm<InventoryForm>({
+    defaultValues : {
+      category: undefined,
+      date: undefined,
+      plantationYear: undefined,
+      plantationArea: undefined,
+      numberOfPods: "",
+      pricePerGram: "",
+      customer: "",
+      amount: "",
+      Remarks: "",
+    }
+  });
 
   const category = form.watch("category");
 
+  const previousCategory = useRef<string | undefined>(undefined);
+
+  useEffect(() => {
+
+    if (!category) return;
+
+    if (previousCategory.current && previousCategory.current !== category) {
+      form.reset();
+    }
+
+    previousCategory.current = category;
+
+}, [category, form]);
+
   const onSubmit = (data: InventoryForm) => {
     console.log("Form data:", data);
+    form.reset()
   };
 
   return (
@@ -42,6 +71,7 @@ export default function InventorySaleForm() {
       <form>
         <div className="mx-auto w-1/2 rounded-xl bg-white p-4 shadow">
           <CustomDatePicker
+            key={`date-${category}`}
             control={form.control}
             path="date"
             label="Date"
@@ -59,6 +89,7 @@ export default function InventorySaleForm() {
           />
 
           <CustomSelect
+            key={`year-${category}`}
             control={form.control}
             path="plantationYear"
             label="Plantation Year"
@@ -68,6 +99,7 @@ export default function InventorySaleForm() {
           />
 
           <CustomSelect
+            key={`area-${category}`}
             control={form.control}
             path="plantationArea"
             label="Plantation Area"
@@ -77,6 +109,7 @@ export default function InventorySaleForm() {
           />
 
           <FormsInput
+            key={`pods-${category}`}
             control={form.control}
             path="numberOfPods"
             label="Number of Pods"
@@ -85,16 +118,30 @@ export default function InventorySaleForm() {
           />
 
           {category === "issued" && (
-            <FormsInput
-              control={form.control}
-              path="pricePerGram"
-              label="Price per Gram"
-              placeholder="Enter price per gram"
-              className="mb-3"
-            />
+            <>
+              <FormsInput
+                key={`price-${category}`}
+                control={form.control}
+                path="pricePerGram"
+                label="Price per Gram"
+                placeholder="Enter price per gram"
+                className="mb-3"
+              />
+
+              <CustomSelect
+                key={`customer-${category}`}
+                control={form.control}
+                path="customer"
+                label="Customer Name"
+                placeholder="Select customer"
+                options={customers}
+                className="mb-3"
+              />
+            </>
           )}
 
           <FormsInput
+            key={`amount-${category}`}
             control={form.control}
             path="amount"
             label="Amount"
@@ -103,6 +150,7 @@ export default function InventorySaleForm() {
           />
 
           <FormsInput
+            key={`remarks-${category}`}
             control={form.control}
             path="Remarks"
             label="Remarks | Details"

@@ -324,6 +324,7 @@ export type InventoryForm = {
   pricePerGram?: string;
   amount: string;
   Remarks: string;
+  customer : string
 };
 
 export type DistributionHistorySearchForm = {

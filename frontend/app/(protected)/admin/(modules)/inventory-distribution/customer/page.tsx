@@ -14,7 +14,7 @@ export type Customers = {
   note: string;
 };
 
-type CustomersApiResponse = {
+export type CustomersApiResponse = {
   customers: Customers[];
 };
  
