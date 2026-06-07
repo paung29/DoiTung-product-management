@@ -17,8 +17,12 @@ import { FieldGroup } from "@/components/ui/field";
 import FormsInput from "../../../common/forms/form-input";
 import { Form } from "@/components/ui/form";
 import { createYear } from "@/lib/server-actions/admin/create-year-client";
+import { useRouter } from "next/navigation";
 
 function CreateYearButton() {
+
+  const router = useRouter();
+
   const form = useForm<CreateYearFormType>({
     defaultValues: {
       year: 0,
@@ -37,6 +41,8 @@ function CreateYearButton() {
 
     setOpen(false);
     form.reset();
+
+    router.replace("/admin/zone-form-management/year")
   };
   return (
     <Dialog open={open} onOpenChange={setOpen}>

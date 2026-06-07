@@ -3,26 +3,15 @@ import YearTable, {
   YearTableDataType,
 } from "@/components/custom/admin/zone&form/year/year-table";
 
-function YearManagementTab() {
-  const yearData: YearTableDataType[] = [
-    {
-      year: "2023",
-      totalZone: 5,
-      totalPole: 10,
-    },
-    {
-      year: "2024",
-      totalZone: 8,
-      totalPole: 15,
-    },
-  ];
+function YearManagementTab({records} : {records : YearTableDataType[]}) {
+
   return (
     <>
       <div className="flex flex-col">
         <div className="flex h-[80px] flex-row items-end justify-end p-4">
           <CreateYearButton />
         </div>
-        <YearTable yearTableData={yearData} />
+        <YearTable yearTableData={records} />
       </div>
     </>
   );

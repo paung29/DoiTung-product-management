@@ -46,7 +46,7 @@ export default function ProtectedLayout({
     {
       label: "Zone & Form\nManagement",
       icon: MapPin,
-      href: `/admin/zone-form-management`,
+      href: `/admin/zone-form-management/year`,
     },
     {
       label: "Inventory & \nDistribution",

@@ -3,6 +3,7 @@
 import AdminCustomTabs from "@/components/custom/admin/admin-custom-tabs";
 import FormManagementTab from "@/components/custom/admin/zone&form/form/form-management-tab";
 import YearManagementTab from "@/components/custom/admin/zone&form/year/year-management-tab";
+import { YearTableDataType } from "@/components/custom/admin/zone&form/year/year-table";
 import ZoneAndFormLayoutComponent from "@/components/custom/admin/zone&form/zone-and-form-layout";
 import ZoneManagementTab from "@/components/custom/admin/zone&form/zone/zone-management-tab";
 import { TabsContent } from "@/components/ui/tabs";
@@ -16,7 +17,7 @@ const zoneAndFormTabs = [
   { id: "form", value: "Form Management", icon: FileText },
 ];
 
-function ZoneAndFormManagementPage({yearsRecords} : {yearsRecords : YearApiResponse} ) {
+function YearManagementPage({yearsRecords, yearTables} : {yearsRecords : YearApiResponse, yearTables :YearTableDataType[]} ) {
 
   var [activeTab, setActiveTab] = useState("year");
   const [selectedYear, setSelectedYear] = useState("");
@@ -29,7 +30,9 @@ function ZoneAndFormManagementPage({yearsRecords} : {yearsRecords : YearApiRespo
       isYearTab={isYearTab}
       yearRecords={yearsRecords}
     >
-      <AdminCustomTabs
+      <YearManagementTab records={yearTables}/>
+     
+      {/* <AdminCustomTabs
         tabs={zoneAndFormTabs}
         value={activeTab}
         onValueChange={setActiveTab}
@@ -43,9 +46,9 @@ function ZoneAndFormManagementPage({yearsRecords} : {yearsRecords : YearApiRespo
         <TabsContent value="form">
           <FormManagementTab selectedYear={selectedYear} />
         </TabsContent>
-      </AdminCustomTabs>
+      </AdminCustomTabs> */}
     </ZoneAndFormLayoutComponent>
   );
 }
 
-export default ZoneAndFormManagementPage;
+export default YearManagementPage;

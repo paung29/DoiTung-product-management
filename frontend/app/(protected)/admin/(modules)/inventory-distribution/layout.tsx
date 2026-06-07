@@ -21,13 +21,16 @@ export default function InventoryLayout({
   const pathname = usePathname();
   const [year, setYear] = useState("2026");
 
+  const isStockOverviewPage = pathname === "/admin/inventory-distribution";
+
   return (
     <>
-      <SelectYearCard
-        title="Inventory And Warehouse"
-        year={year}
-        onYearChange={setYear}
-      />
+      
+        <SelectYearCard
+          title="Inventory And Warehouse"
+          year={year}
+          onYearChange={setYear}
+        />
 
       <div className="px-10 py-6">
         <div className="flex gap-3 border-b">
