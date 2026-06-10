@@ -44,9 +44,14 @@ export default function ProtectedLayout({
       href: "/admin/user-management",
     },
     {
+      label: "Year Management",
+      icon: Users2,
+      href: "/admin/year-management",
+    },
+    {
       label: "Zone & Form\nManagement",
       icon: MapPin,
-      href: `/admin/zone-form-management/year`,
+      href: `/admin/zone-form-management`,
     },
     {
       label: "Inventory & \nDistribution",

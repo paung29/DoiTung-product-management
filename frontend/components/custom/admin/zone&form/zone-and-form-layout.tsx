@@ -2,7 +2,7 @@
 import { ChevronDown, Layers } from "lucide-react";
 import React, { ReactNode, useState } from "react";
 import YearPickerDialog from "./year/year-pick-dialogue";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { YearApiResponse } from "@/lib/types/model/type";
 
 type Props = {
@@ -22,6 +22,7 @@ function ZoneAndFormLayoutComponent({
   yearRecords
 }: Props) {
   const router = useRouter();
+  const pathname = usePathname();
 
   const [open, setOpen] = useState(false);
   const [year, setYear] = useState(selectedYear);
@@ -30,6 +31,9 @@ function ZoneAndFormLayoutComponent({
     setOpen(false);
     setYear(year);
     setSelectedYear && setSelectedYear(year);
+
+    const currentTab = pathname?.includes("/form") ? "form" : "zone";
+    router.push(`/admin/zone-form-management/${year}/${currentTab}`);
   };
 
   return (

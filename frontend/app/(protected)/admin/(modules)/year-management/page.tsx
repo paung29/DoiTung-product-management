@@ -4,16 +4,18 @@ import { Account } from "@/lib/types/model/account";
 import { AccountItem, ClusterApiItem, YearApiResponse } from "@/lib/types/model/type";
 import { baseUrl } from "@/lib/utl";
 import { cookies } from "next/headers";
+import ZoneAndFormManagementPage from "./Year-Management-Page-Client";
 import { YearTableDataType } from "@/components/custom/admin/zone&form/year/year-table";
-import { useZoneForm } from "../zone-form-context";
-import ZoneManagement from "./Zone-Management-Page-Client";
+import YearManagementPage from "./Year-Management-Page-Client";
  
-export default async function Page() {
+export default async function Page({params, searchParams,} : {params : Promise<{year : string}>, searchParams: Promise<{ zoneNo?: string }>;}) {
 
+  const { year } = await params;
+  const { zoneNo } = await searchParams;
   const cookieStore = await cookies();
   const cookieHeader = cookieStore.toString();
 
-  const response = await fetch(`${baseUrl}/years/get-all-years`, {
+  const response = await fetch(`${baseUrl}/years/get-year-management-table`, {
     credentials: "include",
     method: "GET",
     headers: {
@@ -25,18 +27,21 @@ export default async function Page() {
   
 
   const apiData: YearApiResponse = response.ok ? await response.json() : { years: [] };
-  
+
+  console.log("year from route:", year);
+  console.log("zoneNo from query:", zoneNo);
   console.log(apiData);
+  
 
     const records : YearTableDataType[] = apiData.years.map((item, index) => ({
-        year : String(item),
+        year : String(item.year),
         totalPole : 10,
-        totalZone : 10,
+        totalZone : item.totalZone,
     }));
 
 
   return (
-    <ZoneManagement yearRecords={apiData}/>
+    <YearManagementPage yearsRecords={apiData} yearTables={records}/>
   );
   
 }

@@ -13,17 +13,25 @@ import {
 import { FieldGroup } from "@/components/ui/field";
 import { Form } from "@/components/ui/form";
 
-import { CreateOrEditZoneFormType } from "@/lib/types/model/type";
+import { CreateOrEditZoneForm, CreateOrEditZoneFormType } from "@/lib/types/model/type";
 import React from "react";
 import { useForm } from "react-hook-form";
 import FormsInput from "../../../common/forms/form-input";
 import { Edit } from "lucide-react";
+import { useZoneForm } from "@/app/(protected)/admin/(modules)/zone-form-management/zone-form-context";
+import { createZone } from "@/lib/server-actions/admin/create-zone-client";
+import { useRouter } from "next/navigation";
 
 export function CreateOrEditZoneButton({
   isEdit = false,
 }: {
   isEdit?: boolean;
 }) {
+
+  const router = useRouter();
+
+  const {selectedYear} = useZoneForm()
+
   const form = useForm<CreateOrEditZoneFormType>({
     defaultValues: {
       zone_name: "",
@@ -33,10 +41,25 @@ export function CreateOrEditZoneButton({
 
   const [open, setOpen] = React.useState(false);
 
-  const onSubmit = (data: CreateOrEditZoneFormType) => {
+  const onSubmit = async (data: CreateOrEditZoneFormType) => {
+
     console.log(data);
+
+    const reformData : CreateOrEditZoneForm = {
+      year : Number(selectedYear),
+      Name : data.zone_name
+    }
+
+    console.log(reformData);
+
+    const result = await createZone(reformData)
+
+    console.log(result)
+    
     setOpen(false);
     form.reset();
+
+    router.replace(`/admin/zone-form-management/${selectedYear}/zone`)
   };
 
   return (

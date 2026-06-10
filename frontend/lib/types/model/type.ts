@@ -339,7 +339,13 @@ export type DistributionHistorySearchForm = {
 export type CreateOrEditZoneFormType = {
   zone_name: string;
   total_plants: string;
+  year : number
 };
+
+export type CreateOrEditZoneForm = {
+  year : number,
+  Name : string
+}
 
 export type FormsEditType = {
   form_id: number;
@@ -466,17 +472,28 @@ export type WareHouseFormCreate = {
   active_status : boolean
 }
 
+export type year = {
+  year : string,
+  totalZone : number,
+}
+
 export type YearApiResponse = {
-  years: string[];
+  years: {
+    year: number;
+    totalZone: number;
+  }[];
 };
 
 export type Zone = {
-  zoneId: string;
+  zoneId: number;
   zoneName: string;
+  totalPolesInZone: number;
 };
 
 export type ZoneApiResponse = {
-  zones: Zone[] | null;
+  totalZones : number,
+  totalPoles : number,
+  zones: Zone[] | null
 };
 
 export type CreateYearFormType = {
