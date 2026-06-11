@@ -8,6 +8,7 @@ import ConditionForm from "@/components/custom/staff/form/condition-form";
 import FormCard from "@/components/custom/staff/form/form-card";
 import { StaffFormTitle } from "@/components/custom/staff/form/staff-form-title";
 import { Form } from "@/components/ui/form";
+import { createCluster } from "@/lib/server-actions/create-cluster-client";
 import { Option } from "@/lib/types/model/option";
 import {
   ClusterRecordingFormInput,
@@ -23,6 +24,14 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
+export type clusterCreate = {
+  year : number,
+  zoneId : number,
+  poleNo : number,
+  clusterNo : number,
+  condition : string,
+}
+
 function ClusterForm() {
   const [zones, setZones] = useState<Zone[]>([]);
   // eslint-disable-next-line @typescript-eslint/no-wrapper-object-types
@@ -35,7 +44,7 @@ function ClusterForm() {
   const onSubmit = async (data: ClusterRecordingFormType) => {
     const reformData = {
       year : Number(year),
-      zoneNo : Number(data.zoneNo),
+      zoneId : Number(data.zoneNo),
       poleNo : Number(data.poleNo),
       clusterNo : Number(data.clusterNo),
       condition : data.condition
@@ -44,18 +53,12 @@ function ClusterForm() {
     console.log(reformData);
 
     try {
-      const response = await fetch(`${baseUrl}/clusters/create`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(reformData),
-        credentials: "include",
-      });
 
-      const result = await response.json();
+      const result = await createCluster(reformData)
 
-      if (!response.ok) {
+      console.log(result)
+
+      if (!result.ok) {
         setError(result.message || "Failed to create");
         return;
       }

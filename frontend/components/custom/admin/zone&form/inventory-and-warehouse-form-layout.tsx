@@ -2,7 +2,7 @@
 import { ChevronDown, Layers } from "lucide-react";
 import React, { ReactNode, useState } from "react";
 import YearPickerDialog from "./year/year-pick-dialogue";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { YearApiResponse } from "@/lib/types/model/type";
 
 type Props = {
@@ -13,8 +13,7 @@ type Props = {
   yearRecords : YearApiResponse
 };
 
-function ZoneAndFormLayoutComponent({
-
+function InventoryAndWarehouseFormLayout({
   children,
   selectedYear,
   setSelectedYear,
@@ -22,7 +21,6 @@ function ZoneAndFormLayoutComponent({
   yearRecords
 }: Props) {
   const router = useRouter();
-  const pathname = usePathname();
 
   const [open, setOpen] = useState(false);
   const [year, setYear] = useState(selectedYear);
@@ -31,9 +29,6 @@ function ZoneAndFormLayoutComponent({
     setOpen(false);
     setYear(year);
     setSelectedYear && setSelectedYear(year);
-
-    const currentTab = pathname?.includes("/form") ? "form" : "zone";
-    router.push(`/admin/zone-form-management/${year}/${currentTab}`);
   };
 
   return (
@@ -48,8 +43,7 @@ function ZoneAndFormLayoutComponent({
           </div>
 
           <p className="hidden lg:flex">
-            Unified zone, form, and year management system for Doi Tung Vanilla
-            Production
+            Inventory And Warehouse
           </p>
         </div>
 
@@ -84,4 +78,6 @@ function ZoneAndFormLayoutComponent({
   );
 }
 
-export default ZoneAndFormLayoutComponent;
+export default InventoryAndWarehouseFormLayout;
+
+;

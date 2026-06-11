@@ -19,7 +19,7 @@ export default async function HarvestGradingEntryPage({params, searchParams,} : 
     redirect(`/staff/${year}/harvest-grading?zoneNo=3`);
   }
   
-  const response = await fetch(`${baseUrl}/poles/get-by-zone?year=${year}&zoneNo=${zoneNo}`, {
+  const response = await fetch(`${baseUrl}/poles/get-by-zone?year=${year}&zoneId=${zoneNo}`, {
       credentials: "include",
       method: "GET",
       headers: {
@@ -29,7 +29,7 @@ export default async function HarvestGradingEntryPage({params, searchParams,} : 
 
   const result : HarvestAndGradingResponse = await response.json()
  
-  console.log(result)
+  console.log("fetch server side ",result)
 
 
 

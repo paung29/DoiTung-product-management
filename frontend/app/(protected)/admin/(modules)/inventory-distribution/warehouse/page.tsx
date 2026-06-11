@@ -13,7 +13,7 @@ export type Warehouse = {
   active_status: boolean;
 };
 
-type WarehouseApiResponse = {
+export type WarehouseApiResponse = {
   warehouses: Warehouse[];
 };
  

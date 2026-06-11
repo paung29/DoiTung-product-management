@@ -1,16 +1,16 @@
 "use server"
 
+import { CreateOrEditZoneForm } from "@/lib/types/model/type";
+import { baseUrl } from "@/lib/utl";
 import { cookies } from "next/headers";
-import { FlowerRecordingFormType } from "../types/model/type";
-import { baseUrl } from "../utl";
 
 
-export async function createFlower(data : FlowerRecordingFormType) {
+export async function createZone(data : CreateOrEditZoneForm) {
 
     const cookieStore = await cookies();
     const cookieHeader = cookieStore.toString();
 
-    const response = await fetch(`${baseUrl}/flowers/create`, {
+    const response = await fetch(`${baseUrl}/zones/create`, {
         method : "POST",
         credentials: "include",
         headers: {

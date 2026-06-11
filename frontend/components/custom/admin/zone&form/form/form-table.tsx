@@ -12,9 +12,11 @@ export type FormTableDataType = {
   form_id: number;
   form_name: string;
   active_status: boolean;
+  serviceName : string;
 };
 
 function FormTable({ formTableData }: { formTableData: FormTableDataType[] }) {
+
   return (
     <div className="border-primary-button overflow-hidden rounded-2xl border">
       <Table className="gap-20">
@@ -45,8 +47,10 @@ function FormTable({ formTableData }: { formTableData: FormTableDataType[] }) {
               </TableCell>
               <TableCell>
                 <EditFormButton
+                  status={item.active_status}
                   form_id={item.form_id}
                   form_name={item.form_name}
+                  form_service_name={item.serviceName}
                 />
               </TableCell>
             </TableRow>

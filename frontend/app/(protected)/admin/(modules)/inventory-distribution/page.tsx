@@ -16,6 +16,7 @@ import WarehouseTable from "@/components/custom/admin/inventory&distribution/war
 import { TabsContent } from "@/components/ui/tabs";
 import { Option } from "@/lib/types/model/option";
 import { useState } from "react";
+import { useInventory } from "./inventory-context";
 
 const inventoryAndWarehouseTabs: Option[] = [
   { id: "overview", value: "Stock Overview" },
@@ -26,11 +27,17 @@ const inventoryAndWarehouseTabs: Option[] = [
 ];
 
 export default function InventoryAndWarehouses() {
-  const [year, setYear] = useState("2026");
-  const [activeTab, setActiveTab] = useState("overview");
+  
+  const { selectedYear, setSelectedYear } = useInventory();
+  console.log("Provider Selected Year : ", selectedYear)
 
+
+  // <ZoneAndFormLayoutComponent yearRecords={yearRecords} setSelectedYear={setSelectedYear} selectedYear={selectedYear}>
+  //               < ZoneManagementTab selectedYear={selectedYear}  />
+  //           </ZoneAndFormLayoutComponent>
   return (
     <>
+    
       <StockOverviewCards />
 
       <div className="my-6 grid grid-cols-2 gap-6">

@@ -65,6 +65,8 @@ export default function HarvestGradingRecordingForm({
   const year = params.year
   const zoneId = zoneNo
 
+  console.log("Fetch Data : ", data)
+
   const router = useRouter();
 
   const [error, setError] = useState<String | null>()
@@ -84,9 +86,7 @@ export default function HarvestGradingRecordingForm({
   const onSubmit = async (data: HarvestGradingRecordingFormData) => {
 
     const reformData : HarvestGradingRecordInput = {
-      year: Number(year),
-      zoneNo: zoneId,
-      poleNo: Number(record?.poleNumber),
+      poleId: Number(record?.poleNumber),
       gradeAPlusCount: data.gradeA_plus.podsCount,
       gradeAPlusWeight: data.gradeA_plus.weight,
       gradeACount: data.gradeA.podsCount,
