@@ -11,6 +11,7 @@ import { CreateOrEditZoneButton } from "./create-new-zone-button";
 import { DeleteZoneButton } from "../delete-zone-button";
 
 export type ZoneTableDataType = {
+  zone_id : number
   zone_name: string;
   total_plants: number;
 };

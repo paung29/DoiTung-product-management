@@ -26,10 +26,10 @@ function YearTable({ yearTableData }: { yearTableData: YearTableDataType[] }) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {yearTableData.map((item) => (
+          {yearTableData.map((item, index) => (
             <TableRow
               className="bg-white text-center [&_td]:py-3"
-              key={item.year}
+              key={item.year ?? index}
             >
               <TableCell className="font-medium">{item.year}</TableCell>
               <TableCell>{item.totalZone}</TableCell>

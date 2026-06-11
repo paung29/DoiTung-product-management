@@ -19,35 +19,8 @@ const zoneAndFormTabs = [
 
 function YearManagementPage({yearsRecords, yearTables} : {yearsRecords : YearApiResponse, yearTables :YearTableDataType[]} ) {
 
-  var [activeTab, setActiveTab] = useState("year");
-  const [selectedYear, setSelectedYear] = useState("");
-  var isYearTab = activeTab === "year";
-
   return (
-    <ZoneAndFormLayoutComponent
-      selectedYear={selectedYear}
-      setSelectedYear={setSelectedYear}
-      isYearTab={isYearTab}
-      yearRecords={yearsRecords}
-    >
       <YearManagementTab records={yearTables}/>
-     
-      {/* <AdminCustomTabs
-        tabs={zoneAndFormTabs}
-        value={activeTab}
-        onValueChange={setActiveTab}
-      >
-        <TabsContent value="year">
-          <YearManagementTab />
-        </TabsContent>
-        <TabsContent value="zone">
-          <ZoneManagementTab selectedYear={selectedYear} />
-        </TabsContent>
-        <TabsContent value="form">
-          <FormManagementTab selectedYear={selectedYear} />
-        </TabsContent>
-      </AdminCustomTabs> */}
-    </ZoneAndFormLayoutComponent>
   );
 }
 
