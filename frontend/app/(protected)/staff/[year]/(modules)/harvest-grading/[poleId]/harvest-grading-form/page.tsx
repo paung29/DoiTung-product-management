@@ -24,7 +24,7 @@ export default async function HarvestGradingEntryPage({params, searchParams} : {
   });
 
   const result : HarvestGradingRecordResponse = await response.json()
-  console.log(result)
+  
 
   const PassData : HarvestGradingRecord = {
       poleid: result.poleId,
@@ -32,7 +32,7 @@ export default async function HarvestGradingEntryPage({params, searchParams} : {
       poleNumber: String(result.poleNo),
       recordedDate: "2025",
       editedDate: "2024",
-      status: "complete"
+      status: result.harvestGradingFormDone ? "complete" : "incomplete"
   };
 
   return (

@@ -364,9 +364,7 @@ export type HarvestGradingRecord = {
 };
 
 export type HarvestGradingRecordInput = {
-  year: number;
-  zoneNo: number;
-  poleNo: number;
+  poleId: number;
   gradeAPlusCount: number;
   gradeAPlusWeight: number;
   gradeACount: number;
@@ -500,3 +498,19 @@ export type CreateYearFormType = {
   year: number;
 };
 
+export type YearSettingApiResponse = {
+  totalActiveForms : number,
+  year : number,
+  clusterActive : boolean,
+  flowerActive : boolean,
+  pollinationActive : boolean,
+  podActive : boolean,
+  preHarvestActive : boolean,
+  harvestGradingActive : boolean,
+}
+
+export type YearSettingFormType = {
+  year : number,
+  formName : string,
+  activeStatus : boolean
+}

@@ -15,7 +15,7 @@ export default async function Page({params, searchParams,} : {params : Promise<{
 
   const selectedZoneNo = zoneNo ?? "3";
 
-  const response = await fetch(`${baseUrl}/clusters/get-by-zone?year=${year}&zoneNo=${selectedZoneNo}`, {
+  const response = await fetch(`${baseUrl}/clusters/get-by-zone?year=${year}&zoneId=${selectedZoneNo}`, {
     credentials: "include",
     method: "GET",
     headers: {

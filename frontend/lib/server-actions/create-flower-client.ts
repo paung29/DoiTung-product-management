@@ -5,7 +5,7 @@ import { FlowerRecordingFormType } from "../types/model/type";
 import { baseUrl } from "../utl";
 
 
-export async function createCluster(data : FlowerRecordingFormType) {
+export async function createFlower(data : FlowerRecordingFormType) {
 
     const cookieStore = await cookies();
     const cookieHeader = cookieStore.toString();

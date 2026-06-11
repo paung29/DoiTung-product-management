@@ -15,10 +15,10 @@ import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { baseUrl } from "@/lib/utl";
-import { createCluster } from "@/lib/server-actions/create-flower-client";
 import { getErrorMessage } from "@/lib/types/model/function";
 import { ApiError } from "next/dist/server/api-utils";
 import ApiErrorUI from "../../common/error-handle";
+import { createFlower } from "@/lib/server-actions/create-flower-client";
 
 function FlowerRecordingForm() {
 
@@ -35,7 +35,7 @@ function FlowerRecordingForm() {
     data.clusterId = Number(clusterId)
     console.log(data)
     try{
-      const result = await createCluster(data);
+      const result = await createFlower(data);
       console.log(result);
 
       if (result.success === false) {

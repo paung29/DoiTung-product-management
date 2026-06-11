@@ -12,25 +12,37 @@ import {
 } from "@/components/ui/dialog";
 import { FieldGroup } from "@/components/ui/field";
 import { Form } from "@/components/ui/form";
-import { FormsEditType } from "@/lib/types/model/type";
+import { FormsEditType, YearSettingFormType } from "@/lib/types/model/type";
 import React from "react";
 import { useForm } from "react-hook-form";
 import FormsInput from "../../../common/forms/form-input";
 import { Edit } from "lucide-react";
 import CustomSelect from "../../../common/forms/form-select";
+import { useZoneForm } from "@/app/(protected)/admin/(modules)/zone-form-management/zone-form-context";
+import { updateYearSetting } from "@/lib/server-actions/admin/update-year-setting-client";
+import { useRouter } from "next/navigation";
 
 export function EditFormButton({
   form_id,
   form_name,
+  form_service_name,
+  status
 }: {
   form_id: number;
   form_name: string;
+  form_service_name: string
+  status : boolean
 }) {
+
+  const router = useRouter();
+
+  const {selectedYear} = useZoneForm()
+
   const form = useForm<FormsEditType>({
     defaultValues: {
       form_id: 0,
       form_name: "",
-      active_status: "",
+      active_status: status ? "ACTIVE" : "INACTIVE",
     },
   });
 
@@ -41,14 +53,29 @@ export function EditFormButton({
       form.reset({
         form_id,
         form_name,
-        active_status: "ACTIVE",
+        active_status: status ? "ACTIVE" : "INACTIVE",
       });
     }
   }, [open, form, form_id, form_name]);
 
-  const onSubmit = (data: FormsEditType) => {
+  const onSubmit = async (data: FormsEditType) => {
+
     console.log(data);
+
+    const reformData : YearSettingFormType = {
+      year : Number(selectedYear),
+      formName : form_service_name,
+      activeStatus : data.active_status === "ACTIVE"
+    }
+    console.log(reformData)
+
+    const result = await updateYearSetting(reformData)
+    console.log(result)
+
     setOpen(false);
+
+    router.replace(`/admin/zone-form-management/${selectedYear}/form`)
+
   };
 
   return (
