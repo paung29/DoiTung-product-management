@@ -9,6 +9,8 @@ import {
 } from "@/components/ui/table";
 import { CreateOrEditZoneButton } from "./create-new-zone-button";
 import { DeleteZoneButton } from "../delete-zone-button";
+import { useRouter } from "next/navigation";
+import { useZoneForm } from "@/app/(protected)/admin/(modules)/zone-form-management/zone-form-context";
 
 export type ZoneTableDataType = {
   zone_id : number
@@ -21,6 +23,15 @@ export function ZoneTable({
 }: {
   zoneTableData: ZoneTableDataType[];
 }) {
+
+  const {selectedYear} = useZoneForm();
+  const router = useRouter();
+
+  const onView = ({id} : {id : string}) => {
+    router.push(`/admin/zone-form-management/zone-details/${id}`)
+  }
+
+
   return (
     <div className="border-primary-button overflow-hidden rounded-2xl border">
       <Table className="gap-20">
@@ -41,7 +52,7 @@ export function ZoneTable({
               <TableCell className="font-medium">{item.zone_name}</TableCell>
               <TableCell>{item.total_plants}</TableCell>
               <TableCell>
-                <button className="bg-primary-button rounded-lg px-4 py-2 text-white">
+                <button onClick={() => onView({id : String(item.zone_id)})} className="bg-primary-button rounded-lg px-4 py-2 text-white">
                   View Report
                 </button>
               </TableCell>
