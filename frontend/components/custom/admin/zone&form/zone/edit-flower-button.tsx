@@ -18,6 +18,7 @@ import FormsInput from "../../../common/forms/form-input";
 import { Edit } from "lucide-react";
 import CustomSelect from "../../../common/forms/form-select";
 import { FlowerTableDataType } from "./form/flower-table";
+import CustomButton from "@/components/custom/common/custom-button";
 
 type FlowerFormData = {
   recordedDate: string;
@@ -68,9 +69,11 @@ export function EditFlowerButton({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm" className="p-2">
-          <Edit className="text-primary h-4 w-4" />
-        </Button>
+        <CustomButton
+          label="Edit"
+          type="button"
+          className="text-primary h-4 w-4"
+        />
       </DialogTrigger>
 
       <DialogContent className="text-primary-button border-primary border bg-white sm:max-w-2xl">

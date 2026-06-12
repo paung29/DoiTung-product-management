@@ -9,6 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useState, useMemo } from "react";
+import { Edit } from "lucide-react";
 import CustomButton from "@/components/custom/common/custom-button";
 
 // Types
@@ -98,7 +99,6 @@ const MOCK_DATA: CustomerHistoryData[] = [
   },
 ];
 
-// Tooltip component for truncated notes
 const NoteCell = ({ note }: { note: string }) => {
   const MAX_LENGTH = 20;
   const isTruncated = note.length > MAX_LENGTH;
@@ -120,9 +120,10 @@ const NoteCell = ({ note }: { note: string }) => {
 // Table row component
 interface CustomerTableRowProps {
   data: CustomerHistoryData;
+  onEdit: (customer: CustomerHistoryData) => void;
 }
 
-const CustomerTableRow = ({ data }: CustomerTableRowProps) => {
+const CustomerTableRow = ({ data, onEdit }: CustomerTableRowProps) => {
   return (
     <TableRow className="h-14 border-b border-b-gray-100 transition-colors hover:bg-yellow-50">
       <TableCell className="w-28 px-6 py-4 text-left text-sm font-medium text-gray-900">
@@ -149,6 +150,15 @@ const CustomerTableRow = ({ data }: CustomerTableRowProps) => {
       <TableCell className="min-w-40 flex-1 px-6 py-4 text-left text-sm text-gray-900">
         <NoteCell note={data.note} />
       </TableCell>
+      <TableCell className="w-16 px-6 py-4 text-center">
+        <button
+          onClick={() => onEdit(data)}
+          className="rounded-lg p-2 text-gray-600 transition-colors hover:bg-gray-200 hover:text-gray-900"
+          title="Edit customer"
+        >
+          <Edit className="h-5 w-5" />
+        </button>
+      </TableCell>
     </TableRow>
   );
 };
@@ -158,6 +168,8 @@ export default function CustomerTable({
   itemsPerPage = 6,
 }: CustomerTableProps) {
   const [currentPage, setCurrentPage] = useState(1);
+  const [editingCustomer, setEditingCustomer] =
+    useState<CustomerHistoryData | null>(null);
 
   // Calculate pagination
   const totalPages = Math.ceil(data.length / itemsPerPage);
@@ -174,6 +186,14 @@ export default function CustomerTable({
 
   const handleNext = () => {
     setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+  };
+
+  const handleEdit = (customer: CustomerHistoryData) => {
+    setEditingCustomer(customer);
+  };
+
+  const handleCloseEdit = () => {
+    setEditingCustomer(null);
   };
 
   const isFirstPage = currentPage === 1;
@@ -211,6 +231,9 @@ export default function CustomerTable({
               <TableHead className="h-14 min-w-40 flex-1 px-6 py-4 text-left font-semibold text-white">
                 NOTE
               </TableHead>
+              <TableHead className="h-14 w-16 px-6 py-4 text-center font-semibold text-white">
+                ACTION
+              </TableHead>
             </TableRow>
           </TableHeader>
 
@@ -218,11 +241,15 @@ export default function CustomerTable({
           <TableBody className="bg-[#FAF3E0]">
             {currentData.length > 0 ? (
               currentData.map((item) => (
-                <CustomerTableRow key={item.id} data={item} />
+                <CustomerTableRow
+                  key={item.id}
+                  data={item}
+                  onEdit={handleEdit}
+                />
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={8} className="px-6 py-12 text-center">
+                <TableCell colSpan={9} className="px-6 py-12 text-center">
                   <p className="text-sm text-gray-500">
                     No customer history found
                   </p>
@@ -261,6 +288,94 @@ export default function CustomerTable({
                 : "bg-[#8a6752] text-white hover:bg-[#705a40]"
             }`}
           />
+        </div>
+      )}
+
+      {/* Edit Customer Modal */}
+      {editingCustomer && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/5"
+          onClick={() => handleCloseEdit()}
+        >
+          <div
+            className="mx-4 w-full max-w-2xl rounded-3xl bg-white p-8 shadow-lg"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="mb-6 flex items-start justify-between">
+              <div>
+                <h2 className="text-3xl font-bold text-gray-900">
+                  Edit Customer
+                </h2>
+                <p className="mt-2 text-gray-500">
+                  Update customer information.
+                </p>
+              </div>
+
+              <button
+                onClick={() => handleCloseEdit()}
+                className="text-gray-400 transition hover:text-gray-600"
+              >
+                <svg
+                  className="h-6 w-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+
+            {/* Form */}
+            <div className="mb-8 space-y-6">
+              {/* Company/Organization Field */}
+              <div>
+                <label className="mb-2 block text-sm font-medium text-gray-700">
+                  Company / Organization
+                </label>
+                <input
+                  type="text"
+                  defaultValue={editingCustomer.customer}
+                  className="w-full rounded-xl border border-gray-300 px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-green-600 focus:outline-none"
+                  placeholder="e.g., Premium Vanilla Co."
+                />
+              </div>
+
+              {/* Note Field */}
+              <div>
+                <label className="mb-2 block text-sm font-medium text-gray-700">
+                  Note
+                </label>
+                <textarea
+                  defaultValue={editingCustomer.note}
+                  placeholder="Enter customer notes"
+                  rows={4}
+                  className="w-full resize-none rounded-xl border border-gray-300 px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-green-600 focus:outline-none"
+                />
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="flex justify-end gap-4 pt-4">
+              <CustomButton
+                label="Cancel"
+                onClick={() => handleCloseEdit()}
+                type="button"
+                className="rounded-full bg-gray-200 px-6 py-2 text-gray-700 hover:bg-gray-300"
+              />
+              <CustomButton
+                label="Update"
+                type="button"
+                className="rounded-full bg-amber-900 px-6 py-2 hover:bg-amber-950"
+              />
+            </div>
+          </div>
         </div>
       )}
     </div>

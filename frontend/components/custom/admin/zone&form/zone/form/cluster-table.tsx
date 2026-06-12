@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/table";
 import { CreateOrEditZoneButton } from "../create-new-zone-button";
 import { DeleteZoneButton } from "../../delete-zone-button";
+import { EditClusterButton } from "../edit-cluster-button";
 
 export type ClusterTableDataType = {
   clusterId: number;
@@ -44,7 +45,7 @@ export function ClusterTable({
           {clusterTableData.map((item) => (
             <TableRow
               className="bg-white text-center [&_td]:py-3"
-              key={item.recordedBy}
+              key={item.clusterId}
             >
               <TableCell className="font-medium">{item.recordedDate}</TableCell>
               <TableCell>{item.poleNo}</TableCell>
@@ -54,7 +55,7 @@ export function ClusterTable({
               <TableCell>{item.recordedBy}</TableCell>
               <TableCell>
                 <div className="flex flex-row justify-center gap-2">
-                  <CreateOrEditZoneButton isEdit={true} />
+                  <EditClusterButton clusterData={item} />
                   <DeleteZoneButton />
                 </div>
               </TableCell>
