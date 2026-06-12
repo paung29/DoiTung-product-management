@@ -1,5 +1,9 @@
 "use client";
 
+import React from "react";
+import { useForm } from "react-hook-form";
+import { Edit } from "lucide-react";
+
 import {
   Dialog,
   DialogClose,
@@ -11,52 +15,55 @@ import {
 } from "@/components/ui/dialog";
 import { FieldGroup } from "@/components/ui/field";
 import { Form } from "@/components/ui/form";
-import React from "react";
-import { useForm } from "react-hook-form";
-import { Edit } from "lucide-react";
 
 import FormsInput from "../../../common/forms/form-input";
 import CustomSelect from "../../../common/forms/form-select";
 import CustomButton from "@/components/custom/common/custom-button";
 
-import { PodTableDataType } from "./form/pod-table";
+import { PreharvestTableDataType } from "./form/preharvest-table";
 
-export function EditPodButton({ podData }: { podData: PodTableDataType }) {
+export function EditPreharvestButton({
+  preharvestData,
+}: {
+  preharvestData: PreharvestTableDataType;
+}) {
   const [open, setOpen] = React.useState(false);
 
-  const form = useForm<PodTableDataType>({
+  const form = useForm<PreharvestTableDataType>({
     mode: "onChange",
     defaultValues: {
-      recordedDate: podData.recordedDate || "",
-      poleNo: podData.poleNo || "",
-      clusterId: podData.clusterId || "",
-      totalFlower: podData.totalFlower || 0,
-      numberOfPod: podData.numberOfPod || 0,
-      lostPods: podData.lostPods || 0,
-      remainingPod: podData.remainingPod || 0,
-      condition: podData.condition || "",
-      recordedBy: podData.recordedBy || "",
+      recordedDate: preharvestData.recordedDate || "",
+      poleNo: preharvestData.poleNo || "",
+      clusterId: preharvestData.clusterId || "",
+      gradeARound1: preharvestData.gradeARound1 || 0,
+      numberOfPodsRound2: preharvestData.numberOfPodsRound2 || 0,
+      lostPodsBeforeHarvest: preharvestData.lostPodsBeforeHarvest || 0,
+      podRemoved: preharvestData.podRemoved || 0,
+      plantWithPodRemoved: preharvestData.plantWithPodRemoved || 0,
+      condition: preharvestData.condition || "",
+      recordedBy: preharvestData.recordedBy || "",
     },
   });
 
   React.useEffect(() => {
     if (open) {
       form.reset({
-        recordedDate: podData.recordedDate,
-        poleNo: podData.poleNo,
-        clusterId: podData.clusterId,
-        totalFlower: podData.totalFlower,
-        numberOfPod: podData.numberOfPod,
-        lostPods: podData.lostPods,
-        remainingPod: podData.remainingPod,
-        condition: podData.condition,
-        recordedBy: podData.recordedBy,
+        recordedDate: preharvestData.recordedDate,
+        poleNo: preharvestData.poleNo,
+        clusterId: preharvestData.clusterId,
+        gradeARound1: preharvestData.gradeARound1,
+        numberOfPodsRound2: preharvestData.numberOfPodsRound2,
+        lostPodsBeforeHarvest: preharvestData.lostPodsBeforeHarvest,
+        podRemoved: preharvestData.podRemoved,
+        plantWithPodRemoved: preharvestData.plantWithPodRemoved,
+        condition: preharvestData.condition,
+        recordedBy: preharvestData.recordedBy,
       });
     }
-  }, [open, form, podData]);
+  }, [open, form, preharvestData]);
 
-  const onSubmit = (data: PodTableDataType) => {
-    console.log("Updated Pod Form Data:", data);
+  const onSubmit = (data: PreharvestTableDataType) => {
+    console.log("Updated Preharvest Data:", data);
     setOpen(false);
   };
 
@@ -66,10 +73,10 @@ export function EditPodButton({ podData }: { podData: PodTableDataType }) {
         <CustomButton icon={Edit} type="button" />
       </DialogTrigger>
 
-      <DialogContent className="text-primary-button border-primary border bg-white sm:max-w-3xl">
+      <DialogContent className="border-primary max-h-[90vh] w-[95vw] max-w-2xl overflow-y-auto bg-white">
         <DialogHeader className="bg-primary-button -mx-6 -mt-6 mb-6 rounded-t-lg px-6 py-4">
           <DialogTitle className="text-xl font-bold text-white">
-            Edit Pod Form
+            Edit Pre-Harvest Form
           </DialogTitle>
 
           <button
@@ -83,8 +90,8 @@ export function EditPodButton({ podData }: { podData: PodTableDataType }) {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="px-6 pb-6">
             <FieldGroup>
-              {/* Date & Pole ID */}
-              <div className="mb-4 grid grid-cols-2 gap-4">
+              {/* Date & Pole */}
+              <div className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2">
                 <FormsInput
                   inputClassName="bg-white border-primary-button border rounded-lg"
                   control={form.control}
@@ -101,8 +108,8 @@ export function EditPodButton({ podData }: { podData: PodTableDataType }) {
                 />
               </div>
 
-              {/* Cluster & Total Flower */}
-              <div className="mb-4 grid grid-cols-2 gap-4">
+              {/* Cluster & Grade A */}
+              <div className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2">
                 <FormsInput
                   inputClassName="bg-white border-primary-button border rounded-lg"
                   control={form.control}
@@ -113,35 +120,46 @@ export function EditPodButton({ podData }: { podData: PodTableDataType }) {
                 <FormsInput
                   inputClassName="bg-white border-primary-button border rounded-lg"
                   control={form.control}
-                  path="totalFlower"
-                  label="Total Flower"
+                  path="gradeARound1"
+                  label="Grade A (Round 1)"
                   type="number"
                 />
               </div>
 
-              {/* Pod Data */}
-              <div className="mb-4 grid grid-cols-3 gap-4">
+              {/* Round 2 & Lost Pods */}
+              <div className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2">
                 <FormsInput
                   inputClassName="bg-white border-primary-button border rounded-lg"
                   control={form.control}
-                  path="numberOfPod"
-                  label="Number of Pod"
+                  path="numberOfPodsRound2"
+                  label="Number of Pods (Round 2)"
                   type="number"
                 />
 
                 <FormsInput
                   inputClassName="bg-white border-primary-button border rounded-lg"
                   control={form.control}
-                  path="lostPods"
-                  label="Lost Pods"
+                  path="lostPodsBeforeHarvest"
+                  label="Lost Pods Before Harvest"
+                  type="number"
+                />
+              </div>
+
+              {/* Removed Pods */}
+              <div className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+                <FormsInput
+                  inputClassName="bg-white border-primary-button border rounded-lg"
+                  control={form.control}
+                  path="podRemoved"
+                  label="Pod Removed"
                   type="number"
                 />
 
                 <FormsInput
                   inputClassName="bg-white border-primary-button border rounded-lg"
                   control={form.control}
-                  path="remainingPod"
-                  label="Remaining Pod"
+                  path="plantWithPodRemoved"
+                  label="Plant With Pod Removed"
                   type="number"
                 />
               </div>
@@ -173,7 +191,7 @@ export function EditPodButton({ podData }: { podData: PodTableDataType }) {
               </div>
             </FieldGroup>
 
-            <DialogFooter className="mt-8 flex justify-end gap-3">
+            <DialogFooter className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
               <DialogClose asChild>
                 <CustomButton
                   label="Cancel"

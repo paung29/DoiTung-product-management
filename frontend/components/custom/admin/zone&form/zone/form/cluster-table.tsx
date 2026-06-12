@@ -7,9 +7,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { CreateOrEditZoneButton } from "../create-new-zone-button";
-import { DeleteZoneButton } from "../../delete-zone-button";
+
 import { EditClusterButton } from "../edit-cluster-button";
+import { DeleteClusterButton } from "../../delete-cluster-button";
 
 export type ClusterTableDataType = {
   clusterId: number;
@@ -56,7 +56,7 @@ export function ClusterTable({
               <TableCell>
                 <div className="flex flex-row justify-center gap-2">
                   <EditClusterButton clusterData={item} />
-                  <DeleteZoneButton />
+                  <DeleteClusterButton />
                 </div>
               </TableCell>
             </TableRow>

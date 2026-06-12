@@ -8,6 +8,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { CreateOrEditZoneButton } from "../create-new-zone-button";
+import { EditPodButton } from "../edit-pod-button";
 
 export type PodTableDataType = {
   podId: number;
@@ -34,7 +35,7 @@ export function PodTable({
           Pod Form Data (Round 1)
         </h2>
       </div>
-      <div className="scrollbar-thin scrollbar-thumb-primary-button scrollbar-track-gray-100 overflow-x-auto">
+      <div className="scrollbar-thumb-primary-button scrollbar-thin scrollbar-track-gray-100 overflow-x-auto">
         <Table className="w-full min-w-max">
           <TableHeader>
             <TableRow className="[&_th]:text-primary-button hover:bg-secondary bg-secondary border-primary-button [&_th]:px-6 [&_th]:py-4 [&_th]:text-center [&_th]:font-semibold [&_th]:whitespace-nowrap">
@@ -69,7 +70,7 @@ export function PodTable({
                 <TableCell>{item.recordedBy}</TableCell>
                 <TableCell>
                   <div className="flex flex-row justify-center gap-2">
-                    <CreateOrEditZoneButton isEdit={true} />
+                    <EditPodButton podData={item} />
                   </div>
                 </TableCell>
               </TableRow>
