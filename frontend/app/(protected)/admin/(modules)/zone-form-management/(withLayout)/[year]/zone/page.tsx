@@ -1,13 +1,13 @@
 "use server"
 
 import { Account } from "@/lib/types/model/account";
-import { AccountItem, ClusterApiItem, YearApiResponse, YearSettingApiResponse, ZoneApiResponse } from "@/lib/types/model/type";
+import { AccountItem, ClusterApiItem, YearApiResponse, ZoneApiResponse } from "@/lib/types/model/type";
 import { baseUrl } from "@/lib/utl";
 import { cookies } from "next/headers";
 import { YearTableDataType } from "@/components/custom/admin/zone&form/year/year-table";
-import { useZoneForm } from "../../zone-form-context";
+import { useZoneForm } from "../../../zone-form-context";
+import ZoneManagement from "./Zone-Management-Page-Client";
 import { ZoneTableDataType } from "@/components/custom/admin/zone&form/zone/zone-table";
-import FormManagement from "./Form-Management-Page-Client";
  
 export default async function Page( {
   params,
@@ -21,7 +21,7 @@ export default async function Page( {
 
   console.log("params year",year)
 
-  const response = await fetch(`${baseUrl}/years/get-year-setting?year=${year}`, {
+  const response = await fetch(`${baseUrl}/zones/get-zone-management-table?year=${year}`, {
     credentials: "include",
     method: "GET",
     headers: {
@@ -36,13 +36,20 @@ export default async function Page( {
   
   
 
-  const apiData: YearSettingApiResponse = response.ok ? await response.json() : { zones: [] };
+  const apiData: ZoneApiResponse = response.ok ? await response.json() : { zones: [] };
   
   console.log("zone api result : ", apiData);
 
+  const records: ZoneTableDataType[] = (apiData.zones ?? []).map((item, index) => ({
+    zone_name: item.zoneName,
+    zone_id : item.zoneId,
+    totalPole: item.totalPolesInZone,
+    total_plants: item.totalPolesInZone,
+  }));
+
 
   return (
-    <FormManagement data={apiData} />
+    <ZoneManagement zoneRecords={records} totalPlants={apiData.totalPoles} totalZones={apiData.totalZones}/>
   );
   
 }
