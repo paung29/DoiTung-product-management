@@ -1,7 +1,7 @@
 "use client";
 
 import { Form } from "@/components/ui/form";
-import { InventoryForm, YearApiResponse } from "@/lib/types/model/type";
+import { InventoryForm, StockDistributionForm, YearApiResponse } from "@/lib/types/model/type";
 import { useForm } from "react-hook-form";
 import CustomDatePicker from "../../common/custom-date-picker";
 import CustomSelect from "../../common/forms/form-select";
@@ -10,6 +10,12 @@ import FormsInput from "../../common/forms/form-input";
 import { Button } from "@/components/ui/button";
 import CustomButton from "../../common/custom-button";
 import { useEffect, useRef } from "react";
+import { createCarryOver } from "@/lib/server-actions/admin/create-carry-over-client";
+import { createIncoming } from "@/lib/server-actions/admin/create-incoming-client";
+import { createIssued } from "@/lib/server-actions/admin/create-issued-client";
+import { useZoneForm } from "@/app/(protected)/admin/(modules)/zone-form-management/zone-form-context";
+import { useInventory } from "@/app/(protected)/admin/(modules)/inventory-distribution/inventory-context";
+import { useRouter } from "next/navigation";
 
 const categoryOptions: Option[] = [
   { id: "carry-over", value: "Carry Over" },
@@ -18,17 +24,32 @@ const categoryOptions: Option[] = [
 ];
 
 
-// const plantationAreaOptions: Option[] = [
-//   { id: "PM", value: "PM Phamee" },
-//   { id: "RD", value: "RD Research" },
-//   { id: "SE", value: "SE Building 1" },
-// ];
+// export type HarvestGradingRecordingFormData = {
+//   gradeA_plus: GradeEntry;
+//   gradeA: GradeEntry;
+//   gradeB: GradeEntry;
+//   gradeC: GradeEntry;
+//   gradeD_plus: GradeEntry;
+// };
+
+const gradeOtions : Option[] = [
+  { id: "A_PLUS", value: "grade A +" },
+  { id: "A", value: "grade A" },
+  { id: "B", value: "grade B" },
+  { id: "C", value: "grade C" },
+  { id: "D_PLUS", value: "grade D +" },
+  { id: "D", value: "grade D" },
+];
+
 
 export default function InventorySaleForm({years, plantationAreaOptions, customers} : {years : YearApiResponse, plantationAreaOptions : Option[] , customers : Option[]}) {
 
+  const router = useRouter()
+  const {selectedYear} = useInventory()
+
   const plantationYearOptions: Option[] = years.years.map((year) => ({
-    id: year,
-    value: year,
+    id: String(year),
+    value: String(year),
   }));
 
   const form = useForm<InventoryForm>({
@@ -54,21 +75,79 @@ export default function InventorySaleForm({years, plantationAreaOptions, custome
     if (!category) return;
 
     if (previousCategory.current && previousCategory.current !== category) {
-      form.reset();
+      form.reset(
+        {
+          category,
+          date: undefined,
+          plantationYear: undefined,
+          plantationArea: undefined,
+          numberOfPods: "",
+          pricePerGram: "",
+          customer: "",
+          amount: "",
+          Remarks: "",
+          grade: undefined,
+        }
+      );
     }
 
     previousCategory.current = category;
 
 }, [category, form]);
 
-  const onSubmit = (data: InventoryForm) => {
-    console.log("Form data:", data);
-    form.reset()
+  const onSubmit = async (data: InventoryForm) => {
+
+    console.log(data)
+
+    const reformData : StockDistributionForm = {
+      year: Number(selectedYear),
+      production_year: Number(data.plantationYear),
+      warehouse_id : Number(data.plantationArea),
+      customer_id : Number(data.customer),
+      grade: data.grade,
+      price_per_gram : data.pricePerGram ? Number(data.pricePerGram) : undefined,
+      total_grams : Number(data.amount),
+      total_pods : Number(data.numberOfPods),
+      details : data.Remarks,
+      recorded_date : data.date
+    }
+
+    console.log("ReformData : " , reformData)
+
+    try{
+      let result;
+
+      switch (data.category) {
+
+      case "carry-over":
+        result = await createCarryOver(reformData);
+        break;
+
+      case "incoming":
+        result = await createIncoming(reformData);
+        break;
+
+      case "issued":
+        result = await createIssued(reformData);
+        break;
+
+      default:
+        console.log("Invalid category");
+        return;
+    }
+
+    console.log("API result:", result);
+    router.replace(`/admin/inventory-distribution/distribution`)
+
+    } catch(error) {
+      console.log(error)
+    }
+    
   };
 
   return (
     <Form {...form}>
-      <form>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className="mx-auto w-1/2 rounded-xl bg-white p-4 shadow">
           <CustomDatePicker
             key={`date-${category}`}
@@ -140,6 +219,16 @@ export default function InventorySaleForm({years, plantationAreaOptions, custome
             </>
           )}
 
+          <CustomSelect
+                key={`grade-${category}`}
+                control={form.control}
+                path="grade"
+                label="Grade"
+                placeholder="Select Grade"
+                options={gradeOtions}
+                className="mb-3"
+          />
+
           <FormsInput
             key={`amount-${category}`}
             control={form.control}
@@ -167,7 +256,7 @@ export default function InventorySaleForm({years, plantationAreaOptions, custome
 
             <CustomButton
               label="Submit / Record Sale"
-              onClick={form.handleSubmit(onSubmit)}
+              type="submit"
               className="btn-primary w-1/3"
             />
           </div>
