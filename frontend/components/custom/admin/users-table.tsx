@@ -33,7 +33,7 @@ export default function UsersTable({
   console.log(users)
 
   return (
-    <div className="border-primary-button overflow-hidden rounded-2xl border">
+    <div className="border-primary-button overflow-hidden rounded-2xl border mb-4">
       <Table className="gap-20">
         <TableHeader>
           <TableRow className="[&_th]:text-primary-button hover:bg-secondary bg-secondary border-primary-button [&_th]:py-4 [&_th]:text-center [&_th]:font-semibold">

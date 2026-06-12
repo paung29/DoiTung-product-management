@@ -327,6 +327,19 @@ export type InventoryForm = {
   customer : string
 };
 
+export type StockDistributionForm = {
+  year: number;
+  production_year: number;
+  warehouse_id : number
+  customer_id : number
+  grade: string;
+  price_per_gram ?: number,
+  total_grams : number,
+  total_pods : number,
+  details : string,
+  recorded_date : string
+};
+
 export type DistributionHistorySearchForm = {
   startDate: string;
   endDate: string;
