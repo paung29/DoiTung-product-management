@@ -40,7 +40,7 @@ export function HarvestGradingTable({
           Harvest and Grading Form
         </h2>
       </div>
-      <div className="scrollbar-thin scrollbar-thumb-primary-button scrollbar-track-gray-100 overflow-x-auto">
+      <div className="scrollbar-thumb-primary-button scrollbar-thin scrollbar-track-gray-100 overflow-x-auto">
         <Table className="w-full min-w-max">
           <TableHeader>
             <TableRow className="[&_th]:text-primary-button hover:bg-secondary bg-secondary border-primary-button text-sm [&_th]:px-4 [&_th]:py-4 [&_th]:text-center [&_th]:font-semibold [&_th]:whitespace-nowrap">
