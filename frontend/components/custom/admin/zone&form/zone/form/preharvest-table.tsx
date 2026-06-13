@@ -8,6 +8,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { CreateOrEditZoneButton } from "../create-new-zone-button";
+import { EditPreharvestButton } from "../edit-preharvest-button";
 
 export type PreharvestTableDataType = {
   preharvestId: number;
@@ -35,7 +36,7 @@ export function PreharvestTable({
           Pre-Harvest Pod Monitoring Form Data (Round 2)
         </h2>
       </div>
-      <div className="scrollbar-thin scrollbar-thumb-primary-button scrollbar-track-gray-100 overflow-x-auto">
+      <div className="scrollbar-thumb-primary-button scrollbar-thin scrollbar-track-gray-100 overflow-x-auto">
         <Table className="w-full min-w-max">
           <TableHeader>
             <TableRow className="[&_th]:text-primary-button hover:bg-secondary bg-secondary border-primary-button [&_th]:px-6 [&_th]:py-4 [&_th]:text-center [&_th]:font-semibold [&_th]:whitespace-nowrap">
@@ -72,7 +73,7 @@ export function PreharvestTable({
                 <TableCell>{item.recordedBy}</TableCell>
                 <TableCell>
                   <div className="flex flex-row justify-center gap-2">
-                    <CreateOrEditZoneButton isEdit={true} />
+                    <EditPreharvestButton preharvestData={item} />
                   </div>
                 </TableCell>
               </TableRow>

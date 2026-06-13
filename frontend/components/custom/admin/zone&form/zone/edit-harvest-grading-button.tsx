@@ -20,6 +20,7 @@ import { Form } from "@/components/ui/form";
 import FormsInput from "../../../common/forms/form-input";
 
 import { HarvestGradingTableDataType } from "./form/harvest-grading-table";
+import CustomButton from "@/components/custom/common/custom-button";
 
 export function EditHarvestGradingButton({
   harvestData,
@@ -81,9 +82,7 @@ export function EditHarvestGradingButton({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm" className="p-2">
-          <Edit className="text-primary h-4 w-4" />
-        </Button>
+        <CustomButton icon={Edit} type="button" />
       </DialogTrigger>
 
       <DialogContent className="text-primary-button border-primary max-h-[90vh] overflow-y-auto border bg-white sm:max-w-4xl">
@@ -218,14 +217,18 @@ export function EditHarvestGradingButton({
 
             <DialogFooter className="mt-8 flex justify-end gap-3">
               <DialogClose asChild>
-                <Button variant="outline" type="button">
-                  Cancel
-                </Button>
+                <CustomButton
+                  label="Cancel"
+                  type="button"
+                  className="border-input bg-background hover:bg-accent border text-black"
+                />
               </DialogClose>
 
-              <Button type="submit" className="bg-primary-button text-white">
-                Save Changes
-              </Button>
+              <CustomButton
+                label="Save Changes"
+                type="button"
+                className="bg-primary-button text-white"
+              />
             </DialogFooter>
           </form>
         </Form>

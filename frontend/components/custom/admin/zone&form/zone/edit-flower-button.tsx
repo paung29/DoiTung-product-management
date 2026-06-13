@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -69,11 +68,7 @@ export function EditFlowerButton({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <CustomButton
-          label="Edit"
-          type="button"
-          className="text-primary h-4 w-4"
-        />
+        <CustomButton icon={Edit} type="button" />
       </DialogTrigger>
 
       <DialogContent className="text-primary-button border-primary border bg-white sm:max-w-2xl">
@@ -159,20 +154,18 @@ export function EditFlowerButton({
 
             <DialogFooter className="mt-8 flex justify-end gap-3">
               <DialogClose asChild>
-                <Button
-                  variant="outline"
+                <CustomButton
+                  label="Cancel"
                   type="button"
-                  className="text-gray-600"
-                >
-                  Cancel
-                </Button>
+                  className="border-input bg-background hover:bg-accent border text-black"
+                />
               </DialogClose>
-              <Button
-                className="bg-primary-button hover:bg-primary-button font-semibold text-white hover:opacity-90 hover:shadow-lg"
-                type="submit"
-              >
-                Save Changes
-              </Button>
+
+              <CustomButton
+                label="Save Changes"
+                type="button"
+                className="bg-primary-button text-white"
+              />
             </DialogFooter>
           </form>
         </Form>
