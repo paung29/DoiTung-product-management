@@ -24,6 +24,12 @@ export type UpdateUserInfoFormData = {
   active_status: boolean;
 };
 
+export type UpdateCustomerInfoFormData = {
+  customer_id : number,
+  customer_name : string;
+  note : string
+}
+
 export type AccountItem = {
   user_id : number,
   email : string,
@@ -526,4 +532,14 @@ export type YearSettingFormType = {
   year : number,
   formName : string,
   activeStatus : boolean
+}
+
+export type wareHouseItem = {
+  warehouse_id : number,
+  warehouse_name : string,
+  active_status : boolean
+}
+
+export type getAllWarehouses = {
+  warehouses : wareHouseItem[]
 }

@@ -1,7 +1,7 @@
 "use server"
 
 import { Account } from "@/lib/types/model/account";
-import { AccountItem, ClusterApiItem, YearApiResponse } from "@/lib/types/model/type";
+import { AccountItem, ClusterApiItem, getAllWarehouses, YearApiResponse } from "@/lib/types/model/type";
 import { baseUrl } from "@/lib/utl";
 import { cookies } from "next/headers";
 import { YearTableDataType } from "@/components/custom/admin/zone&form/year/year-table";
@@ -9,7 +9,7 @@ import DistributionPage from "./Distribution-Page-Client";
 import { WarehouseTableData } from "@/components/custom/admin/inventory&distribution/warehouse-table";
 import { WarehouseApiResponse } from "../warehouse/page";
 import { Option } from "@/lib/types/model/option";
-import { CustomersApiResponse } from "../customer/page";
+import { CustomersApiResponse } from "../../customer/page";
  
 export default async function Page({params, searchParams,} : {params : Promise<{year : string}>, searchParams: Promise<{ zoneNo?: string }>;}) {
 
@@ -46,7 +46,7 @@ export default async function Page({params, searchParams,} : {params : Promise<{
     console.log("fetching data")
     
   
-  const wareHouseapiData : WarehouseApiResponse = wareHouseResponse.ok ? await wareHouseResponse.json() : { warehouses: [] };
+  const wareHouseapiData : getAllWarehouses = wareHouseResponse.ok ? await wareHouseResponse.json() : { warehouses: [] };
 
   const wareHouserecords : Option[] = wareHouseapiData.warehouses.map((item, index) => ({
     id : String(item.warehouse_id),

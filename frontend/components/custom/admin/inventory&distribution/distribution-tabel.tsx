@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-interface DistributionRecord {
+export interface DistributionRecord {
   id: string;
   date: string;
   category: string;
@@ -41,110 +41,8 @@ const categoryBadgeConfig: Record<
   },
 };
 
-const mockData: DistributionRecord[] = [
-  {
-    id: "1",
-    date: "Jan 8, 2026",
-    category: "Issued",
-    grade: "A+",
-    productionYear: 2025,
-    warehouse: "PM Phamee",
-    amount: 1250,
-    details: "Sold to Premium Distributor Co.",
-  },
-  {
-    id: "2",
-    date: "Jan 7, 2026",
-    category: "Incoming",
-    grade: "B",
-    productionYear: 2025,
-    warehouse: "RD Research",
-    amount: 2400,
-    details: "New harvest batch received",
-  },
-  {
-    id: "3",
-    date: "Jan 7, 2026",
-    category: "Carry-over",
-    grade: "A",
-    productionYear: 2024,
-    warehouse: "SP Forest Plantation",
-    amount: 850,
-    details: "Transferred from previous season",
-  },
-  {
-    id: "4",
-    date: "Jan 6, 2026",
-    category: "Issued",
-    grade: "C",
-    productionYear: 2025,
-    warehouse: "RD Research",
-    amount: 1800,
-    details: "Export order fulfilled",
-  },
-  {
-    id: "5",
-    date: "Jan 6, 2026",
-    category: "Incoming",
-    grade: "A+",
-    productionYear: 2025,
-    warehouse: "SP Forest Plantation",
-    amount: 3200,
-    details: "Premium grade harvest",
-  },
-  {
-    id: "6",
-    date: "Jan 5, 2026",
-    category: "Issued",
-    grade: "B",
-    productionYear: 2024,
-    warehouse: "PM Phamee",
-    amount: 950,
-    details: "Local market distribution",
-  },
-  {
-    id: "7",
-    date: "Jan 5, 2026",
-    category: "Carry-over",
-    grade: "D+",
-    productionYear: 2023,
-    warehouse: "PM Phamee",
-    amount: 450,
-    details: "Inventory balance adjustment",
-  },
-  {
-    id: "8",
-    date: "Jan 4, 2026",
-    category: "Incoming",
-    grade: "A",
-    productionYear: 2025,
-    warehouse: "SE Building 1",
-    amount: 2750,
-    details: "Grade A batch from processing",
-  },
-  {
-    id: "9",
-    date: "Jan 4, 2026",
-    category: "Issued",
-    grade: "A",
-    productionYear: 2025,
-    warehouse: "PM Phamee",
-    amount: 1650,
-    details: "Wholesale order to retailer",
-  },
-  {
-    id: "10",
-    date: "Jan 3, 2026",
-    category: "Incoming",
-    grade: "C",
-    productionYear: 2025,
-    warehouse: "SE Building 1",
-    amount: 1400,
-    details: "Standard grade intake",
-  },
-];
 
-export default function DistributionTable() {
+export default function DistributionTable({records} : {records : DistributionRecord[]}) {
   const getCategoryBadgeStyle = (category: string) => {
     return categoryBadgeConfig[category] || categoryBadgeConfig["Issued"];
   };
@@ -186,7 +84,7 @@ export default function DistributionTable() {
       <div className="bg-[#FAF3E0]">
         <Table>
           <TableBody>
-            {mockData.map((record) => (
+            {records.map((record) => (
               <TableRow
                 key={record.id}
                 className="border-0 border-b border-b-gray-100 hover:bg-yellow-50"

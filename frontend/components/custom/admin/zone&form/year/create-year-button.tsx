@@ -42,7 +42,7 @@ function CreateYearButton() {
     setOpen(false);
     form.reset();
 
-    router.replace("/admin/zone-form-management/year")
+    router.replace("/admin/year-management")
   };
   return (
     <Dialog open={open} onOpenChange={setOpen}>

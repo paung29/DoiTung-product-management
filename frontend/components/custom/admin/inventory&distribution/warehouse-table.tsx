@@ -59,6 +59,10 @@ export interface WarehouseTableData {
 //   },
 // ];
 
+const oneEdit = ({id, name, status} : {id : number, name : string, status : boolean}) => {
+
+}
+
 export default function WarehouseTable({records} : {records : WarehouseTableData[]}) {
   return (
     <div className="overflow-hidden rounded-3xl border-2 border-[#8a6752] bg-[#faf3e0]">
@@ -108,13 +112,13 @@ export default function WarehouseTable({records} : {records : WarehouseTableData
                 {warehouse.stock}
               </TableCell>
               <TableCell className="px-6 py-4 text-center text-sm whitespace-nowrap text-gray-700">
-                {warehouse.totalWeight}
+                {warehouse.totalWeight} g
               </TableCell>
               <TableCell className="px-6 py-4 text-center text-sm whitespace-nowrap text-gray-700">
-                {warehouse.distributed}
+                {warehouse.distributed} g
               </TableCell>
               <TableCell className="px-6 py-4 text-center text-sm whitespace-nowrap text-gray-700">
-                {warehouse.remaining}
+                {warehouse.remaining} g
               </TableCell>
               <TableCell className="px-6 py-4 text-center">
                 <div className="flex items-center justify-center">

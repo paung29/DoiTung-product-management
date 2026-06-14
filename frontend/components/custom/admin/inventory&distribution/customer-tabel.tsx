@@ -11,6 +11,8 @@ import {
 import { useState, useMemo } from "react";
 import { Edit } from "lucide-react";
 import CustomButton from "@/components/custom/common/custom-button";
+import { updateCustomerInfo } from "@/lib/server-actions/admin/update-customer-info-client";
+import { UpdateCustomerInfoFormData } from "@/lib/types/model/type";
 
 // Types
 export interface CustomerHistoryData {

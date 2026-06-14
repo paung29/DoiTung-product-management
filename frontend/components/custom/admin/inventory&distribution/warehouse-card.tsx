@@ -1,6 +1,6 @@
 "use client";
 
-import { Package, TrendingUp, CheckCircle } from "lucide-react";
+import { Package, TrendingUp, CheckCircle, Weight } from "lucide-react";
 
 interface StatCardProps {
   title: string;
@@ -30,28 +30,46 @@ function StatCard({ title, value, icon, className }: StatCardProps) {
   );
 }
 
-export default function WarehouseCard() {
+export type WarehouseCardData = {
+  totalWarehouse : string
+  totalStockPods : string
+  totalWeightPods : string
+  activeWarehouse : string
+}
+
+type Props = {
+  data : WarehouseCardData
+}
+
+export default function WarehouseCard({data} : Props) {
   return (
     <div className="space-y-6">
       {/* Stats Grid */}
       <div className="grid grid-cols-1 gap-2 md:grid-cols-3 lg:grid-cols-3">
         <StatCard
           title="Total Warehouse"
-          value="4"
+          value={data.totalWarehouse}
           icon={<Package className="h-6 w-6 text-black" />}
           className="bg-slate-900"
         />
 
         <StatCard
-          title="Total Stock"
-          value="700 kg"
+          title="Total Stock Pods"
+          value={data.totalStockPods}
           icon={<TrendingUp className="h-6 w-6 text-black" />}
           className="bg-linear-to-br from-amber-700 to-amber-900"
         />
 
         <StatCard
+          title="Total Weight Pods"
+          value={data.totalWeightPods + " g"}
+          icon={<Weight className="h-6 w-6 text-black" />}
+          className="bg-linear-to-br from-amber-700 to-amber-900"
+        />
+
+        <StatCard
           title="Active Warehouse"
-          value="3"
+          value={data.activeWarehouse}
           icon={<CheckCircle className="h-6 w-6 text-black" />}
           className="bg-blue-600"
         />

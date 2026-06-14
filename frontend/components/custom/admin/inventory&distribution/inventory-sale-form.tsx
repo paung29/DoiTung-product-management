@@ -15,7 +15,7 @@ import { createIncoming } from "@/lib/server-actions/admin/create-incoming-clien
 import { createIssued } from "@/lib/server-actions/admin/create-issued-client";
 import { useZoneForm } from "@/app/(protected)/admin/(modules)/zone-form-management/zone-form-context";
 import { useInventory } from "@/app/(protected)/admin/(modules)/inventory-distribution/inventory-context";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 const categoryOptions: Option[] = [
   { id: "carry-over", value: "Carry Over" },
@@ -45,7 +45,8 @@ const gradeOtions : Option[] = [
 export default function InventorySaleForm({years, plantationAreaOptions, customers} : {years : YearApiResponse, plantationAreaOptions : Option[] , customers : Option[]}) {
 
   const router = useRouter()
-  const {selectedYear} = useInventory()
+  const params = useParams();
+  const year = params.year
 
   const plantationYearOptions: Option[] = years.years.map((year) => ({
     id: String(year),
@@ -100,7 +101,7 @@ export default function InventorySaleForm({years, plantationAreaOptions, custome
     console.log(data)
 
     const reformData : StockDistributionForm = {
-      year: Number(selectedYear),
+      year: Number(year),
       production_year: Number(data.plantationYear),
       warehouse_id : Number(data.plantationArea),
       customer_id : Number(data.customer),
@@ -137,8 +138,7 @@ export default function InventorySaleForm({years, plantationAreaOptions, custome
     }
 
     console.log("API result:", result);
-    router.replace(`/admin/inventory-distribution/distribution`)
-
+    router.replace(`/admin/inventory-distribution/${year}/history`)
     } catch(error) {
       console.log(error)
     }
