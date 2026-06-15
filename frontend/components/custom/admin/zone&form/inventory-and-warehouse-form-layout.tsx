@@ -41,8 +41,16 @@ function InventoryAndWarehouseFormLayout({
     ? "customer"
     : "";
 
-    router.push(currentTab ? `/admin/inventory-distribution/${year}/${currentTab}`
-                            : `/admin/inventory-distribution/${year}/warehouse`);
+    const routes: Record<string, string> = {
+      warehouse: `/admin/inventory-distribution/${year}/warehouse`,
+      distribution: `/admin/inventory-distribution/${year}/distribution`,
+      history: `/admin/inventory-distribution/${year}/history`,
+      customer: `/admin/inventory-distribution/customer`,
+    };
+
+    router.push( currentTab
+        ? routes[currentTab]
+        : `/admin/inventory-distribution/${year}/warehouse`);
   };
 
   return (

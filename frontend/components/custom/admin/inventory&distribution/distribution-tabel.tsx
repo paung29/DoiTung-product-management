@@ -24,17 +24,17 @@ const categoryBadgeConfig: Record<
   string,
   { bg: string; text: string; border: string }
 > = {
-  Issued: {
+  ISSUED: {
     bg: "bg-orange-50",
     text: "text-orange-700",
     border: "border-orange-200",
   },
-  Incoming: {
+  INCOMING: {
     bg: "bg-green-50",
     text: "text-green-700",
     border: "border-green-200",
   },
-  "Carry-over": {
+  CARRY_OVER: {
     bg: "bg-blue-50",
     text: "text-blue-700",
     border: "border-blue-200",

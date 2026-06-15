@@ -30,6 +30,18 @@ export type UpdateCustomerInfoFormData = {
   note : string
 }
 
+export type UpdateWareHouseForm = {
+  warehouse_id : number,
+  warehouse_name : string;
+  active_status : string
+}
+
+export type UpdateWareHouseFormData = {
+  warehouse_id : number,
+  warehouse_name : string;
+  active_status : boolean
+}
+
 export type AccountItem = {
   user_id : number,
   email : string,
