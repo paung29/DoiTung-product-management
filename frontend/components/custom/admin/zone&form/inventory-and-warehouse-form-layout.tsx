@@ -45,7 +45,7 @@ function InventoryAndWarehouseFormLayout({
       warehouse: `/admin/inventory-distribution/${year}/warehouse`,
       distribution: `/admin/inventory-distribution/${year}/distribution`,
       history: `/admin/inventory-distribution/${year}/history`,
-      customer: `/admin/inventory-distribution/customer`,
+      customer: `/admin/inventory-distribution/${year}/customer`,
     };
 
     router.push( currentTab

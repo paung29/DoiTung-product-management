@@ -11,7 +11,7 @@ const tabs = (year : string) =>  [
   { href: `/admin/inventory-distribution/${year}/warehouse`, label: "Warehouse" },
   { href: `/admin/inventory-distribution/${year}/distribution`, label: "Stock Distribution" },
   { href: `/admin/inventory-distribution/${year}/history`, label: "Distribution History" },
-  { href: "/admin/inventory-distribution/customer", label: "Customer" },
+  { href: `/admin/inventory-distribution/${year}/customer`, label: "Customer" },
 ];
 
 export function InventoryLayoutContent({

@@ -9,7 +9,7 @@ import DistributionPage from "./Distribution-Page-Client";
 import { WarehouseTableData } from "@/components/custom/admin/inventory&distribution/warehouse-table";
 import { WarehouseApiResponse } from "../warehouse/page";
 import { Option } from "@/lib/types/model/option";
-import { CustomersApiResponse } from "../../customer/page";
+import { CustomersApiResponse } from "../customer/page";
  
 export default async function Page({params, searchParams,} : {params : Promise<{year : string}>, searchParams: Promise<{ zoneNo?: string }>;}) {
 
