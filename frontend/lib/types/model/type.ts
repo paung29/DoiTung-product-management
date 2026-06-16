@@ -1,10 +1,10 @@
 import z, { number, string } from "zod";
 
 export type ApiError = {
-  errors : string | null,
-  message : string,
-  success : boolean
-}
+  errors: string | null;
+  message: string;
+  success: boolean;
+};
 
 // Form Types for User Management
 export type CreateUserFormData = {
@@ -13,25 +13,31 @@ export type CreateUserFormData = {
   password: string;
   role: string;
   active_status: boolean;
-  phone_no ?: string;
+  phone_no?: string;
 };
 
 export type UpdateUserInfoFormData = {
-  user_id : number,
-  phone_no : string;
+  user_id: number;
+  phone_no: string;
   name: string;
   role: string;
   active_status: boolean;
 };
 
+export type UpdateUserPasswordFormData = {
+  user_id: number;
+  new_password: string;
+  confirm_password: string;
+};
+
 export type AccountItem = {
-  user_id : number,
-  email : string,
-  name : string,
-  role : string,
-  phone_no : string,
-  active_status : boolean
-}
+  user_id: number;
+  email: string;
+  name: string;
+  role: string;
+  phone_no: string;
+  active_status: boolean;
+};
 
 export const ConditionOptions = [
   { id: "GOOD", value: "Good" },
@@ -46,25 +52,32 @@ export type ClusterSearchForm = {
   progress_status: string;
 };
 
-
 export const ClusterRecordingFormTypeSchema = z.object({
   year: z.number(),
-  zoneNo: z.string({error : "Zone number is required"}).nonempty("Zone number is required"),
-  poleNo: z.string().
-          nonempty("Pole Number is required").
-          transform((val) => Number(val)).
-          refine((val) => !isNaN(val), "Must be a number").
-          refine((val) => val > 0, "Must be 0 or positive"),
-  clusterNo: z.string().
-          nonempty("Cluster Number is required").
-          transform((val) => Number(val)).
-          refine((val) => !isNaN(val), "Must be a number").
-          refine((val) => val > 0, "Must be 0 or positive"),
+  zoneNo: z
+    .string({ error: "Zone number is required" })
+    .nonempty("Zone number is required"),
+  poleNo: z
+    .string()
+    .nonempty("Pole Number is required")
+    .transform((val) => Number(val))
+    .refine((val) => !isNaN(val), "Must be a number")
+    .refine((val) => val > 0, "Must be 0 or positive"),
+  clusterNo: z
+    .string()
+    .nonempty("Cluster Number is required")
+    .transform((val) => Number(val))
+    .refine((val) => !isNaN(val), "Must be a number")
+    .refine((val) => val > 0, "Must be 0 or positive"),
   condition: z.string().nonempty("Condition is required"),
-})
+});
 
-export type ClusterRecordingFormInput = z.input<typeof ClusterRecordingFormTypeSchema>;
-export type ClusterRecordingFormType = z.infer<typeof ClusterRecordingFormTypeSchema>;
+export type ClusterRecordingFormInput = z.input<
+  typeof ClusterRecordingFormTypeSchema
+>;
+export type ClusterRecordingFormType = z.infer<
+  typeof ClusterRecordingFormTypeSchema
+>;
 
 export type ClusterEditingView = {
   location: string;
@@ -75,7 +88,7 @@ export type ClusterEditingView = {
 export const ClusterEditSchema = z.object({
   clusterId: z.number(),
   condition: z.string().nonempty("Condition is required"),
-})
+});
 
 export type ClusterEditType = z.input<typeof ClusterEditSchema>;
 
@@ -94,14 +107,14 @@ export type ClusterApiResponse = {
 };
 
 export type GetClusterApiResponse = {
-  clusterId : number,
-  location : string,
-  poleNo: number,
-  clusterNo : number,
-  condition : string,
-  totalFlowers : number,
-  flowerFormDone : boolean
-}
+  clusterId: number;
+  location: string;
+  poleNo: number;
+  clusterNo: number;
+  condition: string;
+  totalFlowers: number;
+  flowerFormDone: boolean;
+};
 
 export type ClusterHistoryApiItem = {
   no: number;
@@ -118,51 +131,61 @@ export type ClusterHistoryApiResponse = {
   clusterFormHistories: ClusterHistoryApiItem[] | null;
 };
 
-
 export const FlowerRecordingFormTypeSchema = z.object({
   clusterId: z.coerce.number(),
   condition: z.string().nonempty("Condition is required"),
-  totalFlowers: z.string().
-          nonempty("Total Flowers is required").
-          transform((val) => Number(val)).
-          refine((val) => !isNaN(val), "Must be a number").
-          refine((val) => val >= 0, "Must be 0 or positive"),
-})
+  totalFlowers: z
+    .string()
+    .nonempty("Total Flowers is required")
+    .transform((val) => Number(val))
+    .refine((val) => !isNaN(val), "Must be a number")
+    .refine((val) => val >= 0, "Must be 0 or positive"),
+});
 
-export type FlowerRecordingFormInput = z.input<typeof FlowerRecordingFormTypeSchema>;
-export type FlowerRecordingFormType = z.output<typeof FlowerRecordingFormTypeSchema>;
+export type FlowerRecordingFormInput = z.input<
+  typeof FlowerRecordingFormTypeSchema
+>;
+export type FlowerRecordingFormType = z.output<
+  typeof FlowerRecordingFormTypeSchema
+>;
 
 export type GetPollinationFormApiResponse = {
-  clusterId : number,
-  location : string,
-  poleNo : number,
-  clusterNo : number,
-  totalFlowers : number,
-  numberPods : number,
-  unsuccessfulPollination : number,
-  goodFlowers : number,
-  badFlowers : number,
-  condition : string,
-  pollinationFormDone : boolean
-}
+  clusterId: number;
+  location: string;
+  poleNo: number;
+  clusterNo: number;
+  totalFlowers: number;
+  numberPods: number;
+  unsuccessfulPollination: number;
+  goodFlowers: number;
+  badFlowers: number;
+  condition: string;
+  pollinationFormDone: boolean;
+};
 
 export const PollinationRecordingFormSchema = z.object({
   clusterId: z.coerce.number(),
-  numberPods: z.string({error : "Number of Pods is required"}).
-          nonempty("Number of Pods is required").
-          transform((val) => Number(val)).
-          refine((val) => !isNaN(val), "Must be a number").
-          refine((val) => val >= 0, "Must be 0 or positive"),
-  unsuccessfulPollination : z.string({error : "Unsuccessful Pollination is required"}).
-          nonempty("Unsuccessful Pollination is required").
-          transform((val) => Number(val)).
-          refine((val) => !isNaN(val), "Must be a number").
-          refine((val) => val >= 0, "Must be 0 or positive"),
+  numberPods: z
+    .string({ error: "Number of Pods is required" })
+    .nonempty("Number of Pods is required")
+    .transform((val) => Number(val))
+    .refine((val) => !isNaN(val), "Must be a number")
+    .refine((val) => val >= 0, "Must be 0 or positive"),
+  unsuccessfulPollination: z
+    .string({ error: "Unsuccessful Pollination is required" })
+    .nonempty("Unsuccessful Pollination is required")
+    .transform((val) => Number(val))
+    .refine((val) => !isNaN(val), "Must be a number")
+    .refine((val) => val >= 0, "Must be 0 or positive"),
   condition: z.string().nonempty("Condition is required"),
-})
+});
 
-export type PollinationRecordingFormInput = z.input<typeof PollinationRecordingFormSchema>;
-export type PollinationRecordingFormType = z.output<typeof PollinationRecordingFormSchema>;
+export type PollinationRecordingFormInput = z.input<
+  typeof PollinationRecordingFormSchema
+>;
+export type PollinationRecordingFormType = z.output<
+  typeof PollinationRecordingFormSchema
+>;
 
 export type GetPodApiResponse = {
   clusterId: number;
@@ -174,13 +197,13 @@ export type GetPodApiResponse = {
   remainingPods: number;
   condition: string;
   podFormDone: boolean;
-}
+};
 
 export type PodCreateForm = {
-  clusterId : number;
-  lostPods : number;
-  condition : string;
-}
+  clusterId: number;
+  lostPods: number;
+  condition: string;
+};
 
 export const PodFormSchema = z.object({
   lostPods: z
@@ -189,9 +212,7 @@ export const PodFormSchema = z.object({
     .refine((value) => !isNaN(Number(value)), {
       message: "Lost pods must be a number",
     }),
-  condition: z
-    .string()
-    .min(1, "Condition is required"),
+  condition: z.string().min(1, "Condition is required"),
 });
 
 export type PodFormValues = z.infer<typeof PodFormSchema>;
@@ -202,43 +223,41 @@ export type PodRecordingFormType = {
   cluster_id: string;
   condition: string;
   lost_pods: string;
-  redmaing_pods : string;
+  redmaing_pods: string;
 };
 
 export const PreHarvestFormShcema = z.object({
   clusterId: z.number(),
-  numberPodsSecondRound : z
+  numberPodsSecondRound: z
     .string()
     .min(1, "Number of Pods (Round-2) is required")
     .refine((value) => !isNaN(Number(value)), {
       message: "Number of Pods (Round-2) must be a number",
     }),
-  removedPods : z
-  .string()
-  .min(1, "Pods Removed is required")
-  .refine((value) => !isNaN(Number(value)), {
-    message: "Pods Removed must be a number",
-  }),
-  plantsRemoved : z
-  .string()
-  .min(1, "Plants With Pods Removed is required")
-  .refine((value) => !isNaN(Number(value)), {
-    message: "Plants With Pods Removed must be a number",
-  }),
-  condition: z
+  removedPods: z
     .string()
-    .min(1, "Condition is required"),
-})
+    .min(1, "Pods Removed is required")
+    .refine((value) => !isNaN(Number(value)), {
+      message: "Pods Removed must be a number",
+    }),
+  plantsRemoved: z
+    .string()
+    .min(1, "Plants With Pods Removed is required")
+    .refine((value) => !isNaN(Number(value)), {
+      message: "Plants With Pods Removed must be a number",
+    }),
+  condition: z.string().min(1, "Condition is required"),
+});
 
-export type PreHarvestFormValue = z.infer<typeof PreHarvestFormShcema>
+export type PreHarvestFormValue = z.infer<typeof PreHarvestFormShcema>;
 
 export type CreatePreHarvestForm = {
-  clusterId : number,
-  numberPodsSecondRound : number,
-  removedPods : number,
-  plantsRemoved : number,
-  condition : string,
-}
+  clusterId: number;
+  numberPodsSecondRound: number;
+  removedPods: number;
+  plantsRemoved: number;
+  condition: string;
+};
 
 export type PreHarvestRecordingFormType = {
   location: string;
@@ -256,27 +275,27 @@ export type GetPreHarvestApiResponse = {
   poleNo: number;
   clusterNo: number;
   remainingPods: number;
-  numberPodsSecondRound : number;
-  lostPodsBeforeHarvest : number;
+  numberPodsSecondRound: number;
+  lostPodsBeforeHarvest: number;
   removedPods: number;
   plantsRemoved: number;
   condition: string;
   preHarvestFormDone: boolean;
-}
+};
 
 export type HarvestAndGradingResponse = {
-  poles: HarvestAndGradingItem[]
-}
+  poles: HarvestAndGradingItem[];
+};
 
 export type HarvestAndGradingItem = {
-  poleId: number,
-  zoneId: number,
-  location: string,
-  poleNo: number,
-  harvestGradingFormDone: boolean,
-  createdAt: string,
-  updatedAt: string
-}
+  poleId: number;
+  zoneId: number;
+  location: string;
+  poleNo: number;
+  harvestGradingFormDone: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
 
 export type HarvestAndGradingSearchForm = {
   location: string;
@@ -300,13 +319,13 @@ export type HarvestGradingRecordingFormData = {
 };
 
 export type HarvestGradingHistory = {
-  poleId : number;
-  location : string;
-  poleNo : number;
-  harvestGradingFormDone : boolean;
-  createdAt : string;
-  updatedAt : string;
-}
+  poleId: number;
+  location: string;
+  poleNo: number;
+  harvestGradingFormDone: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
 
 export type ActiveYearFrom = {
   year: string;
@@ -324,20 +343,20 @@ export type InventoryForm = {
   pricePerGram?: string;
   amount: string;
   Remarks: string;
-  customer : string
+  customer: string;
 };
 
 export type StockDistributionForm = {
   year: number;
   production_year: number;
-  warehouse_id : number
-  customer_id : number
+  warehouse_id: number;
+  customer_id: number;
   grade: string;
-  price_per_gram ?: number,
-  total_grams : number,
-  total_pods : number,
-  details : string,
-  recorded_date : string
+  price_per_gram?: number;
+  total_grams: number;
+  total_pods: number;
+  details: string;
+  recorded_date: string;
 };
 
 export type DistributionHistorySearchForm = {
@@ -352,13 +371,13 @@ export type DistributionHistorySearchForm = {
 export type CreateOrEditZoneFormType = {
   zone_name: string;
   total_plants: string;
-  year : number
+  year: number;
 };
 
 export type CreateOrEditZoneForm = {
-  year : number,
-  Name : string
-}
+  year: number;
+  Name: string;
+};
 
 export type FormsEditType = {
   form_id: number;
@@ -390,7 +409,7 @@ export type HarvestGradingRecordInput = {
   gradeDPlusWeight: number;
   undersizedCount: number;
   undersizedWeight: number;
-}
+};
 
 export type HarvestGradingRecordResponse = {
   poleId: number;
@@ -409,8 +428,8 @@ export type HarvestGradingRecordResponse = {
   gradeDPlusWeight: number;
   undersizedCount: number;
   undersizedWeight: number;
-  harvestGradingFormDone : boolean
-}
+  harvestGradingFormDone: boolean;
+};
 
 // Chart Types
 export interface ChartDataPoint {
@@ -479,14 +498,14 @@ export const WareHouseFormSchema = z.object({
 export type WareHouseForm = z.infer<typeof WareHouseFormSchema>;
 
 export type WareHouseFormCreate = {
-  warehouse_name : string,
-  active_status : boolean
-}
+  warehouse_name: string;
+  active_status: boolean;
+};
 
 export type year = {
-  year : string,
-  totalZone : number,
-}
+  year: string;
+  totalZone: number;
+};
 
 export type YearApiResponse = {
   years: {
@@ -502,9 +521,9 @@ export type Zone = {
 };
 
 export type ZoneApiResponse = {
-  totalZones : number,
-  totalPoles : number,
-  zones: Zone[] | null
+  totalZones: number;
+  totalPoles: number;
+  zones: Zone[] | null;
 };
 
 export type CreateYearFormType = {
@@ -512,18 +531,18 @@ export type CreateYearFormType = {
 };
 
 export type YearSettingApiResponse = {
-  totalActiveForms : number,
-  year : number,
-  clusterActive : boolean,
-  flowerActive : boolean,
-  pollinationActive : boolean,
-  podActive : boolean,
-  preHarvestActive : boolean,
-  harvestGradingActive : boolean,
-}
+  totalActiveForms: number;
+  year: number;
+  clusterActive: boolean;
+  flowerActive: boolean;
+  pollinationActive: boolean;
+  podActive: boolean;
+  preHarvestActive: boolean;
+  harvestGradingActive: boolean;
+};
 
 export type YearSettingFormType = {
-  year : number,
-  formName : string,
-  activeStatus : boolean
-}
+  year: number;
+  formName: string;
+  activeStatus: boolean;
+};
