@@ -7,16 +7,16 @@ export type Account = {
   email: string;
   password: string;
   role_on_db: Role;
-  phone_no : string;
-  status : string;
+  phone_no: string;
+  status: string;
 };
 
-export function getAccounts({records} : {records : Account[]}): Account[] {
+export function getAccounts({ records }: { records: Account[] }): Account[] {
   return records;
 }
 
-export function getUserStatus({records} : {records : Account[]}) {
-  const all = getAccounts({records : records});
+export function getUserStatus({ records }: { records: Account[] }) {
+  const all = getAccounts({ records: records });
   const totalUsers = all.length;
   const adminUsers = all.filter(
     (account) => account.role_on_db.toLocaleLowerCase() === "admin",

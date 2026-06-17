@@ -71,7 +71,7 @@ export default function CreateUserModal({
       email: "",
       password: "",
       role: "STAFF",
-      active_status: true
+      active_status: true,
     },
   });
 
@@ -83,7 +83,7 @@ export default function CreateUserModal({
         password: editingUser.password,
         role: editingUser.role_on_db.toUpperCase(),
         active_status: true,
-        phone_no: editingUser.phone_no
+        phone_no: editingUser.phone_no,
       });
     } else {
       form.reset({
@@ -153,15 +153,6 @@ export default function CreateUserModal({
               label="Email"
               placeholder="john@doitung.com"
               type="email"
-            />
-
-            {/* Password */}
-            <FormsInput
-              control={form.control}
-              path="password"
-              label="Password"
-              placeholder="Enter password"
-              type="password"
             />
 
             {/* Role */}

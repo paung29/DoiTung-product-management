@@ -1,7 +1,7 @@
 "use client";
 
 import { Account } from "@/lib/types/model/account";
-import { Edit } from "lucide-react";
+import { Edit, KeyRound } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -13,12 +13,14 @@ import {
 
 interface UsersTableProps {
   users: Account[];
-  onEdit?: (user: Account) => void;
+  onEditInfo?: (user: Account) => void;
+  onChangePassword?: (user: Account) => void;
 }
 
 export default function UsersTable({
   users,
-  onEdit = () => {},
+  onEditInfo = () => {},
+  onChangePassword = () => {},
 }: UsersTableProps) {
   const getRoleBadgeColor = (role: string) => {
     return role.toLocaleLowerCase() === "admin"
@@ -30,10 +32,10 @@ export default function UsersTable({
     return role.toLocaleLowerCase() === "admin" ? "Admin" : "Staff";
   };
 
-  console.log(users)
+  console.log(users);
 
   return (
-    <div className="border-primary-button overflow-hidden rounded-2xl border mb-4">
+    <div className="border-primary-button mb-4 overflow-hidden rounded-2xl border">
       <Table className="gap-20">
         <TableHeader>
           <TableRow className="[&_th]:text-primary-button hover:bg-secondary bg-secondary border-primary-button [&_th]:py-4 [&_th]:text-center [&_th]:font-semibold">
@@ -83,13 +85,26 @@ export default function UsersTable({
 
               {/* Actions */}
               <TableCell>
-                <div className="flex items-center justify-center gap-3">
+                <div className="flex items-center justify-center gap-2">
+                  {/* Edit User Info */}
                   <button
-                    onClick={() => onEdit(user)}
-                    className="rounded-lg p-2 text-gray-600 transition-colors hover:bg-yellow-900/10 hover:text-yellow-900"
-                    title="Edit user"
+                    onClick={() => onEditInfo(user)}
+                    className="text-primary-button hover:bg-primary-button/10 rounded-lg p-2 transition-colors"
+                    title="Edit User Information"
                   >
                     <Edit size={18} />
+                  </button>
+
+                  {/* Change Password */}
+                  <button
+                    onClick={() => {
+                      console.log("password clicked");
+                      onChangePassword(user);
+                    }}
+                    className="text-primary-button hover:bg-primary-button/10 rounded-lg p-2 transition-colors"
+                    title="Change Password"
+                  >
+                    <KeyRound size={18} />
                   </button>
                 </div>
               </TableCell>
