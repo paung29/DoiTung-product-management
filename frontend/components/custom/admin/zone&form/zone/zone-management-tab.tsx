@@ -17,7 +17,7 @@ function ZoneManagementTab({ selectedYear, zoneRecords, totalZones, totalPlants 
         <div className="flex flex-row items-end">
           <div className="flex flex-1 gap-8">
             <ZoneTotalCard title="Total Zones" total={totalZones} icon={MapPin} />
-            <ZoneTotalCard title="Total Plants" total={totalPlants} icon={Flower} />
+            <ZoneTotalCard title="Total Poles" total={totalPlants} icon={Flower} />
           </div>
           <CreateOrEditZoneButton />
         </div>

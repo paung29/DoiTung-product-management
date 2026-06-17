@@ -1,4 +1,4 @@
-import z, { number, string } from "zod";
+import  z, { number, string } from "zod";
 
 export type ApiError = {
   errors : string | null,
@@ -367,11 +367,12 @@ export type DistributionHistorySearchForm = {
   plantationArea: string;
 };
 
-export type CreateOrEditZoneFormType = {
-  zone_name: string;
-  total_plants: string;
-  year : number
-};
+export const CreateOrEditZoneFormSchema = z.object({
+  zone_name : z.string().min(1, "Zone name is required"),
+  year : z.number()
+})
+
+export type CreateOrEditZoneFormType = z.input<typeof CreateOrEditZoneFormSchema>
 
 export type CreateOrEditZoneForm = {
   year : number,
@@ -525,9 +526,19 @@ export type ZoneApiResponse = {
   zones: Zone[] | null
 };
 
-export type CreateYearFormType = {
-  year: number;
-};
+export const CreateYearFormSchema = z.object({
+  year: z
+    .string()
+    .min(1, "Year is required")
+    .refine((value) => !isNaN(Number(value)), {
+      message: "Year must be a number",
+    })
+    .transform((value) => Number(value)),
+})
+
+export type CreateYearFormInput =  z.input<typeof CreateYearFormSchema>;
+
+export type CreateYearFormType = z.output<typeof CreateYearFormSchema>;
 
 export type YearSettingApiResponse = {
   totalActiveForms : number,

@@ -9,28 +9,20 @@ import { Option } from "@/lib/types/model/option";
 import FormsInput from "../../common/forms/form-input";
 import { Button } from "@/components/ui/button";
 import CustomButton from "../../common/custom-button";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createCarryOver } from "@/lib/server-actions/admin/create-carry-over-client";
 import { createIncoming } from "@/lib/server-actions/admin/create-incoming-client";
 import { createIssued } from "@/lib/server-actions/admin/create-issued-client";
 import { useZoneForm } from "@/app/(protected)/admin/(modules)/zone-form-management/zone-form-context";
 import { useInventory } from "@/app/(protected)/admin/(modules)/inventory-distribution/inventory-context";
 import { useParams, useRouter } from "next/navigation";
+import ApiErrorUI from "../../common/error-handle";
 
 const categoryOptions: Option[] = [
   { id: "carry-over", value: "Carry Over" },
   { id: "incoming", value: "Incoming" },
   { id: "issued", value: "Issued" },
 ];
-
-
-// export type HarvestGradingRecordingFormData = {
-//   gradeA_plus: GradeEntry;
-//   gradeA: GradeEntry;
-//   gradeB: GradeEntry;
-//   gradeC: GradeEntry;
-//   gradeD_plus: GradeEntry;
-// };
 
 const gradeOtions : Option[] = [
   { id: "A_PLUS", value: "grade A +" },
@@ -40,7 +32,6 @@ const gradeOtions : Option[] = [
   { id: "D_PLUS", value: "grade D +" },
   { id: "D", value: "grade D" },
 ];
-
 
 export default function InventorySaleForm({years, plantationAreaOptions, customers} : {years : YearApiResponse, plantationAreaOptions : Option[] , customers : Option[]}) {
 
@@ -52,6 +43,8 @@ export default function InventorySaleForm({years, plantationAreaOptions, custome
     id: String(year),
     value: String(year),
   }));
+
+  const [error, setError] = useState<string | null>(null)
 
   const form = useForm<InventoryForm>({
     defaultValues : {
@@ -137,131 +130,140 @@ export default function InventorySaleForm({years, plantationAreaOptions, custome
         return;
     }
 
+    if(result.success === false) {
+      setError(result.message)
+      return
+    }
+
     console.log("API result:", result);
     router.replace(`/admin/inventory-distribution/${year}/history`)
     } catch(error) {
-      console.log(error)
+      setError("Cannot connect to server");
     }
     
   };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="mx-auto w-1/2 rounded-xl bg-white p-4 shadow">
-          <CustomDatePicker
-            key={`date-${category}`}
-            control={form.control}
-            path="date"
-            label="Date"
-            placeholder="Pick a date"
-            className="mb-3"
-          />
+    <>
+      <ApiErrorUI message={error}/>
 
-          <CustomSelect
-            control={form.control}
-            path="category"
-            label="Category"
-            placeholder="Select category"
-            options={categoryOptions}
-            className="mt-3 mb-3"
-          />
-
-          <CustomSelect
-            key={`year-${category}`}
-            control={form.control}
-            path="plantationYear"
-            label="Plantation Year"
-            placeholder="Select year"
-            options={plantationYearOptions}
-            className="mb-3"
-          />
-
-          <CustomSelect
-            key={`area-${category}`}
-            control={form.control}
-            path="plantationArea"
-            label="Plantation Area"
-            placeholder="Select area"
-            options={plantationAreaOptions}
-            className="mb-3"
-          />
-
-          <FormsInput
-            key={`pods-${category}`}
-            control={form.control}
-            path="numberOfPods"
-            label="Number of Pods"
-            placeholder="Enter number of pods"
-            className="mb-3"
-          />
-
-          {category === "issued" && (
-            <>
-              <FormsInput
-                key={`price-${category}`}
-                control={form.control}
-                path="pricePerGram"
-                label="Price per Gram"
-                placeholder="Enter price per gram"
-                className="mb-3"
-              />
-
-              <CustomSelect
-                key={`customer-${category}`}
-                control={form.control}
-                path="customer"
-                label="Customer Name"
-                placeholder="Select customer"
-                options={customers}
-                className="mb-3"
-              />
-            </>
-          )}
-
-          <CustomSelect
-                key={`grade-${category}`}
-                control={form.control}
-                path="grade"
-                label="Grade"
-                placeholder="Select Grade"
-                options={gradeOtions}
-                className="mb-3"
-          />
-
-          <FormsInput
-            key={`amount-${category}`}
-            control={form.control}
-            path="amount"
-            label="Amount"
-            placeholder="Enter amount"
-            className="mb-3"
-          />
-
-          <FormsInput
-            key={`remarks-${category}`}
-            control={form.control}
-            path="Remarks"
-            label="Remarks | Details"
-            placeholder="Enter remarks"
-            className="mb-5"
-          />
-
-          <div className="mb-10 flex justify-between">
-            <CustomButton
-              label="Reset"
-              onClick={() => form.reset()}
-              className="btn-primary w-1/3"
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <div className="mx-auto w-1/2 rounded-xl bg-white p-4 shadow">
+            <CustomDatePicker
+              key={`date-${category}`}
+              control={form.control}
+              path="date"
+              label="Date"
+              placeholder="Pick a date"
+              className="mb-3"
             />
 
-            <CustomButton
-              label="Submit / Record Sale"
-              type="submit"
-              className="btn-primary w-1/3"
+            <CustomSelect
+              control={form.control}
+              path="category"
+              label="Category"
+              placeholder="Select category"
+              options={categoryOptions}
+              className="mt-3 mb-3"
             />
+
+            <CustomSelect
+              key={`year-${category}`}
+              control={form.control}
+              path="plantationYear"
+              label="Plantation Year"
+              placeholder="Select year"
+              options={plantationYearOptions}
+              className="mb-3"
+            />
+
+            <CustomSelect
+              key={`area-${category}`}
+              control={form.control}
+              path="plantationArea"
+              label="Plantation Area"
+              placeholder="Select area"
+              options={plantationAreaOptions}
+              className="mb-3"
+            />
+
+            <FormsInput
+              key={`pods-${category}`}
+              control={form.control}
+              path="numberOfPods"
+              label="Number of Pods"
+              placeholder="Enter number of pods"
+              className="mb-3"
+            />
+
+            {category === "issued" && (
+              <>
+                <FormsInput
+                  key={`price-${category}`}
+                  control={form.control}
+                  path="pricePerGram"
+                  label="Price per Gram"
+                  placeholder="Enter price per gram"
+                  className="mb-3"
+                />
+
+                <CustomSelect
+                  key={`customer-${category}`}
+                  control={form.control}
+                  path="customer"
+                  label="Customer Name"
+                  placeholder="Select customer"
+                  options={customers}
+                  className="mb-3"
+                />
+              </>
+            )}
+
+            <CustomSelect
+                  key={`grade-${category}`}
+                  control={form.control}
+                  path="grade"
+                  label="Grade"
+                  placeholder="Select Grade"
+                  options={gradeOtions}
+                  className="mb-3"
+            />
+
+            <FormsInput
+              key={`amount-${category}`}
+              control={form.control}
+              path="amount"
+              label="Amount"
+              placeholder="Enter amount"
+              className="mb-3"
+            />
+
+            <FormsInput
+              key={`remarks-${category}`}
+              control={form.control}
+              path="Remarks"
+              label="Remarks | Details"
+              placeholder="Enter remarks"
+              className="mb-5"
+            />
+
+            <div className="mb-10 flex justify-between">
+              <CustomButton
+                label="Reset"
+                onClick={() => form.reset()}
+                className="btn-primary w-1/3"
+              />
+
+              <CustomButton
+                label="Submit / Record Sale"
+                type="submit"
+                className="btn-primary w-1/3"
+              />
+            </div>
           </div>
-        </div>
-      </form>
-    </Form>
+        </form>
+      </Form>
+    </>
   );
 }

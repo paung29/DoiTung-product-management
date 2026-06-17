@@ -29,6 +29,8 @@ import CustomSelect from "../../common/forms/form-select";
 import { createWareHouse } from "@/lib/server-actions/admin/create-warehouse-client";
 import { useParams, useRouter } from "next/navigation";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { useState } from "react";
+import ApiErrorUI from "../../common/error-handle";
 
 export default function WareHouse() {
 
@@ -68,6 +70,10 @@ export default function WareHouse() {
 }
 
 function AddWareHouse({router, year} : {router : AppRouterInstance, year : string}) {
+
+  const [open, setOpen] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
   const form = useForm<WareHouseForm>({
     resolver: zodResolver(WareHouseFormSchema),
     defaultValues: {
@@ -82,6 +88,9 @@ function AddWareHouse({router, year} : {router : AppRouterInstance, year : strin
   ];
 
   const onSave =  async (form: WareHouseForm) => {
+
+    setError(null)
+    
     console.log(form);
 
     const reformData : WareHouseFormCreate = {
@@ -89,25 +98,52 @@ function AddWareHouse({router, year} : {router : AppRouterInstance, year : strin
       active_status : form.active_status === "true" ? true : false
     }
 
-    const result = await createWareHouse(reformData)
-    console.log(result)
-    router.replace(`/admin/inventory-distribution/${year}/warehouse`)
+    try{
+
+      const result = await createWareHouse(reformData)
+
+      if(result.success === false) {
+        setError(result.message || "Failed to create warehouse")
+        return
+      }
+
+      console.log(result)
+      setOpen(false)
+      router.replace(`/admin/inventory-distribution/${year}/warehouse`)
+
+    }catch(error) {
+      setError("Cannot connect to server");
+    }
+
   };
 
+  const onCancel = () => {
+    form.reset()
+    setError(null)
+    setOpen(false)
+  }
+
   return (
-    <AlertDialog>
+    <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>
         <CustomButton
           label="Add Warehouse"
           icon={Plus}
           type="button"
           className="bg-green-600 whitespace-nowrap hover:bg-green-700"
+          onClick={() => {
+            setError(null);
+            setOpen(true);
+          }}
         />
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Add Warehouse</AlertDialogTitle>
         </AlertDialogHeader>
+
+        <ApiErrorUI message={error}/>
+
         <Form {...form}>
           <form className="flex flex-col gap-4">
             <FormsInput
@@ -125,7 +161,7 @@ function AddWareHouse({router, year} : {router : AppRouterInstance, year : strin
           </form>
         </Form>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel onClick={onCancel}>Cancel</AlertDialogCancel>
           <AlertDialogAction onClick={form.handleSubmit(onSave)}>
             Save
           </AlertDialogAction>

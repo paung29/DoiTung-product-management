@@ -13,6 +13,8 @@ import CustomSelect from "../../common/forms/form-select";
 import { updateWareHouse } from "@/lib/server-actions/admin/update-warehouse-client";
 import { Option } from "@/lib/types/model/option";
 import { useState } from "react";
+import { tr } from "zod/locales";
+import ApiErrorUI from "../../common/error-handle";
 
 interface Props {
     id : number
@@ -37,6 +39,7 @@ export default function WareHouseEditModal({
     const year = params.year
 
     const [open, setOpen] = useState(false);
+    const [error, setError] = useState<string | null>(null)
 
     const form = useForm<UpdateWareHouseForm>({
         defaultValues : {
@@ -55,23 +58,35 @@ export default function WareHouseEditModal({
 
   };
 
-    const onUpdate = async (data: UpdateWareHouseForm) => {
+  const onUpdate = async (data: UpdateWareHouseForm) => {
 
-        const reformData : UpdateWareHouseFormData = {
-            warehouse_id : data.warehouse_id,
-            warehouse_name : data.warehouse_name,
-            active_status : data.active_status === "true",
-        }
+      const reformData : UpdateWareHouseFormData = {
+          warehouse_id : data.warehouse_id,
+          warehouse_name : data.warehouse_name,
+          active_status : data.active_status === "true",
+      }
 
+      try{
         const result = await updateWareHouse(reformData);
 
         console.log(result)
+        if(result.success === false) {
+          setError(result.message || "Failed to update warehouse")
+          return
+        }
+
         setOpen(false);
-
         router.replace(`/admin/inventory-distribution/${year}/warehouse`)
+      }catch(error) {
+        setError("Cannot connect to server");
+      }
+  };
 
-
-    };
+  const onCancel = () => {
+    form.reset()
+    setError(null)
+    setOpen(false)
+  }
 
 
   return (
@@ -90,6 +105,9 @@ export default function WareHouseEditModal({
         <AlertDialogHeader>
           <AlertDialogTitle>Edit Warehouse</AlertDialogTitle>
         </AlertDialogHeader>
+
+        <ApiErrorUI message={error}/>
+
         <Form {...form}>
           <form className="flex flex-col gap-4">
             <FormsInput
@@ -107,7 +125,7 @@ export default function WareHouseEditModal({
           </form>
         </Form>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel onClick={onCancel}>Cancel</AlertDialogCancel>
           <AlertDialogAction onClick={form.handleSubmit(onUpdate)}>
             Save
           </AlertDialogAction>
