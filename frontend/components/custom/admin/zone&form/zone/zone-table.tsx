@@ -38,7 +38,7 @@ export function ZoneTable({
         <TableHeader>
           <TableRow className="[&_th]:text-primary-button hover:bg-secondary bg-secondary border-primary-button [&_th]:py-4 [&_th]:text-center [&_th]:font-semibold">
             <TableHead>Zone Name</TableHead>
-            <TableHead>Total Plants</TableHead>
+            <TableHead>Total Poles In Zone</TableHead>
             <TableHead>View Zone Report</TableHead>
             <TableHead>Action</TableHead>
           </TableRow>
@@ -58,7 +58,6 @@ export function ZoneTable({
               </TableCell>
               <TableCell>
                 <div className="flex flex-row justify-center gap-2">
-                  <CreateOrEditZoneButton isEdit={true} />
                   <DeleteZoneButton />
                 </div>
               </TableCell>

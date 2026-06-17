@@ -17,13 +17,31 @@ export type Customers = {
 export type CustomersApiResponse = {
   customers: Customers[];
 };
+
+export type CustomerStockTableItem = {
+  customer_id: number;
+  no: number;
+  customer_name: string;
+  grade_a: number;
+  grade_b: number;
+  grade_c: number;
+  grade_failed: number;
+  total_weight: number;
+  note: string;
+};
+
+export type CustomerStockTableResponse = {
+  customer_stock_table : CustomerStockTableItem[]
+}
  
 export default async function Page({params, searchParams,} : {params : Promise<{year : string}>, searchParams: Promise<{ zoneNo?: string }>;}) {
 
   const cookieStore = await cookies();
   const cookieHeader = cookieStore.toString();
 
-  const response = await fetch(`${baseUrl}/customers/get-all-customers`, {
+  const {year} = await params
+  
+  const stockTableResponse = await fetch(`${baseUrl}/stocks/get-customer-stock-by-year?year=${year}`, {
     credentials: "include",
     method: "GET",
     headers: {
@@ -31,24 +49,21 @@ export default async function Page({params, searchParams,} : {params : Promise<{
     }
   });
 
-  console.log("fetching data")
-  
+  const stockTableapiData : CustomerStockTableResponse = stockTableResponse.ok ? await stockTableResponse.json() : { customer_stock_table: [] };
 
-  const apiData : CustomersApiResponse = response.ok ? await response.json() : { customers: [] };
-
-  const records : CustomerHistoryData[] = apiData.customers.map((item, index) => ({
-    id: String(item.id),
+  const records : CustomerHistoryData[] = stockTableapiData.customer_stock_table.map((item, index) => ({
+    id: String(item.customer_id),
     date: "Jan 8, 2026",
     customer: item.customer_name,
-    gradeA: 500,
-    gradeB: 500,
-    gradeC: 459,
-    gradeFailed: 500,
-    totalWeight: 1959,
+    gradeA: item.grade_a,
+    gradeB: item.grade_b,
+    gradeC: item.grade_c,
+    gradeFailed: item.grade_failed,
+    totalWeight: item.total_weight,
     note: item.note,
-    }));
+  }));
 
-  console.log(apiData)
+  console.log(stockTableapiData)
   console.log(records)
 
   return (

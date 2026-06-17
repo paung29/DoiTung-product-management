@@ -2,7 +2,7 @@
 import { ChevronDown, Layers } from "lucide-react";
 import React, { ReactNode, useState } from "react";
 import YearPickerDialog from "./year/year-pick-dialogue";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { YearApiResponse } from "@/lib/types/model/type";
 
 type Props = {
@@ -21,6 +21,7 @@ function InventoryAndWarehouseFormLayout({
   yearRecords
 }: Props) {
   const router = useRouter();
+  const pathname = usePathname();
 
   const [open, setOpen] = useState(false);
   const [year, setYear] = useState(selectedYear);
@@ -29,6 +30,27 @@ function InventoryAndWarehouseFormLayout({
     setOpen(false);
     setYear(year);
     setSelectedYear && setSelectedYear(year);
+
+    const currentTab = pathname.includes("/warehouse")
+    ? "warehouse"
+    : pathname.includes("/distribution")
+    ? "distribution"
+    : pathname.includes("/history")
+    ? "history"
+    : pathname.includes("/customer")
+    ? "customer"
+    : "";
+
+    const routes: Record<string, string> = {
+      warehouse: `/admin/inventory-distribution/${year}/warehouse`,
+      distribution: `/admin/inventory-distribution/${year}/distribution`,
+      history: `/admin/inventory-distribution/${year}/history`,
+      customer: `/admin/inventory-distribution/${year}/customer`,
+    };
+
+    router.push( currentTab
+        ? routes[currentTab]
+        : `/admin/inventory-distribution/${year}/warehouse`);
   };
 
   return (

@@ -13,14 +13,16 @@ import {
 import { FieldGroup } from "@/components/ui/field";
 import { Form } from "@/components/ui/form";
 
-import { CreateOrEditZoneForm, CreateOrEditZoneFormType } from "@/lib/types/model/type";
-import React from "react";
+import { CreateOrEditZoneForm, CreateOrEditZoneFormSchema, CreateOrEditZoneFormType } from "@/lib/types/model/type";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import FormsInput from "../../../common/forms/form-input";
 import { Edit } from "lucide-react";
 import { useZoneForm } from "@/app/(protected)/admin/(modules)/zone-form-management/zone-form-context";
 import { createZone } from "@/lib/server-actions/admin/create-zone-client";
 import { useRouter } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import ApiErrorUI from "@/components/custom/common/error-handle";
 
 export function CreateOrEditZoneButton({
   isEdit = false,
@@ -28,20 +30,26 @@ export function CreateOrEditZoneButton({
   isEdit?: boolean;
 }) {
 
+  console.log(isEdit)
+
   const router = useRouter();
 
   const {selectedYear} = useZoneForm()
 
+  const [error, setError] = useState<string | null>(null)
+
   const form = useForm<CreateOrEditZoneFormType>({
+    resolver : zodResolver(CreateOrEditZoneFormSchema),
     defaultValues: {
       zone_name: "",
-      total_plants: "",
+      year: Number(selectedYear)
     },
   });
 
   const [open, setOpen] = React.useState(false);
 
   const onSubmit = async (data: CreateOrEditZoneFormType) => {
+    setError(null)
 
     console.log(data);
 
@@ -52,15 +60,30 @@ export function CreateOrEditZoneButton({
 
     console.log(reformData);
 
-    const result = await createZone(reformData)
+    try{
+      const result = await createZone(reformData)
 
-    console.log(result)
-    
-    setOpen(false);
-    form.reset();
+      if(result.success === false) {
+        setError(result.message || "Failed to create zone")
+        return
+      }
 
-    router.replace(`/admin/zone-form-management/${selectedYear}/zone`)
+      console.log(result)
+      
+      setOpen(false);
+      form.reset();
+      router.replace(`/admin/zone-form-management/${selectedYear}/zone`)
+
+    }catch(error) {
+      setError("Cannot connect to server");
+    }
+
   };
+
+  const onCancel = () => {
+    form.reset()
+    setError(null)
+  }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -86,6 +109,8 @@ export function CreateOrEditZoneButton({
           </DialogTitle>
         </DialogHeader>
 
+        <ApiErrorUI message={error} />
+
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <FieldGroup>
@@ -97,19 +122,12 @@ export function CreateOrEditZoneButton({
                 type="text"
                 placeholder="Eg: Zone-1"
               />
-              <FormsInput
-                inputClassName="bg-white"
-                control={form.control}
-                path="total_plants"
-                label="Total Plants"
-                type="number"
-                placeholder="Eg: 1-1000"
-              />
+              
             </FieldGroup>
 
             <DialogFooter className="mt-4">
               <DialogClose asChild>
-                <Button variant="outline" type="button">
+                <Button variant="outline" type="button" onClick={onCancel}>
                   Cancel
                 </Button>
               </DialogClose>

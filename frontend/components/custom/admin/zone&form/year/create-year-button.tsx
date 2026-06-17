@@ -1,6 +1,6 @@
 "use client";
-import { CreateYearFormType } from "@/lib/types/model/type";
-import React from "react";
+import { CreateYearFormInput, CreateYearFormSchema, CreateYearFormType } from "@/lib/types/model/type";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 
 import {
@@ -18,31 +18,43 @@ import FormsInput from "../../../common/forms/form-input";
 import { Form } from "@/components/ui/form";
 import { createYear } from "@/lib/server-actions/admin/create-year-client";
 import { useRouter } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import ApiErrorUI from "@/components/custom/common/error-handle";
 
 function CreateYearButton() {
 
   const router = useRouter();
 
-  const form = useForm<CreateYearFormType>({
+  const form = useForm<CreateYearFormInput, any, CreateYearFormType>({
+    resolver : zodResolver(CreateYearFormSchema),
     defaultValues: {
-      year: 0,
+      year: "",
     },
   });
   const [open, setOpen] = React.useState(false);
+  const [error, setError] = useState<string | null>(null)
 
   const onSubmit = async (data: CreateYearFormType) => {
 
-    const reformData : CreateYearFormType = {
-      year : Number(data.year)
+    setError(null)
+
+    try{
+      const result = await createYear(data)
+      console.log(result);
+
+      if (result.success === false) {
+        setError(result.message || "Failed to create year");
+        return;
+      }
+
+      setOpen(false);
+      form.reset();
+
+      router.replace("/admin/year-management")
+    }catch(error) {
+      setError("Cannot connect to server");
     }
 
-    const result = await createYear(reformData)
-    console.log(result);
-
-    setOpen(false);
-    form.reset();
-
-    router.replace("/admin/zone-form-management/year")
   };
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -59,6 +71,8 @@ function CreateYearButton() {
         <DialogHeader>
           <DialogTitle className="text-2xl">"Create New Year"</DialogTitle>
         </DialogHeader>
+
+        <ApiErrorUI message={error} />
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
