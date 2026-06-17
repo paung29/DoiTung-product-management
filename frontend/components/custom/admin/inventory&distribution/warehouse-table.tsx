@@ -9,6 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Edit } from "lucide-react";
+import WareHouseEditModal from "./warehouse-edit-modal";
 
 export interface WarehouseTableData {
   id: string;
@@ -20,44 +21,6 @@ export interface WarehouseTableData {
   remaining: string;
 }
 
-// const warehouseData: WarehouseTableData[] = [
-//   {
-//     id: "1",
-//     name: "PM Center – Phamee",
-//     status: "ACTIVE",
-//     stock: 20990,
-//     totalWeight: "32290.00 g",
-//     distributed: "8100 g",
-//     remaining: "24190.00 g",
-//   },
-//   {
-//     id: "2",
-//     name: "Forest Plantation",
-//     status: "ACTIVE",
-//     stock: 20990,
-//     totalWeight: "32290.00 g",
-//     distributed: "8100 g",
-//     remaining: "24190.00 g",
-//   },
-//   {
-//     id: "3",
-//     name: "Research Unit",
-//     status: "ACTIVE",
-//     stock: 20990,
-//     totalWeight: "32290.00 g",
-//     distributed: "8100 g",
-//     remaining: "24190.00 g",
-//   },
-//   {
-//     id: "4",
-//     name: "SE Building I",
-//     status: "ACTIVE",
-//     stock: 5920,
-//     totalWeight: "2500g",
-//     distributed: "870g",
-//     remaining: "1630g",
-//   },
-// ];
 
 export default function WarehouseTable({records} : {records : WarehouseTableData[]}) {
   return (
@@ -99,28 +62,36 @@ export default function WarehouseTable({records} : {records : WarehouseTableData
               </TableCell>
               <TableCell className="px-6 py-4 text-center">
                 <div className="flex items-center justify-center">
-                  <span className="inline-block rounded-full bg-green-100 px-3 py-1 text-xs font-semibold whitespace-nowrap text-green-700">
-                    {warehouse.status}
-                  </span>
+                  <span
+                    className={`inline-block rounded-full px-3 py-1 text-xs font-semibold whitespace-nowrap ${
+                      warehouse.status === "ACTIVE"
+                        ? "bg-green-100 text-green-700"
+                        : "bg-red-100 text-red-700"
+                    }`}
+                  >
+                  {warehouse.status}
+                </span>
                 </div>
               </TableCell>
               <TableCell className="px-6 py-4 text-center text-sm whitespace-nowrap text-gray-700">
                 {warehouse.stock}
               </TableCell>
               <TableCell className="px-6 py-4 text-center text-sm whitespace-nowrap text-gray-700">
-                {warehouse.totalWeight}
+                {warehouse.totalWeight} g
               </TableCell>
               <TableCell className="px-6 py-4 text-center text-sm whitespace-nowrap text-gray-700">
-                {warehouse.distributed}
+                {warehouse.distributed} g
               </TableCell>
               <TableCell className="px-6 py-4 text-center text-sm whitespace-nowrap text-gray-700">
-                {warehouse.remaining}
+                {warehouse.remaining} g
               </TableCell>
               <TableCell className="px-6 py-4 text-center">
                 <div className="flex items-center justify-center">
-                  <button className="rounded-lg p-2 text-gray-600 transition-colors hover:bg-gray-200 hover:text-gray-900">
-                    <Edit className="h-5 w-5" />
-                  </button>
+                  <WareHouseEditModal 
+                    id={Number(warehouse.id)}
+                    warehouseName={warehouse.name}
+                    status={warehouse.status === "ACTIVE"}
+                  />
                 </div>
               </TableCell>
             </TableRow>
