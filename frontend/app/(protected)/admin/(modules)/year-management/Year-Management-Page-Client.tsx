@@ -9,7 +9,6 @@ import ZoneManagementTab from "@/components/custom/admin/zone&form/zone/zone-man
 import { TabsContent } from "@/components/ui/tabs";
 import { YearApiResponse } from "@/lib/types/model/type";
 import { Calendar, FileText, Icon, MapPin } from "lucide-react";
-import { useState } from "react";
 
 const zoneAndFormTabs = [
   { id: "year", value: "Year Management", icon: Calendar },
@@ -17,10 +16,17 @@ const zoneAndFormTabs = [
   { id: "form", value: "Form Management", icon: FileText },
 ];
 
-function YearManagementPage({yearsRecords, yearTables} : {yearsRecords : YearApiResponse, yearTables :YearTableDataType[]} ) {
-
+function YearManagementPage({
+  yearsRecords,
+  yearTables,
+}: {
+  yearsRecords: YearApiResponse;
+  yearTables: YearTableDataType[];
+}) {
   return (
-      <YearManagementTab records={yearTables}/>
+    <div className="">
+      <YearManagementTab records={yearTables} />
+    </div>
   );
 }
 

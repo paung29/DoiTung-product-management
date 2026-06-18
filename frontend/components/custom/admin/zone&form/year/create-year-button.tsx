@@ -20,7 +20,6 @@ import { createYear } from "@/lib/server-actions/admin/create-year-client";
 import { useRouter } from "next/navigation";
 
 function CreateYearButton() {
-
   const router = useRouter();
 
   const form = useForm<CreateYearFormType>({
@@ -31,18 +30,17 @@ function CreateYearButton() {
   const [open, setOpen] = React.useState(false);
 
   const onSubmit = async (data: CreateYearFormType) => {
+    const reformData: CreateYearFormType = {
+      year: Number(data.year),
+    };
 
-    const reformData : CreateYearFormType = {
-      year : Number(data.year)
-    }
-
-    const result = await createYear(reformData)
+    const result = await createYear(reformData);
     console.log(result);
 
     setOpen(false);
     form.reset();
 
-    router.replace("/admin/zone-form-management/year")
+    router.replace("/admin/zone-form-management/year");
   };
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -57,7 +55,9 @@ function CreateYearButton() {
 
       <DialogContent className="text-primary-button bg-soft-secondary border-primary border sm:max-w-sm">
         <DialogHeader>
-          <DialogTitle className="text-2xl">"Create New Year"</DialogTitle>
+          <DialogTitle className="text-2xl">
+            &quot;Create New Year&quot;
+          </DialogTitle>
         </DialogHeader>
 
         <Form {...form}>
@@ -83,7 +83,7 @@ function CreateYearButton() {
                 className="bg-primary-button hover:bg-primary-button hover:opacity-90 hover:shadow-lg"
                 type="submit"
               >
-                "Create Year"
+                &quot;Create Year&quot;
               </Button>
             </DialogFooter>
           </form>

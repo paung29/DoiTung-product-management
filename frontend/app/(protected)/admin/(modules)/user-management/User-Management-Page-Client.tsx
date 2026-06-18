@@ -9,13 +9,12 @@ import UsersTable from "@/components/custom/admin/users-table";
 import { Account, getUserStatus } from "@/lib/types/model/account";
 import { Shield, UserCog, Users } from "lucide-react";
 import { createUser } from "@/lib/server-actions/admin/create-user-client";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { updateUserInfo } from "@/lib/server-actions/admin/update-user-info-client";
 import {
   UpdateUserInfoFormData,
   UpdateUserPasswordFormData,
 } from "@/lib/types/model/type";
-import { is, se } from "date-fns/locale";
 import ChangePasswordModal, {
   ChangePasswordFormData,
 } from "@/components/custom/admin/change-password-modal";
@@ -29,6 +28,7 @@ function UserManage({ records }: { records: Account[] }) {
   });
 
   console.log(records);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<Account | null>(null);
   const [editingPasswordUser, setEditingPasswordUser] =

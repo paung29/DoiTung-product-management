@@ -502,7 +502,7 @@ export type WareHouseFormCreate = {
   active_status: boolean;
 };
 
-export type year = {
+export type Year = {
   year: string;
   totalZone: number;
 };
@@ -543,6 +543,6 @@ export type YearSettingApiResponse = {
 
 export type YearSettingFormType = {
   year: number;
-  formName: string;
-  activeStatus: boolean;
+  formName?: string;
+  activeStatus?: boolean;
 };
