@@ -1,7 +1,7 @@
 import InventorySaleForm from "@/components/custom/admin/inventory&distribution/inventory-sale-form";
 import { Option } from "@/lib/types/model/option";
 import { YearApiResponse } from "@/lib/types/model/type";
-import { useInventory } from "../inventory-context";
+import { useInventory } from "../../inventory-context";
 
 export default function DistributionPage({years, plantationAreaOptions, customers} : {years : YearApiResponse, plantationAreaOptions : Option[] , customers : Option[]}) {
 

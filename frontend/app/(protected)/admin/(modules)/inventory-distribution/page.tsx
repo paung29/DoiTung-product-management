@@ -18,14 +18,6 @@ import { Option } from "@/lib/types/model/option";
 import { useState } from "react";
 import { useInventory } from "./inventory-context";
 
-const inventoryAndWarehouseTabs: Option[] = [
-  { id: "overview", value: "Stock Overview" },
-  { id: "warehouse", value: "Warehouse" },
-  { id: "distribution", value: "Stock Distribution" },
-  { id: "history", value: "Distribution History" },
-  { id: "customer", value: "Customer" },
-];
-
 export default function InventoryAndWarehouses() {
   
   const { selectedYear, setSelectedYear } = useInventory();

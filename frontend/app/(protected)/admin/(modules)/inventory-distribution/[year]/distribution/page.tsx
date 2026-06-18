@@ -1,7 +1,7 @@
 "use server"
 
 import { Account } from "@/lib/types/model/account";
-import { AccountItem, ClusterApiItem, YearApiResponse } from "@/lib/types/model/type";
+import { AccountItem, ClusterApiItem, getAllWarehouses, YearApiResponse } from "@/lib/types/model/type";
 import { baseUrl } from "@/lib/utl";
 import { cookies } from "next/headers";
 import { YearTableDataType } from "@/components/custom/admin/zone&form/year/year-table";
@@ -46,7 +46,7 @@ export default async function Page({params, searchParams,} : {params : Promise<{
     console.log("fetching data")
     
   
-  const wareHouseapiData : WarehouseApiResponse = wareHouseResponse.ok ? await wareHouseResponse.json() : { warehouses: [] };
+  const wareHouseapiData : getAllWarehouses = wareHouseResponse.ok ? await wareHouseResponse.json() : { warehouses: [] };
 
   const wareHouserecords : Option[] = wareHouseapiData.warehouses.map((item, index) => ({
     id : String(item.warehouse_id),
