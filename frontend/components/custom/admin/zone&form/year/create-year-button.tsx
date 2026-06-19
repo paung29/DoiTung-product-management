@@ -1,5 +1,9 @@
 "use client";
-import { CreateYearFormInput, CreateYearFormSchema, CreateYearFormType } from "@/lib/types/model/type";
+import {
+  CreateYearFormInput,
+  CreateYearFormSchema,
+  CreateYearFormType,
+} from "@/lib/types/model/type";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -22,24 +26,22 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import ApiErrorUI from "@/components/custom/common/error-handle";
 
 function CreateYearButton() {
-
   const router = useRouter();
 
   const form = useForm<CreateYearFormInput, any, CreateYearFormType>({
-    resolver : zodResolver(CreateYearFormSchema),
+    resolver: zodResolver(CreateYearFormSchema),
     defaultValues: {
       year: "",
     },
   });
   const [open, setOpen] = React.useState(false);
-  const [error, setError] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null);
 
   const onSubmit = async (data: CreateYearFormType) => {
+    setError(null);
 
-    setError(null)
-
-    try{
-      const result = await createYear(data)
+    try {
+      const result = await createYear(data);
       console.log(result);
 
       if (result.success === false) {
@@ -50,11 +52,10 @@ function CreateYearButton() {
       setOpen(false);
       form.reset();
 
-      router.replace("/admin/year-management")
-    }catch(error) {
+      router.replace("/admin/year-management");
+    } catch (error) {
       setError("Cannot connect to server");
     }
-
   };
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -69,7 +70,9 @@ function CreateYearButton() {
 
       <DialogContent className="text-primary-button bg-soft-secondary border-primary border sm:max-w-sm">
         <DialogHeader>
-          <DialogTitle className="text-2xl">"Create New Year"</DialogTitle>
+          <DialogTitle className="text-2xl">
+            &quot;Create New Year&quot;
+          </DialogTitle>
         </DialogHeader>
 
         <ApiErrorUI message={error} />
@@ -97,7 +100,7 @@ function CreateYearButton() {
                 className="bg-primary-button hover:bg-primary-button hover:opacity-90 hover:shadow-lg"
                 type="submit"
               >
-                "Create Year"
+                &quot;Create Year&quot;
               </Button>
             </DialogFooter>
           </form>

@@ -9,7 +9,7 @@ import UsersTable from "@/components/custom/admin/users-table";
 import { Account, getUserStatus } from "@/lib/types/model/account";
 import { Shield, UserCog, Users } from "lucide-react";
 import { createUser } from "@/lib/server-actions/admin/create-user-client";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { updateUserInfo } from "@/lib/server-actions/admin/update-user-info-client";
 import {
   UpdateUserInfoFormData,
@@ -28,8 +28,6 @@ function UserManage({ records }: { records: Account[] }) {
   });
 
   console.log(records);
-
-  const [error, setError] = useState<string | null>(null);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<Account | null>(null);
