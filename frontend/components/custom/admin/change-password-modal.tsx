@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -13,6 +13,8 @@ import CustomButton from "../common/custom-button";
 import FormsInput from "../common/forms/form-input";
 
 import { Account } from "@/lib/types/model/account";
+import { updateUserPassword } from "@/lib/server-actions/admin/update-user-password-client";
+import { UpdateUserPasswordForm } from "@/lib/types/model/type";
 
 const ChangePasswordSchema = z
   .object({
@@ -33,19 +35,16 @@ interface ChangePasswordModalProps {
   isOpen: boolean;
   onClose: () => void;
   user: Account | null;
-
-  onSubmit: (
-    userId: number,
-    data: ChangePasswordFormData,
-  ) => Promise<void> | void;
 }
 
 export default function ChangePasswordModal({
   isOpen,
   onClose,
   user,
-  onSubmit,
 }: ChangePasswordModalProps) {
+
+  const [error, setError] = useState<string | null>(null)
+
   const form = useForm<ChangePasswordFormData>({
     resolver: zodResolver(ChangePasswordSchema),
     defaultValues: {
@@ -64,9 +63,25 @@ export default function ChangePasswordModal({
   }, [isOpen, form]);
 
   const handleSubmit = async (data: ChangePasswordFormData) => {
+
+    const reformData : UpdateUserPasswordForm = {
+      user_id : Number(user?.account_id),
+      password : data.newPassword
+    }
     if (!user) return;
 
-    await onSubmit(Number(user.account_id), data);
+    try{
+
+      const result = await updateUserPassword(reformData)
+
+      if(result.success === false) {
+        setError(result.message)
+        return
+      }
+
+    }catch(error) {
+      setError("Cannot connect to server");
+    }
 
     form.reset();
     onClose();

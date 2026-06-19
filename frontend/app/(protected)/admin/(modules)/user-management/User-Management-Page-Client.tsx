@@ -35,72 +35,6 @@ function UserManage({ records }: { records: Account[] }) {
     useState<Account | null>(null);
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
 
-  const handleCreateUser = async (data: CreateUserFormData) => {
-    console.log("Creating user:", data);
-    const response = await createUser(data);
-
-    console.log(response);
-
-    router.replace(`/admin/user-management`);
-  };
-
-  const handleEditUser = async (user: Account) => {
-    setEditingUser(user);
-    setIsModalOpen(true);
-  };
-
-  const handleChangePassword = (user: Account) => {
-    console.log("opening password modal", user);
-    setEditingPasswordUser(user);
-    setIsPasswordModalOpen(true);
-  };
-
-  const handleSubmitPassword = async (
-    userId: number,
-    data: ChangePasswordFormData,
-  ) => {
-    if (editingPasswordUser) {
-      const updatePassword: UpdateUserPasswordFormData = {
-        user_id: userId,
-        new_password: data.newPassword,
-        confirm_password: data.confirmPassword,
-      };
-      console.log("User ID:", userId);
-      console.log("Password:", updatePassword.new_password);
-      console.log("Confirm Password:", updatePassword.confirm_password);
-      const response = await updateUserPassword(updatePassword);
-      console.log(response);
-    }
-
-    setIsPasswordModalOpen(false);
-    setEditingPasswordUser(null);
-
-    router.replace("/admin/user-management");
-  };
-
-  const handleSubmitUser = async (data: CreateUserFormData) => {
-    if (editingUser) {
-      const reformData: UpdateUserInfoFormData = {
-        user_id: Number(editingUser.account_id),
-        phone_no: String(data.phone_no),
-        name: data.name,
-        role: data.role,
-        active_status: Boolean(data.active_status),
-      };
-      console.log("Updating user:", reformData);
-      const response = await updateUserInfo(reformData);
-      console.log(response);
-    } else {
-      console.log("Creating user:", data);
-      await createUser(data);
-      const response = await createUser(data);
-      console.log(response);
-    }
-
-    setIsModalOpen(false);
-    setEditingUser(null);
-    router.replace(`/admin/user-management`);
-  };
 
   return (
     <div className="space-y-6">
@@ -134,8 +68,6 @@ function UserManage({ records }: { records: Account[] }) {
 
         <UsersTable
           users={records}
-          onEditInfo={handleEditUser}
-          onChangePassword={handleChangePassword}
         />
       </div>
 
@@ -145,8 +77,6 @@ function UserManage({ records }: { records: Account[] }) {
           setIsModalOpen(false);
           setEditingUser(null);
         }}
-        onSubmit={handleSubmitUser}
-        editingUser={editingUser}
       />
 
       <ChangePasswordModal
@@ -156,7 +86,6 @@ function UserManage({ records }: { records: Account[] }) {
           setIsPasswordModalOpen(false);
           setEditingPasswordUser(null);
         }}
-        onSubmit={handleSubmitPassword}
       />
     </div>
   );

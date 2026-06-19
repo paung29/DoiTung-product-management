@@ -10,18 +10,24 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useState } from "react";
+import EditUserModal from "./edit-user-modal";
+import ChangePasswordModal from "./change-password-modal";
 
 interface UsersTableProps {
   users: Account[];
-  onEditInfo?: (user: Account) => void;
-  onChangePassword?: (user: Account) => void;
 }
 
 export default function UsersTable({
   users,
-  onEditInfo = () => {},
-  onChangePassword = () => {},
+  
+
 }: UsersTableProps) {
+
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [selectedAccount, setSelectedAccount] = useState<Account | null>(null);
+  const [isEditPassword, setIsEditPassword] = useState(false);
+  
   const getRoleBadgeColor = (role: string) => {
     return role.toLocaleLowerCase() === "admin"
       ? "bg-red-100 text-red-700"
@@ -32,10 +38,40 @@ export default function UsersTable({
     return role.toLocaleLowerCase() === "admin" ? "Admin" : "Staff";
   };
 
+  const onEditUser = (user : Account) => {
+    setSelectedAccount(user);
+    setIsEditModalOpen(true);
+  }
+
+  const handleChangePassword = (user: Account) => {
+      console.log("opening password modal", user);
+      setSelectedAccount(user)
+      setIsEditPassword(true);
+      
+    };
   console.log(users);
 
   return (
     <div className="border-primary-button mb-4 overflow-hidden rounded-2xl border">
+
+      <EditUserModal 
+        isOpen={isEditModalOpen}
+        onClose={() => {
+          setIsEditModalOpen(false);
+          setSelectedAccount(null);
+        }}
+        account={selectedAccount}
+      />
+
+      <ChangePasswordModal 
+        isOpen={isEditPassword}
+        onClose={() => {
+          setIsEditPassword(false);
+          setSelectedAccount(null);
+        }}
+        user={selectedAccount}
+      />
+
       <Table className="gap-20">
         <TableHeader>
           <TableRow className="[&_th]:text-primary-button hover:bg-secondary bg-secondary border-primary-button [&_th]:py-4 [&_th]:text-center [&_th]:font-semibold">
@@ -88,7 +124,7 @@ export default function UsersTable({
                 <div className="flex items-center justify-center gap-2">
                   {/* Edit User Info */}
                   <button
-                    onClick={() => onEditInfo(user)}
+                    onClick={() => onEditUser(user)}
                     className="text-primary-button hover:bg-primary-button/10 rounded-lg p-2 transition-colors"
                     title="Edit User Information"
                   >
@@ -99,7 +135,7 @@ export default function UsersTable({
                   <button
                     onClick={() => {
                       console.log("password clicked");
-                      onChangePassword(user);
+                      handleChangePassword(user);
                     }}
                     className="text-primary-button hover:bg-primary-button/10 rounded-lg p-2 transition-colors"
                     title="Change Password"
