@@ -30,6 +30,11 @@ export type UpdateUserPasswordFormData = {
   confirm_password: string;
 };
 
+export type UpdateUserPasswordForm = {
+  user_id: number;
+  password: string;
+};
+
 export type AccountItem = {
   user_id: number;
   email: string;
@@ -51,6 +56,12 @@ export type ClusterSearchForm = {
   cluster_id: string;
   progress_status: string;
 };
+
+export type UpdateCustomerInfoFormData = {
+  customer_id : number
+  customer_name : string
+  note : string
+}
 
 export const ClusterRecordingFormTypeSchema = z.object({
   year: z.number(),
@@ -368,15 +379,18 @@ export type DistributionHistorySearchForm = {
   plantationArea: string;
 };
 
-export type CreateOrEditZoneFormType = {
-  zone_name: string;
-  total_plants: string;
-  year: number;
-};
 export const CreateOrEditZoneFormSchema = z.object({
   zone_name : z.string().min(1, "Zone name is required"),
   year : z.number()
 })
+
+export type EditUserFormType = {
+  user_id : number
+  phone_no : string
+  name : string
+  role : string
+  active_status : boolean
+}
 
 export type CreateOrEditZoneFormType = z.input<typeof CreateOrEditZoneFormSchema>
 

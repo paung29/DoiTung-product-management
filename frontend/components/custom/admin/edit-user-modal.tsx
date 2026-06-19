@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "@/components/ui/form";
@@ -11,9 +11,12 @@ import FormsInput from "../common/forms/form-input";
 import { z } from "zod";
 import ApiErrorUI from "../common/error-handle";
 import { useRouter } from "next/navigation";
-import { createUser } from "@/lib/server-actions/admin/create-user-client";
+import { updateUserInfo } from "@/lib/server-actions/admin/update-user-info-client";
+import { UpdateUserInfoFormData } from "@/lib/types/model/type";
+import { Account } from "@/lib/types/model/account";
+import CustomSelect from "../common/forms/form-select";
 
-const CreateUserSchema = z.object({
+const EditUserSchema = z.object({
   name: z
     .string()
     .min(1, "Name is required")
@@ -26,13 +29,6 @@ const CreateUserSchema = z.object({
     .min(1, "Email is required")
     .email("Please enter a valid email address")
     .max(100, "Email must not exceed 100 characters"),
-
-  password: z
-    .string()
-    .min(1, "Password is required")
-    .min(6, "Password must be at least 6 characters")
-    .max(100, "Password must not exceed 100 characters"),
-
   role: z
     .string()
     .min(1, "Role is required")
@@ -41,7 +37,7 @@ const CreateUserSchema = z.object({
       "Role must be either ADMIN or STAFF",
     ),
 
-  active_status: z.boolean(),
+  active_status: z.string().min(1, "Status is required"),
   phone_no: z
     .string()
     .optional()
@@ -51,43 +47,62 @@ const CreateUserSchema = z.object({
     ),
 });
 
-export type CreateUserFormData = z.infer<typeof CreateUserSchema>;
+export type EditUserFormData = z.infer<typeof EditUserSchema>;
 
-interface CreateUserModalProps {
+interface EditUserModalProps {
   isOpen: boolean;
   onClose: () => void;
+  account: Account | null;
 }
 
-export default function CreateUserModal({
+const statusOptions = [
+  { id: "true", value: "Active" },
+  { id: "false", value: "Inactive" },
+];
+
+export default function EditUserModal({
   isOpen,
   onClose,
-}: CreateUserModalProps) {
+  account
+}: EditUserModalProps) {
+
+  
+  console.log(account?.status)
 
   const router = useRouter();
   
   const [error, setError] = useState<string | null>(null)
 
-  const form = useForm<CreateUserFormData>({
-    resolver: zodResolver(CreateUserSchema),
+  const form = useForm<EditUserFormData>({
+
+    resolver: zodResolver(EditUserSchema),
     defaultValues: {
       name: "",
       email: "",
-      password: "",
-      role: "STAFF",
-      active_status: true,
+      role: "",
+      active_status: "",
+      phone_no: ""
     },
   });
 
-  const handleSubmit = async (data: CreateUserFormData) => {
+  const handleSubmit = async (data: EditUserFormData) => {
 
     console.log("Submit click")
     setError(null);
 
+    const reformData : UpdateUserInfoFormData = {
+      user_id : Number(account?.account_id),
+      phone_no : String(data.phone_no),
+      name : data.name,
+      role : data.role,
+      active_status : data.active_status === "true",
+    }
+
     try {
-      const response = await createUser(data);
+      const response = await updateUserInfo(reformData);
 
       if (response.success === false) {
-        setError(response.message || "Failed to create user");
+        setError(response.message || "Failed to update user");
         return;
       }
       
@@ -98,12 +113,30 @@ export default function CreateUserModal({
     }
   };
 
-  if (!isOpen) return null;
-
   const roleOptions = [
     { id: "ADMIN", value: "Admin" },
     { id: "STAFF", value: "Staff" },
   ];
+
+  useEffect(() => {
+    if (!account) return;
+
+    console.log(account.status)
+
+    const statusValue = String(account.status).toLowerCase();
+
+    form.reset({
+      name : account.name,
+      email : account.email,
+      role : account.role_on_db.toUpperCase() || "STAFF",
+      active_status: statusValue === "true" || statusValue === "active" ? "true" : "false",
+      phone_no : account.phone_no
+    });
+
+    setError(null);
+  }, [account, form]);
+
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
@@ -119,11 +152,11 @@ export default function CreateUserModal({
 
         {/* Title */}
         <h2 className="mb-6 text-2xl font-semibold text-gray-900">
-          Create User
+          Edit User
         </h2>
 
         <p className="mb-4 text-sm text-gray-600">
-          Fill in the details to create a new user.
+          Update the user details below.
         </p>
 
         <ApiErrorUI message={error}/>
@@ -151,14 +184,6 @@ export default function CreateUserModal({
               type="email"
             />
 
-            <FormsInput
-              control={form.control}
-              path="password"
-              label="Password"
-              placeholder="Enter password"
-              type="password"
-            />
-
             {/* Role */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
@@ -178,19 +203,14 @@ export default function CreateUserModal({
 
             {/* Status */}
             <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Status
-              </label>
-              <select
-                value={String(form.watch("active_status"))}
-                onChange={(e) =>
-                  form.setValue("active_status", e.target.value === "true")
-                }
-                className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-yellow-900 focus:ring-1 focus:ring-yellow-900 focus:outline-none"
-              >
-                <option value="true">Active</option>
-                <option value="false">Inactive</option>
-              </select>
+              <CustomSelect
+                key={`status-${account?.account_id}-${form.watch("active_status")}`}
+                control={form.control}
+                path="active_status"
+                label="Status"
+                placeholder="Select status"
+                options={statusOptions}
+              />
             </div>
 
             {/* Phone */}
@@ -209,7 +229,7 @@ export default function CreateUserModal({
                 className="flex-1 border border-gray-300 bg-white text-gray-700 hover:bg-gray-50"
               />
               <CustomButton
-                label= "Create"
+                label= "Update"
                 type="submit"
                 className="flex-1 bg-yellow-900 text-white hover:bg-yellow-950"
               />

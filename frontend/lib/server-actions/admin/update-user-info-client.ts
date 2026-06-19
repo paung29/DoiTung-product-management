@@ -1,6 +1,6 @@
 "use server"
 
-import { CreateUserFormData, UpdateUserInfoFormData } from "@/lib/types/model/type";
+import { UpdateUserInfoFormData } from "@/lib/types/model/type";
 import { baseUrl } from "@/lib/utl";
 import { cookies } from "next/headers";
 
