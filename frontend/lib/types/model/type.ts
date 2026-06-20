@@ -1,4 +1,4 @@
-import  z, { number, string } from "zod";
+import z, { number, string } from "zod";
 
 export type ApiError = {
   errors: string | null;
@@ -58,10 +58,10 @@ export type ClusterSearchForm = {
 };
 
 export type UpdateCustomerInfoFormData = {
-  customer_id : number
-  customer_name : string
-  note : string
-}
+  customer_id: number;
+  customer_name: string;
+  note: string;
+};
 
 export const ClusterRecordingFormTypeSchema = z.object({
   year: z.number(),
@@ -380,19 +380,21 @@ export type DistributionHistorySearchForm = {
 };
 
 export const CreateOrEditZoneFormSchema = z.object({
-  zone_name : z.string().min(1, "Zone name is required"),
-  year : z.number()
-})
+  zone_name: z.string().min(1, "Zone name is required"),
+  year: z.number(),
+});
 
 export type EditUserFormType = {
-  user_id : number
-  phone_no : string
-  name : string
-  role : string
-  active_status : boolean
-}
+  user_id: number;
+  phone_no: string;
+  name: string;
+  role: string;
+  active_status: boolean;
+};
 
-export type CreateOrEditZoneFormType = z.input<typeof CreateOrEditZoneFormSchema>
+export type CreateOrEditZoneFormType = z.input<
+  typeof CreateOrEditZoneFormSchema
+>;
 
 export type CreateOrEditZoneForm = {
   year: number;
@@ -554,9 +556,9 @@ export const CreateYearFormSchema = z.object({
       message: "Year must be a number",
     })
     .transform((value) => Number(value)),
-})
+});
 
-export type CreateYearFormInput =  z.input<typeof CreateYearFormSchema>;
+export type CreateYearFormInput = z.input<typeof CreateYearFormSchema>;
 
 export type CreateYearFormType = z.output<typeof CreateYearFormSchema>;
 
