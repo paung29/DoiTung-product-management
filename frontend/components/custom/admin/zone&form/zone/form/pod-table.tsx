@@ -14,7 +14,6 @@ export type PodTableDataType = {
   podId: number;
   poleNo: string;
   clusterId: string;
-  totalFlower: number;
   numberOfPod: number;
   lostPods: number;
   remainingPod: number;
@@ -42,7 +41,6 @@ export function PodTable({
               <TableHead>Date</TableHead>
               <TableHead>Pole ID</TableHead>
               <TableHead>Clusters ID</TableHead>
-              <TableHead>Total Flower</TableHead>
               <TableHead>Number of Pod</TableHead>
               <TableHead>Lost Pods</TableHead>
               <TableHead>Remaining Pod</TableHead>
@@ -62,7 +60,6 @@ export function PodTable({
                 </TableCell>
                 <TableCell>{item.poleNo}</TableCell>
                 <TableCell>{item.clusterId}</TableCell>
-                <TableCell>{item.totalFlower}</TableCell>
                 <TableCell>{item.numberOfPod}</TableCell>
                 <TableCell>{item.lostPods}</TableCell>
                 <TableCell>{item.remainingPod}</TableCell>
