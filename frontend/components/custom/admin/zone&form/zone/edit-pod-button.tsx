@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { FieldGroup } from "@/components/ui/field";
 import { Form } from "@/components/ui/form";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Edit } from "lucide-react";
 
@@ -20,8 +20,18 @@ import CustomSelect from "../../../common/forms/form-select";
 import CustomButton from "@/components/custom/common/custom-button";
 
 import { PodTableDataType } from "./form/pod-table";
+import { PodCreateForm } from "@/lib/types/model/type";
+import { updatePod } from "@/lib/server-actions/update-pod-client";
+import { useParams, useRouter } from "next/navigation";
+import ApiErrorUI from "@/components/custom/common/error-handle";
 
 export function EditPodButton({ podData }: { podData: PodTableDataType }) {
+
+  const params = useParams();
+  const router = useRouter();
+  const zoneId = params.zoneId
+
+  const [error, setError] = useState<string | null>(null);
   const [open, setOpen] = React.useState(false);
 
   const form = useForm<PodTableDataType>({
@@ -30,7 +40,6 @@ export function EditPodButton({ podData }: { podData: PodTableDataType }) {
       recordedDate: podData.recordedDate || "",
       poleNo: podData.poleNo || "",
       clusterId: podData.clusterId || "",
-      totalFlower: podData.totalFlower || 0,
       numberOfPod: podData.numberOfPod || 0,
       lostPods: podData.lostPods || 0,
       remainingPod: podData.remainingPod || 0,
@@ -45,7 +54,6 @@ export function EditPodButton({ podData }: { podData: PodTableDataType }) {
         recordedDate: podData.recordedDate,
         poleNo: podData.poleNo,
         clusterId: podData.clusterId,
-        totalFlower: podData.totalFlower,
         numberOfPod: podData.numberOfPod,
         lostPods: podData.lostPods,
         remainingPod: podData.remainingPod,
@@ -55,8 +63,28 @@ export function EditPodButton({ podData }: { podData: PodTableDataType }) {
     }
   }, [open, form, podData]);
 
-  const onSubmit = (data: PodTableDataType) => {
+  const onSubmit = async (data: PodTableDataType) => {
     console.log("Updated Pod Form Data:", data);
+
+    const reformData : PodCreateForm = {
+      clusterId : Number(data.clusterId),
+      lostPods : data.lostPods,
+      condition : data.condition
+    }
+
+    try{
+
+      const result = await updatePod(reformData)
+
+      if(result.success === false) {
+        setError(result.message)
+        return
+      }
+
+      router.replace(`admin/zone-form-management/zone-details/${zoneId}/pod`)
+    }catch(error) {
+      setError("failed to connect error")
+    }
     setOpen(false);
   };
 
@@ -80,6 +108,8 @@ export function EditPodButton({ podData }: { podData: PodTableDataType }) {
           </button>
         </DialogHeader>
 
+        <ApiErrorUI message={error}/>
+
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="px-6 pb-6">
             <FieldGroup>
@@ -91,6 +121,7 @@ export function EditPodButton({ podData }: { podData: PodTableDataType }) {
                   path="recordedDate"
                   label="Date"
                   type="date"
+                  readonly={true}
                 />
 
                 <FormsInput
@@ -98,6 +129,7 @@ export function EditPodButton({ podData }: { podData: PodTableDataType }) {
                   control={form.control}
                   path="poleNo"
                   label="Pole ID"
+                  readonly={true}
                 />
               </div>
 
@@ -108,15 +140,10 @@ export function EditPodButton({ podData }: { podData: PodTableDataType }) {
                   control={form.control}
                   path="clusterId"
                   label="Cluster ID"
+                  readonly={true}
                 />
 
-                <FormsInput
-                  inputClassName="bg-white border-primary-button border rounded-lg"
-                  control={form.control}
-                  path="totalFlower"
-                  label="Total Flower"
-                  type="number"
-                />
+              
               </div>
 
               {/* Pod Data */}
@@ -127,6 +154,7 @@ export function EditPodButton({ podData }: { podData: PodTableDataType }) {
                   path="numberOfPod"
                   label="Number of Pod"
                   type="number"
+                  readonly={true}
                 />
 
                 <FormsInput
@@ -143,6 +171,7 @@ export function EditPodButton({ podData }: { podData: PodTableDataType }) {
                   path="remainingPod"
                   label="Remaining Pod"
                   type="number"
+                  readonly={true}
                 />
               </div>
 
@@ -154,9 +183,9 @@ export function EditPodButton({ podData }: { podData: PodTableDataType }) {
                   path="condition"
                   label="Condition"
                   options={[
-                    { id: "Good", value: "Good" },
-                    { id: "Insect", value: "Insect" },
-                    { id: "Rotten", value: "Rotten" },
+                    { id: "GOOD", value: "Good" },
+                    { id: "INSECT", value: "Insect" },
+                    { id: "ROTTEN", value: "Rotten" },
                   ]}
                   placeholder="Select condition"
                 />
@@ -169,6 +198,7 @@ export function EditPodButton({ podData }: { podData: PodTableDataType }) {
                   control={form.control}
                   path="recordedBy"
                   label="Recorded By"
+                  readonly={true}
                 />
               </div>
             </FieldGroup>
