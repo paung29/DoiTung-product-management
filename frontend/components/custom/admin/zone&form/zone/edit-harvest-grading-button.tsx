@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Edit } from "lucide-react";
 
@@ -21,12 +21,22 @@ import FormsInput from "../../../common/forms/form-input";
 
 import { HarvestGradingTableDataType } from "./form/harvest-grading-table";
 import CustomButton from "@/components/custom/common/custom-button";
+import { useParams, useRouter } from "next/navigation";
+import { HarvestGradingRecordInput } from "@/lib/types/model/type";
+import { updateHarvestGrading } from "@/lib/server-actions/update-harvest-grading-client";
+import ApiErrorUI from "@/components/custom/common/error-handle";
 
 export function EditHarvestGradingButton({
   harvestData,
 }: {
   harvestData: HarvestGradingTableDataType;
 }) {
+
+  const params = useParams();
+  const router = useRouter();
+  const zoneId = params.zoneId
+
+  const [error, setError] = useState<string | null>(null);
   const [open, setOpen] = React.useState(false);
 
   const form = useForm<HarvestGradingTableDataType>({
@@ -74,8 +84,39 @@ export function EditHarvestGradingButton({
     }
   }, [open, form, harvestData]);
 
-  const onSubmit = (data: HarvestGradingTableDataType) => {
+  const onSubmit = async (data: HarvestGradingTableDataType) => {
     console.log("Updated Harvest Data:", data);
+
+    const reformData : HarvestGradingRecordInput = {
+      poleId: Number(data.poleNo),
+      gradeAPlusCount: Number(data.gradeAPlus_noPod),
+      gradeAPlusWeight: Number(data.gradeAPlus_weight),
+      gradeACount: Number(data.gradeA_noPod),
+      gradeAWeight:  Number(data.gradeA_weight),
+      gradeBCount:  Number(data.gradeB_noPod),
+      gradeBWeight: Number(data.gradeB_weight),
+      gradeCCount: Number(data.gradeC_noPod),
+      gradeCWeight: Number(data.gradeC_weight),
+      gradeDPlusCount: Number(data.gradeDPlus_noPod),
+      gradeDPlusWeight: Number(data.gradeDPlus_weight),
+      undersizedCount: Number(data.rejectedUndersize_noPod),
+      undersizedWeight: Number(data.rejectedUndersize_weight),
+    }
+
+    try{
+
+      const result = await updateHarvestGrading(reformData)
+
+      if(result.success === false) {
+        setError(result.message)
+        return
+      }
+
+      router.replace(`/admin/zone-form-management/zone-details/${zoneId}/harvest-grading`)
+
+    }catch(error) {
+      setError("failed to connect server")
+    }
     setOpen(false);
   };
 
@@ -92,6 +133,8 @@ export function EditHarvestGradingButton({
           </DialogTitle>
         </DialogHeader>
 
+        <ApiErrorUI message={error}/>
+
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <FieldGroup>
@@ -100,13 +143,14 @@ export function EditHarvestGradingButton({
                   control={form.control}
                   path="recordedDate"
                   label="Date"
-                  type="date"
+                  readonly={true}
                 />
 
                 <FormsInput
                   control={form.control}
                   path="poleNo"
                   label="Pole ID"
+                  readonly={true}
                 />
               </div>
 
@@ -211,6 +255,7 @@ export function EditHarvestGradingButton({
                   control={form.control}
                   path="recordedBy"
                   label="Recorded By"
+                  readonly={true}
                 />
               </div>
             </FieldGroup>
@@ -226,7 +271,7 @@ export function EditHarvestGradingButton({
 
               <CustomButton
                 label="Save Changes"
-                type="button"
+                type="submit"
                 className="bg-primary-button text-white"
               />
             </DialogFooter>

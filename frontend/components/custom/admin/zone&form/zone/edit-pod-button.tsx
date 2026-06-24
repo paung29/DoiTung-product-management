@@ -68,7 +68,7 @@ export function EditPodButton({ podData }: { podData: PodTableDataType }) {
 
     const reformData : PodCreateForm = {
       clusterId : Number(data.clusterId),
-      lostPods : data.lostPods,
+      lostPods : Number(data.lostPods),
       condition : data.condition
     }
 
@@ -81,7 +81,7 @@ export function EditPodButton({ podData }: { podData: PodTableDataType }) {
         return
       }
 
-      router.replace(`admin/zone-form-management/zone-details/${zoneId}/pod`)
+      router.replace(`/admin/zone-form-management/zone-details/${zoneId}/pod`)
     }catch(error) {
       setError("failed to connect error")
     }
