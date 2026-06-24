@@ -8,7 +8,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { CreateOrEditZoneButton } from "./create-new-zone-button";
-import { DeleteZoneButton } from "../delete-zone-button";
+import { EditZoneButton } from "../edit-zone-button";
 import { useRouter } from "next/navigation";
 import { useZoneForm } from "@/app/(protected)/admin/(modules)/zone-form-management/zone-form-context";
 
@@ -58,7 +58,7 @@ export function ZoneTable({
               </TableCell>
               <TableCell>
                 <div className="flex flex-row justify-center gap-2">
-                  <DeleteZoneButton />
+                  <EditZoneButton id={item.zone_id} name={item.zone_name}/>
                 </div>
               </TableCell>
             </TableRow>
