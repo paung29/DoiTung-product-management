@@ -7,37 +7,29 @@ import React, { useState } from "react";
 function ReportsAndExportPage() {
   const years = ["2023", "2024", "2025"];
   const [toastVisible, setToastVisible] = useState(false);
-  const [toastMessage, setToastMessage] = useState("");
+  const [toastTitle, setToastTitle] = useState("");
+  const [toastDescription, setToastDescription] = useState("");
 
   const [clusterYear, setClusterYear] = useState("");
-  const [clusterFormat, setClusterFormat] = useState("xlsx");
 
   const [harvestYear, setHarvestYear] = useState("");
-  const [harvestFormat, setHarvestFormat] = useState("xlsx");
 
   const [gradingYear, setGradingYear] = useState("");
-  const [gradingFormat, setGradingFormat] = useState("xlsx");
 
   const [stockMovementYear, setStockMovementYear] = useState("");
-  const [stockMovementFormat, setStockMovementFormat] = useState("xlsx");
 
   const [stockSummaryYear, setStockSummaryYear] = useState("");
-  const [stockSummaryFormat, setStockSummaryFormat] = useState("xlsx");
 
-  function handleExport(name: string, year: string, format: string) {
-    showToast(
-      `${name} exported\nYear ${year} · ${format.toUpperCase()} format`,
-    );
-  }
-  function showToast(message: string) {
-    setToastMessage(message);
+  function handleExport(name: string, year: string) {
+    setToastTitle(`${name} exported`);
+    setToastDescription(`Year ${year} · EXCEL format`);
+
     setToastVisible(true);
 
     setTimeout(() => {
       setToastVisible(false);
     }, 3000);
   }
-
   return (
     <div className="min-h-screen bg-gray-50 px-4 py-6 sm:px-6 lg:px-10">
       {/* Centered container */}
@@ -53,13 +45,9 @@ function ReportsAndExportPage() {
             description="Export cluster registration and production information."
             years={years}
             selectedYear={clusterYear}
-            format={clusterFormat}
             onYearChange={setClusterYear}
-            onFormatChange={setClusterFormat}
             disabled={!clusterYear}
-            onExport={() =>
-              handleExport("Cluster Form Report", clusterYear, clusterFormat)
-            }
+            onExport={() => handleExport("Cluster Form Report", clusterYear)}
           />
 
           <ReportExportCard
@@ -67,13 +55,9 @@ function ReportsAndExportPage() {
             description="Export harvest grading records and quality assessment results."
             years={years}
             selectedYear={harvestYear}
-            format={harvestFormat}
             onYearChange={setHarvestYear}
-            onFormatChange={setHarvestFormat}
             disabled={!harvestYear}
-            onExport={() =>
-              handleExport("Harvest Grading Report", harvestYear, harvestFormat)
-            }
+            onExport={() => handleExport("Harvest Grading Report", harvestYear)}
           />
 
           <ReportExportCard
@@ -81,13 +65,9 @@ function ReportsAndExportPage() {
             description="Export summarized grading performance and yearly statistics."
             years={years}
             selectedYear={gradingYear}
-            format={gradingFormat}
             onYearChange={setGradingYear}
-            onFormatChange={setGradingFormat}
             disabled={!gradingYear}
-            onExport={() =>
-              handleExport("Grading Summary Report", gradingYear, gradingFormat)
-            }
+            onExport={() => handleExport("Grading Summary Report", gradingYear)}
           />
 
           <ReportExportCard
@@ -95,16 +75,10 @@ function ReportsAndExportPage() {
             description="Export inventory movement transactions for the selected year."
             years={years}
             selectedYear={stockMovementYear}
-            format={stockMovementFormat}
             onYearChange={setStockMovementYear}
-            onFormatChange={setStockMovementFormat}
             disabled={!stockMovementYear}
             onExport={() =>
-              handleExport(
-                "Stock Movement Report",
-                stockMovementYear,
-                stockMovementFormat,
-              )
+              handleExport("Stock Movement Report", stockMovementYear)
             }
           />
 
@@ -112,21 +86,16 @@ function ReportsAndExportPage() {
             title="Stock Summary Report"
             description="Export annual inventory balances and stock overview."
             years={years}
-            selectedYear={stockSummaryYear}
-            format={stockSummaryFormat}
-            onYearChange={setStockSummaryYear}
-            onFormatChange={setStockSummaryFormat}
-            disabled={!stockSummaryYear}
-            onExport={() =>
-              handleExport(
-                "Stock Summary Report",
-                stockSummaryYear,
-                stockSummaryFormat,
-              )
-            }
+            isAllYears
+            onYearChange={() => {}}
+            onExport={() => handleExport("Stock Summary Report", "All Years")}
           />
         </div>
-        <SuccessToast message={toastMessage} visible={toastVisible} />
+        <SuccessToast
+          visible={toastVisible}
+          title={toastTitle}
+          description={toastDescription}
+        />
       </div>
     </div>
   );
