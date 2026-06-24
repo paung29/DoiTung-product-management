@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Edit } from "lucide-react";
 
@@ -21,12 +21,23 @@ import CustomSelect from "../../../common/forms/form-select";
 import CustomButton from "@/components/custom/common/custom-button";
 
 import { PollinationTableDataType } from "./form/pollination-table";
+import { useParams, useRouter } from "next/navigation";
+import { PollinationRecordingFormType } from "@/lib/types/model/type";
+import { updatePod } from "@/lib/server-actions/update-pod-client";
+import { updatePollination } from "@/lib/server-actions/update-pollination-client";
+import ApiErrorUI from "@/components/custom/common/error-handle";
 
 export function EditPollinationButton({
   pollinationData,
 }: {
   pollinationData: PollinationTableDataType;
 }) {
+
+  const params = useParams();
+  const router = useRouter();
+  const zoneId = params.zoneId
+
+  const [error, setError] = useState<string | null>(null)
   const [open, setOpen] = React.useState(false);
 
   const form = useForm<PollinationTableDataType>({
@@ -62,8 +73,31 @@ export function EditPollinationButton({
     }
   }, [open, form, pollinationData]);
 
-  const onSubmit = (data: PollinationTableDataType) => {
+  const onSubmit = async (data: PollinationTableDataType) => {
     console.log("Updated Pollination Data:", data);
+
+    const reformData : PollinationRecordingFormType = {
+      clusterId : Number(data.clusterId),
+      numberPods : Number(data.numberOfPod),
+      unsuccessfulPollination : Number(data.unsuccessfulPollination),
+      condition : data.condition
+    }
+
+    try{
+
+      const result = await updatePollination(reformData)
+      
+      if(result.success === false) {
+        setError(result.message)
+        return
+      }
+
+      router.replace(`/admin/zone-form-management/zone-details/${zoneId}/pollination`)
+
+    }catch(error) {
+      setError("failed to connect server")
+    }
+
     setOpen(false);
   };
 
@@ -87,6 +121,8 @@ export function EditPollinationButton({
           </button>
         </DialogHeader>
 
+        <ApiErrorUI message={error}/>
+
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="px-6 pb-6">
             <FieldGroup>
@@ -98,6 +134,7 @@ export function EditPollinationButton({
                   path="recordedDate"
                   label="Date"
                   type="date"
+                  readonly={true}
                 />
 
                 <FormsInput
@@ -105,6 +142,7 @@ export function EditPollinationButton({
                   control={form.control}
                   path="poleNo"
                   label="Pole ID"
+                  readonly={true}
                 />
               </div>
 
@@ -115,6 +153,7 @@ export function EditPollinationButton({
                   control={form.control}
                   path="clusterId"
                   label="Cluster ID"
+                  readonly={true}
                 />
 
                 <FormsInput
@@ -123,6 +162,7 @@ export function EditPollinationButton({
                   path="totalFlower"
                   label="Total Flower"
                   type="number"
+                  readonly={true}
                 />
               </div>
 
@@ -152,6 +192,7 @@ export function EditPollinationButton({
                   path="goodFlowers"
                   label="Good Flowers"
                   type="number"
+                  readonly={true}
                 />
 
                 <FormsInput
@@ -160,6 +201,7 @@ export function EditPollinationButton({
                   path="badDroppedFlowers"
                   label="Bad / Dropped Flowers"
                   type="number"
+                  readonly={true}
                 />
               </div>
 
@@ -171,9 +213,9 @@ export function EditPollinationButton({
                   path="condition"
                   label="Condition"
                   options={[
-                    { id: "Good", value: "Good" },
-                    { id: "Insect", value: "Insect" },
-                    { id: "Rotten", value: "Rotten" },
+                    { id: "GOOD", value: "Good" },
+                    { id: "INSECT", value: "Insect" },
+                    { id: "ROTTON", value: "Rotten" },
                   ]}
                   placeholder="Select condition"
                 />
@@ -186,6 +228,7 @@ export function EditPollinationButton({
                   control={form.control}
                   path="recordedBy"
                   label="Recorded By"
+                  readonly={true}
                 />
               </div>
             </FieldGroup>

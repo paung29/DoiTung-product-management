@@ -11,13 +11,17 @@ import {
 } from "@/components/ui/dialog";
 import { FieldGroup } from "@/components/ui/field";
 import { Form } from "@/components/ui/form";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import FormsInput from "../../../common/forms/form-input";
 import { Edit } from "lucide-react";
 import CustomSelect from "../../../common/forms/form-select";
 import { FlowerTableDataType } from "./form/flower-table";
 import CustomButton from "@/components/custom/common/custom-button";
+import { useParams, useRouter } from "next/navigation";
+import { FlowerRecordingFormType } from "@/lib/types/model/type";
+import { updateFlower } from "@/lib/server-actions/update-flower-client";
+import ApiErrorUI from "@/components/custom/common/error-handle";
 
 type FlowerFormData = {
   recordedDate: string;
@@ -33,6 +37,14 @@ export function EditFlowerButton({
 }: {
   flowerData: FlowerTableDataType;
 }) {
+
+  const params = useParams();
+  const router = useRouter();
+  
+  const zoneId = params.zoneId
+
+  const [error, setError] = useState<string | null>(null)
+
   const form = useForm<FlowerFormData>({
     mode: "onChange",
     defaultValues: {
@@ -60,8 +72,31 @@ export function EditFlowerButton({
     }
   }, [open, form, flowerData]);
 
-  const onSubmit = (data: FlowerFormData) => {
+  const onSubmit = async (data: FlowerFormData) => {
     console.log("Updated Flower Form Data:", data);
+
+    const reformData : FlowerRecordingFormType = {
+      clusterId: Number(data.clusterId),
+      condition : data.condition,
+      totalFlowers : Number(data.totalFlower)
+    }
+
+    console.log(reformData)
+
+    try{
+
+      const result = await updateFlower(reformData)
+
+      if (result.success === false) {
+        setError(result.message)
+        return
+      }
+
+      router.replace(`/admin/zone-form-management/zone-details/${zoneId}/flower`)
+
+    }catch(error) {
+      setError("failed to connect server")
+    }
     setOpen(false);
   };
 
@@ -84,6 +119,8 @@ export function EditFlowerButton({
           </button>
         </DialogHeader>
 
+        <ApiErrorUI message={error}/>
+
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="px-6 pb-6">
             <FieldGroup>
@@ -96,6 +133,7 @@ export function EditFlowerButton({
                   label="Date"
                   type="date"
                   placeholder="Select date"
+                  readonly={true}
                 />
                 <FormsInput
                   inputClassName="bg-white border-primary-button border rounded-lg"
@@ -103,6 +141,7 @@ export function EditFlowerButton({
                   path="poleNo"
                   label="Pole ID"
                   placeholder="P-001"
+                  readonly={true}
                 />
               </div>
 
@@ -114,6 +153,7 @@ export function EditFlowerButton({
                   path="clusterId"
                   label="Cluster ID"
                   placeholder="C-001"
+                  readonly={true}
                 />
                 <FormsInput
                   inputClassName="bg-white border-primary-button border rounded-lg"
@@ -133,9 +173,9 @@ export function EditFlowerButton({
                   path="condition"
                   label="Condition"
                   options={[
-                    { id: "Good", value: "Good" },
-                    { id: "Insect", value: "Insect" },
-                    { id: "Rotten", value: "Rotten" },
+                    { id: "GOOD", value: "Good" },
+                    { id: "INSECT", value: "Insect" },
+                    { id: "ROTTEN", value: "Rotten" },
                   ]}
                   placeholder="Select condition"
                 />
@@ -148,6 +188,7 @@ export function EditFlowerButton({
                   path="recordedBy"
                   label="Recorded By"
                   placeholder="Staff A"
+                  readonly={true}
                 />
               </div>
             </FieldGroup>
@@ -163,7 +204,7 @@ export function EditFlowerButton({
 
               <CustomButton
                 label="Save Changes"
-                type="button"
+                type="submit"
                 className="bg-primary-button text-white"
               />
             </DialogFooter>

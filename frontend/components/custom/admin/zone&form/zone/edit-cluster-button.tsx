@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Edit, Icon } from "lucide-react";
 import {
@@ -20,6 +20,10 @@ import CustomSelect from "../../../common/forms/form-select";
 
 import { ClusterTableDataType } from "./form/cluster-table";
 import CustomButton from "@/components/custom/common/custom-button";
+import { ClusterEditType } from "@/lib/types/model/type";
+import { editCluster } from "@/lib/server-actions/edit-cluster-client";
+import ApiErrorUI from "@/components/custom/common/error-handle";
+import { useParams, useRouter } from "next/navigation";
 
 type ClusterFormData = {
   clusterId: number;
@@ -35,7 +39,14 @@ export function EditClusterButton({
 }: {
   clusterData: ClusterTableDataType;
 }) {
+
+  const params = useParams();
+  const router = useRouter();
+
+  const zoneId = params.zoneId
+
   const [open, setOpen] = React.useState(false);
+  const [error, setError] = useState<string | null>(null)
 
   const form = useForm<ClusterFormData>({
     mode: "onChange",
@@ -62,13 +73,35 @@ export function EditClusterButton({
     }
   }, [open, form, clusterData]);
 
-  const onSubmit = (data: ClusterFormData) => {
+  const onSubmit = async (data: ClusterFormData) => {
     console.log("Updated Cluster Data:", data);
 
+    const refromData : ClusterEditType= {
+      clusterId : data.clusterId,
+      condition : data.condition
+    }
+
+    try {
+
+      const result = await editCluster(refromData)
+
+      if(result.success === false) {
+        setError(result.message)
+        return
+      }
+      router.replace(`/admin/zone-form-management/zone-details/${zoneId}`)
+
+    }catch(error) {
+      setError("Failed to connect server")
+    }
     // Call update API
 
     setOpen(false);
   };
+
+  const onCancel = () => {
+    form.reset();
+  }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -83,6 +116,8 @@ export function EditClusterButton({
           </DialogTitle>
         </DialogHeader>
 
+        <ApiErrorUI message={error}/>
+
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="px-6 pb-6">
             <FieldGroup>
@@ -92,6 +127,7 @@ export function EditClusterButton({
                   path="recordedDate"
                   label="Date"
                   type="date"
+                  readonly={true}
                 />
 
                 <FormsInput
@@ -99,6 +135,7 @@ export function EditClusterButton({
                   path="poleNo"
                   label="Pole ID"
                   type="number"
+                  readonly={true}
                 />
               </div>
 
@@ -108,6 +145,7 @@ export function EditClusterButton({
                   path="clusterNo"
                   label="Cluster ID"
                   type="number"
+                  readonly={true}
                 />
               </div>
 
@@ -117,9 +155,9 @@ export function EditClusterButton({
                   path="condition"
                   label="Condition"
                   options={[
-                    { id: "Good", value: "Good" },
-                    { id: "Insect", value: "Insect" },
-                    { id: "Rotten", value: "Rotten" },
+                    { id: "GOOD", value: "Good" },
+                    { id: "INSECT", value: "Insect" },
+                    { id: "ROTTEN", value: "Rotten" },
                   ]}
                   placeholder="Select condition"
                 />
@@ -130,6 +168,7 @@ export function EditClusterButton({
                   control={form.control}
                   path="recordedBy"
                   label="Recorded By"
+                  readonly={true}
                 />
               </div>
             </FieldGroup>
@@ -139,13 +178,14 @@ export function EditClusterButton({
                 <CustomButton
                   label="Cancel"
                   type="button"
+                  onClick={onCancel}
                   className="border-input bg-background hover:bg-accent border text-black"
                 />
               </DialogClose>
 
               <CustomButton
                 label="Save Changes"
-                type="button"
+                type="submit"
                 className="bg-primary-button text-white"
               />
             </DialogFooter>

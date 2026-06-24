@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Edit } from "lucide-react";
 
@@ -21,12 +21,22 @@ import CustomSelect from "../../../common/forms/form-select";
 import CustomButton from "@/components/custom/common/custom-button";
 
 import { PreharvestTableDataType } from "./form/preharvest-table";
+import { useParams, useRouter } from "next/navigation";
+import { CreatePreHarvestForm } from "@/lib/types/model/type";
+import { updatePreHarvestForm } from "@/lib/server-actions/update-pre-harvest-client";
+import ApiErrorUI from "@/components/custom/common/error-handle";
 
 export function EditPreharvestButton({
   preharvestData,
 }: {
   preharvestData: PreharvestTableDataType;
 }) {
+
+  const params = useParams();
+  const router = useRouter();
+  const zoneId = params.zoneId
+
+  const [error, setError] = useState<string | null>(null)
   const [open, setOpen] = React.useState(false);
 
   const form = useForm<PreharvestTableDataType>({
@@ -62,8 +72,31 @@ export function EditPreharvestButton({
     }
   }, [open, form, preharvestData]);
 
-  const onSubmit = (data: PreharvestTableDataType) => {
+  const onSubmit = async (data: PreharvestTableDataType) => {
     console.log("Updated Preharvest Data:", data);
+
+    const reformData : CreatePreHarvestForm = {
+      clusterId : Number(data.clusterId),
+      numberPodsSecondRound : Number(data.numberOfPodsRound2),
+      removedPods : Number(data.podRemoved),
+      plantsRemoved : Number(data.plantWithPodRemoved),
+      condition : data.condition
+    }
+
+    try{
+      const result = await updatePreHarvestForm(reformData)
+
+      if(result.success === false) {
+        setError(result.message)
+        return
+      }
+
+      router.replace(`/admin/zone-form-management/zone-details/${zoneId}/preharvest`)
+
+    }catch(error) {
+      setError("failed to connect server")
+    }
+
     setOpen(false);
   };
 
@@ -87,6 +120,8 @@ export function EditPreharvestButton({
           </button>
         </DialogHeader>
 
+        <ApiErrorUI message={error}/>
+
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="px-6 pb-6">
             <FieldGroup>
@@ -97,7 +132,7 @@ export function EditPreharvestButton({
                   control={form.control}
                   path="recordedDate"
                   label="Date"
-                  type="date"
+                  readonly={true}
                 />
 
                 <FormsInput
@@ -105,6 +140,7 @@ export function EditPreharvestButton({
                   control={form.control}
                   path="poleNo"
                   label="Pole ID"
+                  readonly={true}
                 />
               </div>
 
@@ -115,6 +151,7 @@ export function EditPreharvestButton({
                   control={form.control}
                   path="clusterId"
                   label="Cluster ID"
+                  readonly={true}
                 />
 
                 <FormsInput
@@ -123,6 +160,7 @@ export function EditPreharvestButton({
                   path="gradeARound1"
                   label="Grade A (Round 1)"
                   type="number"
+                  readonly={true}
                 />
               </div>
 
@@ -142,6 +180,7 @@ export function EditPreharvestButton({
                   path="lostPodsBeforeHarvest"
                   label="Lost Pods Before Harvest"
                   type="number"
+                  readonly={true}
                 />
               </div>
 
@@ -172,9 +211,9 @@ export function EditPreharvestButton({
                   path="condition"
                   label="Condition"
                   options={[
-                    { id: "Good", value: "Good" },
-                    { id: "Insect", value: "Insect" },
-                    { id: "Rotten", value: "Rotten" },
+                    { id: "GOOD", value: "Good" },
+                    { id: "INSECT", value: "Insect" },
+                    { id: "ROTTEN", value: "Rotten" },
                   ]}
                   placeholder="Select condition"
                 />
@@ -187,6 +226,7 @@ export function EditPreharvestButton({
                   control={form.control}
                   path="recordedBy"
                   label="Recorded By"
+                  readonly={true}
                 />
               </div>
             </FieldGroup>
