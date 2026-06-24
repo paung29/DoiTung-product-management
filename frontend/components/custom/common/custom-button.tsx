@@ -7,6 +7,7 @@ type CustomButtonProps = {
   icon?: LucideIcon;
   className?: string;
   type?: "button" | "submit" | "reset";
+  disabled?: boolean;
 };
 
 export default function CustomButton({
@@ -15,11 +16,13 @@ export default function CustomButton({
   icon: Icon,
   className = "",
   type = "button",
+  disabled,
 }: CustomButtonProps) {
   return (
     <Button
       type={type}
       onClick={onClick}
+      disabled={disabled}
       className={`flex items-center justify-center text-white transition hover:opacity-90 ${className}`}
     >
       <h1>{label}</h1>

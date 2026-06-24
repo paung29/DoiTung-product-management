@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   FormControl,
   FormField,
@@ -26,7 +27,7 @@ export type CustomSelectProps<T extends FieldValues> = {
   triggerClassName?: string;
   placeholder: string;
   onValueChange?: (value: string) => void;
-  disabled ?: boolean;
+  disabled?: boolean;
 };
 
 export default function CustomSelect<T extends FieldValues>({
@@ -38,7 +39,7 @@ export default function CustomSelect<T extends FieldValues>({
   triggerClassName,
   placeholder,
   onValueChange,
-  disabled
+  disabled,
 }: CustomSelectProps<T>) {
   return (
     <FormField
