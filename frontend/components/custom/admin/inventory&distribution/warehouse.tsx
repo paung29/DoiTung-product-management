@@ -33,10 +33,9 @@ import { useState } from "react";
 import ApiErrorUI from "../../common/error-handle";
 
 export default function WareHouse() {
-
-  const router = useRouter()
+  const router = useRouter();
   const params = useParams();
-  const year = params.year
+  const year = params.year;
 
   const form = useForm<WareHouseSearch>({
     resolver: zodResolver(WareHouseSearchSchema),
@@ -64,15 +63,20 @@ export default function WareHouse() {
         </form>
       </Form>
 
-      <AddWareHouse router={router} year={String(year)}/>
+      <AddWareHouse router={router} year={String(year)} />
     </div>
   );
 }
 
-function AddWareHouse({router, year} : {router : AppRouterInstance, year : string}) {
-
-  const [open, setOpen] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+function AddWareHouse({
+  router,
+  year,
+}: {
+  router: AppRouterInstance;
+  year: string;
+}) {
+  const [open, setOpen] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const form = useForm<WareHouseForm>({
     resolver: zodResolver(WareHouseFormSchema),
@@ -87,41 +91,37 @@ function AddWareHouse({router, year} : {router : AppRouterInstance, year : strin
     { id: "false", value: "Inactive" },
   ];
 
-  const onSave =  async (form: WareHouseForm) => {
+  const onSave = async (form: WareHouseForm) => {
+    setError(null);
 
-    setError(null)
-    
     console.log(form);
 
-    const reformData : WareHouseFormCreate = {
-      warehouse_name : form.warehouse_name,
-      active_status : form.active_status === "true" ? true : false
-    }
+    const reformData: WareHouseFormCreate = {
+      warehouse_name: form.warehouse_name,
+      active_status: form.active_status === "true" ? true : false,
+    };
 
-    try{
+    try {
+      const result = await createWareHouse(reformData);
 
-      const result = await createWareHouse(reformData)
-
-      if(result.success === false) {
-        setError(result.message || "Failed to create warehouse")
-        return
+      if (result.success === false) {
+        setError(result.message || "Failed to create warehouse");
+        return;
       }
 
-      console.log(result)
-      setOpen(false)
-      router.replace(`/admin/inventory-distribution/${year}/warehouse`)
-
-    }catch(error) {
+      console.log(result);
+      setOpen(false);
+      router.replace(`/admin/inventory-distribution/${year}/warehouse`);
+    } catch (error) {
       setError("Cannot connect to server");
     }
-
   };
 
   const onCancel = () => {
-    form.reset()
-    setError(null)
-    setOpen(false)
-  }
+    form.reset();
+    setError(null);
+    setOpen(false);
+  };
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
@@ -130,7 +130,7 @@ function AddWareHouse({router, year} : {router : AppRouterInstance, year : strin
           label="Add Warehouse"
           icon={Plus}
           type="button"
-          className="bg-green-600 whitespace-nowrap hover:bg-green-700"
+          className="bg-primary hover:bg-primary/90 w-40 p-6 text-white"
           onClick={() => {
             setError(null);
             setOpen(true);
@@ -142,7 +142,7 @@ function AddWareHouse({router, year} : {router : AppRouterInstance, year : strin
           <AlertDialogTitle>Add Warehouse</AlertDialogTitle>
         </AlertDialogHeader>
 
-        <ApiErrorUI message={error}/>
+        <ApiErrorUI message={error} />
 
         <Form {...form}>
           <form className="flex flex-col gap-4">

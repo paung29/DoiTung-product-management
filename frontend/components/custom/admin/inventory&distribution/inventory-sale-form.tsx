@@ -1,7 +1,11 @@
 "use client";
 
 import { Form } from "@/components/ui/form";
-import { InventoryForm, StockDistributionForm, YearApiResponse } from "@/lib/types/model/type";
+import {
+  InventoryForm,
+  StockDistributionForm,
+  YearApiResponse,
+} from "@/lib/types/model/type";
 import { useForm } from "react-hook-form";
 import CustomDatePicker from "../../common/custom-date-picker";
 import CustomSelect from "../../common/forms/form-select";
@@ -24,7 +28,7 @@ const categoryOptions: Option[] = [
   { id: "issued", value: "Issued" },
 ];
 
-const gradeOtions : Option[] = [
+const gradeOtions: Option[] = [
   { id: "A_PLUS", value: "grade A +" },
   { id: "A", value: "grade A" },
   { id: "B", value: "grade B" },
@@ -33,21 +37,28 @@ const gradeOtions : Option[] = [
   { id: "D", value: "grade D" },
 ];
 
-export default function InventorySaleForm({years, plantationAreaOptions, customers} : {years : YearApiResponse, plantationAreaOptions : Option[] , customers : Option[]}) {
-
-  const router = useRouter()
+export default function InventorySaleForm({
+  years,
+  plantationAreaOptions,
+  customers,
+}: {
+  years: YearApiResponse;
+  plantationAreaOptions: Option[];
+  customers: Option[];
+}) {
+  const router = useRouter();
   const params = useParams();
-  const year = params.year
+  const year = params.year;
 
   const plantationYearOptions: Option[] = years.years.map((year) => ({
     id: String(year),
     value: String(year),
   }));
 
-  const [error, setError] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null);
 
   const form = useForm<InventoryForm>({
-    defaultValues : {
+    defaultValues: {
       category: undefined,
       date: undefined,
       plantationYear: undefined,
@@ -57,7 +68,7 @@ export default function InventorySaleForm({years, plantationAreaOptions, custome
       customer: "",
       amount: "",
       Remarks: "",
-    }
+    },
   });
 
   const category = form.watch("category");
@@ -65,200 +76,224 @@ export default function InventorySaleForm({years, plantationAreaOptions, custome
   const previousCategory = useRef<string | undefined>(undefined);
 
   useEffect(() => {
-
     if (!category) return;
 
     if (previousCategory.current && previousCategory.current !== category) {
-      form.reset(
-        {
-          category,
-          date: undefined,
-          plantationYear: undefined,
-          plantationArea: undefined,
-          numberOfPods: "",
-          pricePerGram: "",
-          customer: "",
-          amount: "",
-          Remarks: "",
-          grade: undefined,
-        }
-      );
+      form.reset({
+        category,
+        date: undefined,
+        plantationYear: undefined,
+        plantationArea: undefined,
+        numberOfPods: "",
+        pricePerGram: "",
+        customer: "",
+        amount: "",
+        Remarks: "",
+        grade: undefined,
+      });
     }
 
     previousCategory.current = category;
-
-}, [category, form]);
+  }, [category, form]);
 
   const onSubmit = async (data: InventoryForm) => {
+    console.log(data);
 
-    console.log(data)
-
-    const reformData : StockDistributionForm = {
+    const reformData: StockDistributionForm = {
       year: Number(year),
       production_year: Number(data.plantationYear),
-      warehouse_id : Number(data.plantationArea),
-      customer_id : Number(data.customer),
+      warehouse_id: Number(data.plantationArea),
+      customer_id: Number(data.customer),
       grade: data.grade,
-      price_per_gram : data.pricePerGram ? Number(data.pricePerGram) : undefined,
-      total_grams : Number(data.amount),
-      total_pods : Number(data.numberOfPods),
-      details : data.Remarks,
-      recorded_date : data.date
-    }
+      price_per_gram: data.pricePerGram ? Number(data.pricePerGram) : undefined,
+      total_grams: Number(data.amount),
+      total_pods: Number(data.numberOfPods),
+      details: data.Remarks,
+      recorded_date: data.date,
+    };
 
-    console.log("ReformData : " , reformData)
+    console.log("ReformData : ", reformData);
 
-    try{
+    try {
       let result;
 
       switch (data.category) {
+        case "carry-over":
+          result = await createCarryOver(reformData);
+          break;
 
-      case "carry-over":
-        result = await createCarryOver(reformData);
-        break;
+        case "incoming":
+          result = await createIncoming(reformData);
+          break;
 
-      case "incoming":
-        result = await createIncoming(reformData);
-        break;
+        case "issued":
+          result = await createIssued(reformData);
+          break;
 
-      case "issued":
-        result = await createIssued(reformData);
-        break;
+        default:
+          console.log("Invalid category");
+          return;
+      }
 
-      default:
-        console.log("Invalid category");
+      if (result.success === false) {
+        setError(result.message);
         return;
-    }
+      }
 
-    if(result.success === false) {
-      setError(result.message)
-      return
-    }
-
-    console.log("API result:", result);
-    router.replace(`/admin/inventory-distribution/${year}/history`)
-    } catch(error) {
+      console.log("API result:", result);
+      router.replace(`/admin/inventory-distribution/${year}/history`);
+    } catch (error) {
       setError("Cannot connect to server");
     }
-    
   };
 
   return (
     <>
-      <ApiErrorUI message={error}/>
+      <ApiErrorUI message={error} />
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <div className="mx-auto w-1/2 rounded-xl bg-white p-4 shadow">
-            <CustomDatePicker
-              key={`date-${category}`}
-              control={form.control}
-              path="date"
-              label="Date"
-              placeholder="Pick a date"
-              className="mb-3"
-            />
+          <div className="mx-auto w-full max-w-7xl rounded-xl bg-white p-8 shadow">
+            {" "}
+            <div className="mx-auto mb-6 w-full max-w-7xl overflow-hidden rounded-xl bg-white shadow">
+              {/* Header */}
+              <div className="bg-primary px-8 py-6 text-white">
+                <h2 className="text-3xl font-bold">Inventory Sale Record</h2>
 
-            <CustomSelect
-              control={form.control}
-              path="category"
-              label="Category"
-              placeholder="Select category"
-              options={categoryOptions}
-              className="mt-3 mb-3"
-            />
+                <p className="mt-1 text-sm text-white/90">
+                  Record inventory movement for carry over, incoming stock, or
+                  issued stock.
+                </p>
+              </div>
+            </div>
+            {/* General Information */}
+            <div className="mb-6">
+              <h3 className="font-md mb-4 text-lg">General Information</h3>
 
-            <CustomSelect
-              key={`year-${category}`}
-              control={form.control}
-              path="plantationYear"
-              label="Plantation Year"
-              placeholder="Select year"
-              options={plantationYearOptions}
-              className="mb-3"
-            />
-
-            <CustomSelect
-              key={`area-${category}`}
-              control={form.control}
-              path="plantationArea"
-              label="Plantation Area"
-              placeholder="Select area"
-              options={plantationAreaOptions}
-              className="mb-3"
-            />
-
-            <FormsInput
-              key={`pods-${category}`}
-              control={form.control}
-              path="numberOfPods"
-              label="Number of Pods"
-              placeholder="Enter number of pods"
-              className="mb-3"
-            />
-
-            {category === "issued" && (
-              <>
-                <FormsInput
-                  key={`price-${category}`}
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <CustomDatePicker
+                  key={`date-${category}`}
                   control={form.control}
-                  path="pricePerGram"
-                  label="Price per Gram"
-                  placeholder="Enter price per gram"
-                  className="mb-3"
+                  path="date"
+                  label="Date"
+                  placeholder="Pick a date"
                 />
 
                 <CustomSelect
-                  key={`customer-${category}`}
                   control={form.control}
-                  path="customer"
-                  label="Customer Name"
-                  placeholder="Select customer"
-                  options={customers}
-                  className="mb-3"
+                  path="category"
+                  label="Category"
+                  placeholder="Select category"
+                  options={categoryOptions}
                 />
-              </>
-            )}
+              </div>
+            </div>
+            {/* Plantation Information */}
+            <div className="mb-6 border-t pt-6">
+              <h3 className="font-md mb-4 text-lg">Plantation Information</h3>
 
-            <CustomSelect
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <CustomSelect
+                  key={`year-${category}`}
+                  control={form.control}
+                  path="plantationYear"
+                  label="Plantation Year"
+                  placeholder="Select year"
+                  options={plantationYearOptions}
+                />
+
+                <CustomSelect
+                  key={`area-${category}`}
+                  control={form.control}
+                  path="plantationArea"
+                  label="Plantation Area"
+                  placeholder="Select area"
+                  options={plantationAreaOptions}
+                />
+              </div>
+            </div>
+            {/* Product Information */}
+            <div className="mb-6 border-t pt-6">
+              <h3 className="font-md mb-4 text-lg">Product Information</h3>
+
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <FormsInput
+                  key={`pods-${category}`}
+                  control={form.control}
+                  path="numberOfPods"
+                  label="Number of Pods"
+                  placeholder="Enter number of pods"
+                />
+
+                <CustomSelect
                   key={`grade-${category}`}
                   control={form.control}
                   path="grade"
                   label="Grade"
                   placeholder="Select Grade"
                   options={gradeOtions}
-                  className="mb-3"
-            />
+                />
 
-            <FormsInput
-              key={`amount-${category}`}
-              control={form.control}
-              path="amount"
-              label="Amount"
-              placeholder="Enter amount"
-              className="mb-3"
-            />
+                <FormsInput
+                  key={`amount-${category}`}
+                  control={form.control}
+                  path="amount"
+                  label="Amount"
+                  placeholder="Enter amount"
+                />
 
-            <FormsInput
-              key={`remarks-${category}`}
-              control={form.control}
-              path="Remarks"
-              label="Remarks | Details"
-              placeholder="Enter remarks"
-              className="mb-5"
-            />
+                {category === "issued" && (
+                  <FormsInput
+                    key={`price-${category}`}
+                    control={form.control}
+                    path="pricePerGram"
+                    label="Price per Gram"
+                    placeholder="Enter price per gram"
+                  />
+                )}
+              </div>
+            </div>
+            {/* Customer Information */}
+            {category === "issued" && (
+              <div className="mb-6 border-t pt-6">
+                <h3 className="font-md mb-4 text-lg">Customer Information</h3>
 
-            <div className="mb-10 flex justify-between">
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                  <CustomSelect
+                    key={`customer-${category}`}
+                    control={form.control}
+                    path="customer"
+                    label="Customer Name"
+                    placeholder="Select customer"
+                    options={customers}
+                  />
+                </div>
+              </div>
+            )}
+            {/* Additional Details */}
+            <div className="border-t pt-6">
+              <h3 className="font-md mb-4 text-lg">Additional Details</h3>
+
+              <FormsInput
+                key={`remarks-${category}`}
+                control={form.control}
+                path="Remarks"
+                label="Remarks / Details"
+                placeholder="Enter remarks"
+              />
+            </div>
+            {/* Actions */}
+            <div className="mt-8 flex justify-end gap-3">
               <CustomButton
                 label="Reset"
                 onClick={() => form.reset()}
-                className="btn-primary w-1/3"
+                className="text-primary border-primary w-32 border bg-white hover:bg-gray-300"
               />
 
               <CustomButton
-                label="Submit / Record Sale"
+                label="Record Sale"
                 type="submit"
-                className="btn-primary w-1/3"
+                className="w-40"
               />
             </div>
           </div>
