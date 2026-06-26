@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { useState } from "react";
 import { X } from "lucide-react";
@@ -28,13 +28,13 @@ const customerSchema = z.object({
 type CustomerFormData = z.infer<typeof customerSchema>;
 
 export type CustomerFormSubmit = {
-  customer_name : string,
-  note : string
-}
+  customer_name: string;
+  note: string;
+};
 
 export default function AddCustomerButton() {
-  const router = useRouter()
-  
+  const router = useRouter();
+
   const [isOpen, setIsOpen] = useState(false);
   const [customers, setCustomers] = useState<CustomerFormData[]>([]);
 
@@ -50,17 +50,17 @@ export default function AddCustomerButton() {
     setCustomers([...customers, data]);
     console.log("Customer saved:", data);
 
-    const reformData : CustomerFormSubmit = {
-      customer_name : data.company,
-      note : String(data.note)
-    }
+    const reformData: CustomerFormSubmit = {
+      customer_name: data.company,
+      note: String(data.note),
+    };
 
-    const result = await createCustomer(reformData)
-    console.log(result)
+    const result = await createCustomer(reformData);
+    console.log(result);
 
     form.reset();
-    setIsOpen(false); 
-    router.replace("/admin/inventory-distribution/customer")
+    setIsOpen(false);
+    router.replace("/admin/inventory-distribution/customer");
   };
 
   const handleCancel = () => {
@@ -74,7 +74,7 @@ export default function AddCustomerButton() {
       <CustomButton
         label="+ Add Customer"
         onClick={() => setIsOpen(true)}
-        className="rounded-full bg-green-600 px-6 py-2 hover:bg-green-700"
+        className="bg-primary hover:bg-primary/90 w-40 p-6 text-white"
       />
 
       {/* Modal Overlay */}
