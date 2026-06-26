@@ -16,7 +16,7 @@ interface ClusterRecord {
   progressDone: number;
 }
 
-export default function ClusterPageClient({
+export default function PollinationPageClient({
   link,
   editLink,
   year,

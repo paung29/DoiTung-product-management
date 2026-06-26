@@ -5,6 +5,7 @@ import { Option } from "@/lib/types/model/option";
 import { ClusterApiItem, ZoneApiResponse } from "@/lib/types/model/type";
 import { baseUrl } from "@/lib/utl";
 import { cookies } from "next/headers";
+import FlowerPageClient from "./FlowerPageClient";
  
 export default async function Page({params, searchParams,} : {params : Promise<{year : string}>, searchParams: Promise<{ zoneNo?: string }>;}) {
 
@@ -67,7 +68,7 @@ export default async function Page({params, searchParams,} : {params : Promise<{
   console.log(apiData)
 
   return (
-    <ClusterEntryPage
+    <FlowerPageClient
       link="flower"
       editLink="flower-form"
       year={year}

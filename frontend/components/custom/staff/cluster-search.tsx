@@ -7,7 +7,7 @@ import { Form } from "@/components/ui/form";
 import { ClusterSearchForm } from "@/lib/types/model/type";
 import FormsInput from "../common/forms/form-input";
 import CustomButton from "../common/custom-button";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
 
@@ -17,6 +17,10 @@ export default function ClusterSearch({locations , defaultZoneNo} : {locations :
   const router = useRouter();
   const params = useParams();
   const serarchParams = useSearchParams();
+  const pathname = usePathname();
+
+  const module = pathname.split("/").filter(Boolean).at(-1);
+  console.log("module",module)
 
   const year = params.year as string;
   
@@ -24,7 +28,7 @@ export default function ClusterSearch({locations , defaultZoneNo} : {locations :
   const onSubmit = (data : ClusterSearchForm) => {
     console.log("Cluster Search Data: ", data);
 
-    router.push(`/staff/${year}/cluster?zoneNo=${data.location}`)
+    router.replace(`/staff/${year}/${module}?zoneNo=${data.location}`)
   }
 
     const form = useForm<ClusterSearchForm>({
@@ -64,13 +68,6 @@ export default function ClusterSearch({locations , defaultZoneNo} : {locations :
     </Form>
   )
 }
-
-// const locations : Option[] = [
-//   { id: "zone-1", value: "Zone 1" },
-//   { id: "zone-2", value: "Zone 2" },
-//   { id: "zone-3", value: "Zone 3" },
-//   { id: "zone-4", value: "Zone 4" },
-// ];
 
 const progressStatusOptions : Option[] = [
   { id: "zero", value: "0% - 25%" },

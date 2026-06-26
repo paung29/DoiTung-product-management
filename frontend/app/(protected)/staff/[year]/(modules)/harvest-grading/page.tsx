@@ -1,11 +1,10 @@
 "use server";
 
-import HarvestAndGradingSearch from "@/components/custom/staff/harvest-grading-search";
-import { HarvestAndGradingResponse, HarvestGradingRecord } from "@/lib/types/model/type";
+import { HarvestAndGradingResponse, HarvestGradingRecord, ZoneApiResponse } from "@/lib/types/model/type";
 import { baseUrl } from "@/lib/utl";
 import { cookies } from "next/headers";
 import HarvestGradingList from "./HarvestAndGradingPageClient";
-import { redirect } from "next/navigation";
+import { Option } from "@/lib/types/model/option";
 
 export default async function HarvestGradingEntryPage({params, searchParams,} : {params : Promise<{year : string}>, searchParams: Promise<{ zoneNo?: string }>;}) {
 
@@ -15,11 +14,34 @@ export default async function HarvestGradingEntryPage({params, searchParams,} : 
   const {year} = await params;
   const { zoneNo } = await searchParams;
 
-  if (!zoneNo) {
-    redirect(`/staff/${year}/harvest-grading?zoneNo=3`);
+  const zoneResponse = await fetch(`${baseUrl}/zones/get-all-zones?year=${year}`,
+        {
+          method: "GET",
+          headers: {
+            Cookie : cookieHeader
+          },
+          credentials: "include",
+        },
+      );
+      
+  console.log("zone status:", zoneResponse.status);
+
+  if (!zoneResponse.ok) {
+    throw new Error("Failed to fetch zones");
   }
+
+  const data: ZoneApiResponse = await zoneResponse.json();
+
+  const locationOptions: Option[] = (data.zones ?? []).map((zone) => ({
+    id: String(zone.zoneId),
+    value: zone.zoneName,
+  }));
+
+  console.log("zone options",locationOptions)
+
+  const selectedZoneNo = zoneNo ?? locationOptions[0]?.id ?? "";
   
-  const response = await fetch(`${baseUrl}/poles/get-by-zone?year=${year}&zoneId=${zoneNo}`, {
+  const response = await fetch(`${baseUrl}/poles/get-by-zone?year=${year}&zoneId=${selectedZoneNo}`, {
       credentials: "include",
       method: "GET",
       headers: {
@@ -36,9 +58,7 @@ export default async function HarvestGradingEntryPage({params, searchParams,} : 
   return (
     <>
       <div className="px-2 py-2 sm:px-4">
-        <HarvestAndGradingSearch />
-
-        <HarvestGradingList zoneNo={zoneNo} poles={result.poles} year={year} />
+        <HarvestGradingList zoneNo={selectedZoneNo} poles={result.poles} year={year} zones={locationOptions}/>
       </div>
     </>
   );

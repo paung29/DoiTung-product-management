@@ -9,19 +9,28 @@ import CustomButton from "../common/custom-button";
 
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 const harvestSearchSchema = z.object({
   location: z.string().min(1, "Location is required"),
   pole_id: z
     .string()
-    .min(1, "Pole ID is required")
-    .regex(/^P-\d+$/, "Pole ID must be like P-00001"),
+    .optional()
+    .refine((val) => !val || /^P-\d+$/.test(val), {
+      message: "Pole ID must be like P-00001",
+    }),
 });
 
 type HarvestAndGradingSearchForm = z.infer<typeof harvestSearchSchema>;
 
-export default function HarvestAndGradingSearch() {
+export default function HarvestAndGradingSearch({locations} : {locations : Option[]}) {
+
+  const router = useRouter();
+
   const onSubmit = (data: HarvestAndGradingSearchForm) => {
     console.log("Harvest and Grading Search Data: ", data);
+
+    router.push(`/staff/2021/harvest-grading?zoneNo=${data.location}`)
+
   };
 
   const form = useForm<HarvestAndGradingSearchForm>({
@@ -44,7 +53,7 @@ export default function HarvestAndGradingSearch() {
                 path="location"
                 label="Location"
                 placeholder="Select Location"
-                options={[{ id: "-1", value: "Select All" }, ...locations]}
+                options={locations}
               />
             </div>
 
@@ -71,10 +80,3 @@ export default function HarvestAndGradingSearch() {
     </Form>
   );
 }
-
-const locations: Option[] = [
-  { id: "zone-1", value: "Zone 1" },
-  { id: "zone-2", value: "Zone 2" },
-  { id: "zone-3", value: "Zone 3" },
-  { id: "zone-4", value: "Zone 4" },
-];

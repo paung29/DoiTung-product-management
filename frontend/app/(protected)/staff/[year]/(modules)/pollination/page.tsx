@@ -1,9 +1,11 @@
 "use server"
 
 import ClusterEntryPage from "@/app/(protected)/staff/[year]/(modules)/cluster/ClusterPageClient";
-import { ClusterApiItem } from "@/lib/types/model/type";
+import { Option } from "@/lib/types/model/option";
+import { ClusterApiItem, ZoneApiResponse } from "@/lib/types/model/type";
 import { baseUrl } from "@/lib/utl";
 import { cookies } from "next/headers";
+import PollinationPageClient from "./PollinationPageClient";
  
 export default async function Page({params, searchParams,} : {params : Promise<{year : string}>, searchParams: Promise<{ zoneNo?: string }>;}) {
 
@@ -12,8 +14,33 @@ export default async function Page({params, searchParams,} : {params : Promise<{
 
   const {year} = await params;
   const { zoneNo } = await searchParams;
+    
+  const zoneResponse = await fetch(`${baseUrl}/zones/get-all-zones?year=${year}`,
+      {
+        method: "GET",
+        headers: {
+          Cookie : cookieHeader
+        },
+        credentials: "include",
+      },
+    );
+  
+    console.log("zone status:", zoneResponse.status);
+  
+  if (!zoneResponse.ok) {
+    throw new Error("Failed to fetch zones");
+  }
 
-  const selectedZoneNo = zoneNo ?? "3";
+  const data: ZoneApiResponse = await zoneResponse.json();
+
+  const locationOptions: Option[] = (data.zones ?? []).map((zone) => ({
+    id: String(zone.zoneId),
+    value: zone.zoneName,
+  }));
+  
+  console.log("zone options",locationOptions)
+  
+  const selectedZoneNo = zoneNo ?? locationOptions[0]?.id ?? "";
 
   const response = await fetch(`${baseUrl}/clusters/get-by-zone?year=${year}&zoneId=${selectedZoneNo}`, {
     credentials: "include",
@@ -42,12 +69,13 @@ export default async function Page({params, searchParams,} : {params : Promise<{
   console.log(apiData)
 
   return (
-    <ClusterEntryPage
+    <PollinationPageClient
       link="pollination"
       editLink="pollination-form"
       year={year}
       defaultZoneNo={selectedZoneNo}
       records={records}
+      zones={locationOptions}
      />
   );
   
