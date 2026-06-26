@@ -35,18 +35,13 @@ function ClusterFormEdit({data} : {data : GetClusterApiResponse}) {
     router.replace(`/staff/${year}/cluster`)
   };
 
-  const locations: Option[] = [
-    { id: "zone-1", value: "Zone 1" },
-    { id: "zone-2", value: "Zone 2" },
-    { id: "zone-3", value: "Zone 3" },
-    { id: "zone-4", value: "Zone 4" },
-  ];
+  console.log(data.location)
 
   const form = useForm<ClusterRecordingFormInput, any, ClusterRecordingFormType>({
     resolver : zodResolver(ClusterRecordingFormTypeSchema),
     defaultValues : {
         year: Number(year),
-        zoneNo: data.location,
+        zoneNo: String(data.location),
         poleNo: String(data.poleNo),
         clusterNo: String(data.clusterNo),
         condition: String(data.condition),
@@ -62,7 +57,7 @@ function ClusterFormEdit({data} : {data : GetClusterApiResponse}) {
           <FormCard>
             <StaffFormTitle isRequired={true} title={"Location"} />
 
-            <CustomSelect
+            {/* <CustomSelect
               triggerClassName="bg-staff-form-field"
               className="w-full appearance-none rounded-lg px-4 py-3 pr-10 text-sm text-[#2d201b] outline-none"
               control={form.control}
@@ -70,7 +65,16 @@ function ClusterFormEdit({data} : {data : GetClusterApiResponse}) {
               placeholder="Select Location"
               options={locations}
               disabled={true}
+            /> */}
+
+            <FormsInput
+              control={form.control}
+              path={"zoneNo"}
+              placeholder=""
+              className="bg-staff-form-field rounded-lg"
+              readonly={true}
             />
+
           </FormCard>
         </div>
 

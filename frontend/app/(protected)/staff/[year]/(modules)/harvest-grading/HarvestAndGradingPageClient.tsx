@@ -6,11 +6,14 @@ import {
   HarvestAndGradingItem,
   HarvestGradingRecord,
 } from "@/lib/types/model/type";
+import HarvestAndGradingSearch from "@/components/custom/staff/harvest-grading-search";
+import { Option } from "@/lib/types/model/option";
 
 type Props = {
   zoneNo: string
   poles: HarvestAndGradingItem[];
   year: string;
+  zones : Option[]
 };
 
 export function mapToHarvestGradingRecord(
@@ -26,7 +29,7 @@ export function mapToHarvestGradingRecord(
   };
 }
 
-export default function HarvestGradingList({ poles, year,zoneNo }: Props) {
+export default function HarvestGradingList({ poles, year,zoneNo, zones }: Props) {
   const router = useRouter();
 
   const handleEditRecord = (record: HarvestGradingRecord) => {
@@ -37,6 +40,9 @@ export default function HarvestGradingList({ poles, year,zoneNo }: Props) {
 
   return (
     <div className="mt-6 space-y-2">
+
+      <HarvestAndGradingSearch locations={zones}/>
+      
       {records.map((record) => (
         <HarvestGradingRecordingCard
           key={record.poleNumber}

@@ -23,10 +23,6 @@ export default function InventoryAndWarehouses() {
   const { selectedYear, setSelectedYear } = useInventory();
   console.log("Provider Selected Year : ", selectedYear)
 
-
-  // <ZoneAndFormLayoutComponent yearRecords={yearRecords} setSelectedYear={setSelectedYear} selectedYear={selectedYear}>
-  //               < ZoneManagementTab selectedYear={selectedYear}  />
-  //           </ZoneAndFormLayoutComponent>
   return (
     <>
     
