@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import ClusterSearch from "@/components/custom/staff/cluster-search";
 import ClusterRecordingCard from "@/components/custom/staff/cluster-recording-card";
 import StaffContent from "@/app/(protected)/staff/[year]/(modules)/cluster/layout";
+import { Option } from "@/lib/types/model/option";
 
 interface ClusterRecord {
   id: string;
@@ -21,12 +22,14 @@ export default function ClusterPageClient({
   year,
   defaultZoneNo,
   records,
+  zones
 }: {
   link : string;
   editLink : string;
   year: string;
   defaultZoneNo: string;
   records: ClusterRecord[];
+  zones : Option[]
 }) {
   const router = useRouter();
 
@@ -40,7 +43,7 @@ export default function ClusterPageClient({
 
   return (
     <div className="space-y-4 sm:space-y-6">
-      <ClusterSearch />
+      <ClusterSearch defaultZoneNo={defaultZoneNo} locations={zones}/>
 
       <StaffContent>
         <div className="space-y-4">

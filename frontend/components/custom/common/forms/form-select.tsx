@@ -33,7 +33,7 @@ export type CustomSelectProps<T extends FieldValues> = {
 export default function CustomSelect<T extends FieldValues>({
   control,
   path,
-  options,
+  options = [],
   label,
   className,
   triggerClassName,
@@ -41,6 +41,9 @@ export default function CustomSelect<T extends FieldValues>({
   onValueChange,
   disabled,
 }: CustomSelectProps<T>) {
+
+  const safeOptions = Array.isArray(options) ? options : [];
+
   return (
     <FormField
       control={control as Control<T>}
@@ -70,7 +73,7 @@ export default function CustomSelect<T extends FieldValues>({
               </SelectTrigger>
             </FormControl>
             <SelectContent>
-              {options.map((option) => (
+              {safeOptions.map((option) => (
                 <SelectItem key={option.id} value={option.id}>
                   {option.value}
                 </SelectItem>

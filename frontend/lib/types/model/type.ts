@@ -578,3 +578,13 @@ export type YearSettingFormType = {
   formName?: string;
   activeStatus?: boolean;
 };
+
+export type warehouseItem = {
+  warehouse_id : number;
+  warehouse_name : string;
+  active_status : boolean;
+}
+
+export type getAllWarehouses = {
+  warehouses : warehouseItem[]
+}
