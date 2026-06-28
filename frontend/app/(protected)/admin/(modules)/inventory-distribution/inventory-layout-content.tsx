@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { YearApiResponse } from "@/lib/types/model/type";
 import { useInventory } from "./inventory-context";
@@ -6,11 +6,20 @@ import InventoryAndWarehouseFormLayout from "@/components/custom/admin/zone&form
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-const tabs = (year : string) =>  [
+const tabs = (year: string) => [
   { href: "/admin/inventory-distribution", label: "Stock Overview" },
-  { href: `/admin/inventory-distribution/${year}/warehouse`, label: "Warehouse" },
-  { href: `/admin/inventory-distribution/${year}/distribution`, label: "Stock Distribution" },
-  { href: `/admin/inventory-distribution/${year}/history`, label: "Distribution History" },
+  {
+    href: `/admin/inventory-distribution/${year}/warehouse`,
+    label: "Warehouse",
+  },
+  {
+    href: `/admin/inventory-distribution/${year}/distribution`,
+    label: "Stock Distribution",
+  },
+  {
+    href: `/admin/inventory-distribution/${year}/history`,
+    label: "Distribution History",
+  },
   { href: `/admin/inventory-distribution/${year}/customer`, label: "Customer" },
 ];
 
@@ -33,39 +42,37 @@ export function InventoryLayoutContent({
         yearRecords={yearRecords}
       >
         <div className="px-10 py-6">
-            {selectedYear ? (
-                <>
-                <div className="flex gap-3 border-b">
-                    {tabs(selectedYear).map((tab) => {
-                    const active = pathname === tab.href;
+          {selectedYear ? (
+            <>
+              <div className="border-primary mb-6 flex rounded-xl border bg-amber-50 p-1">
+                {tabs(selectedYear).map((tab) => {
+                  const active = pathname === tab.href;
 
-                    return (
-                        <Link
-                        key={tab.href}
-                        href={tab.href}
-                        className={`px-4 py-2 text-sm font-medium ${
-                            active
-                            ? "border-b-2 border-black text-black"
-                            : "text-gray-500"
-                        }`}
-                        >
-                        {tab.label}
-                        </Link>
-                    );
-                    })}
-                </div>
+                  return (
+                    <Link
+                      key={tab.href}
+                      href={tab.href}
+                      className={`flex-1 rounded-lg px-6 py-3 text-center font-semibold transition-all ${
+                        active
+                          ? "bg-primary text-white shadow-sm"
+                          : "text-primary hover:bg-amber-100"
+                      }`}
+                    >
+                      {tab.label}
+                    </Link>
+                  );
+                })}
+              </div>
 
-                <div className="py-6">{children}</div>
-                </>
-            ) : (
-                <div className="py-6 text-gray-500">
-                Please select a year first.
-                </div>
-            )}
+              <div className="py-6">{children}</div>
+            </>
+          ) : (
+            <div className="py-6 text-gray-500">
+              Please select a year first.
+            </div>
+          )}
         </div>
-
       </InventoryAndWarehouseFormLayout>
-
     </>
   );
 }

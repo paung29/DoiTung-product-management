@@ -27,7 +27,7 @@ export default function ReportExportCard({
   onExport,
 }: ReportExportCardProps) {
   return (
-    <div className="border-border overflow-hidden rounded-2xl border bg-white shadow-sm">
+    <div className="border-border bg-secondary overflow-hidden rounded-2xl border shadow-sm">
       <div className="border-primary border-t-4 px-6 py-4">
         {/* Header */}
         <div className="flex items-start gap-4">
