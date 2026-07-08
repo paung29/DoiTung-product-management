@@ -10,19 +10,19 @@ import { baseUrl } from "@/lib/utl";
 import { cookies } from "next/headers";
 
 type PollintaionItem = {
-    no: number;
-    clusterId: number;
-    location: string;
-    poleNo: number;
-    clusterNo: number;
-    totalFlowers: number;
-    numberPods: number;
-    unsuccessfulPollination: number;
-    goodFlowers: number;
-    badFlowers: number;
-    condition: string;
-    pollinationFormDone: boolean;
-}
+  no: number;
+  clusterId: number;
+  location: string;
+  poleNo: number;
+  clusterNo: number;
+  totalFlowers: number;
+  numberPods: number;
+  unsuccessfulPollination: number;
+  goodFlowers: number;
+  badFlowers: number;
+  condition: string;
+  pollinationFormDone: boolean;
+};
 
 export default async function Page({
   params,
@@ -31,19 +31,21 @@ export default async function Page({
   params: Promise<{ zoneId: string }>;
   searchParams: Promise<{ zoneNo?: string }>;
 }) {
-
   const cookieStore = await cookies();
   const cookieHeader = cookieStore.toString();
-  const {zoneId} = await params
-  console.log(zoneId)
+  const { zoneId } = await params;
+  console.log(zoneId);
 
-  const response = await fetch(`${baseUrl}/pollinations/get-pollination-forms-by-zone?zoneId=${zoneId}`, {
-    credentials: "include",
-    method: "GET",
-    headers: {
-      Cookie: cookieHeader,
+  const response = await fetch(
+    `${baseUrl}/pollinations/get-pollination-forms-by-zone?zoneId=${zoneId}`,
+    {
+      credentials: "include",
+      method: "GET",
+      headers: {
+        Cookie: cookieHeader,
+      },
     },
-  });
+  );
 
   console.log("fetching data");
 
@@ -51,7 +53,9 @@ export default async function Page({
     ? await response.json()
     : { pollinationForms: [] };
 
-  const pollinationTableData = apiData?.pollinationForms?.map((item : any) => ({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const pollinationTableData =
+    apiData?.pollinationForms?.map((item: any) => ({
       pollinationId: Number(item.no ?? 0),
       poleNo: String(item.poleNo ?? ""),
       clusterId: String(item.clusterId ?? ""),
@@ -66,9 +70,7 @@ export default async function Page({
       recordedDate: item.date ?? item.Date ?? "",
     })) ?? [];
 
-    console.log(pollinationTableData)
+  console.log(pollinationTableData);
 
-  return(
-    < PollinationTable pollinationTableData={pollinationTableData} />
-  )
+  return <PollinationTable pollinationTableData={pollinationTableData} />;
 }
