@@ -1,5 +1,5 @@
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Icon, LucideIcon } from "lucide-react";
+import { LucideIcon } from "lucide-react";
 
 type customTabs = {
   id: string;
@@ -27,14 +27,14 @@ export default function AdminCustomTabs({
       defaultValue={defaultValue ?? tabs[0]?.id}
       className="w-full"
     >
-      <TabsList className="bg-secondary border-primary w-full border-2 py-6">
+      <TabsList className="flex! w-full! rounded-[28px]! border-2! border-[#8B5E34]! bg-[#FFF8E9]! p-2! shadow-[0_8px_24px_rgba(139,94,52,0.08)]!">
         {tabs.map((tab) => (
           <TabsTrigger
             key={tab.id}
             value={tab.id}
-            className="text-primary data-[state=active]:bg-primary data-[state=active]:text-secondary hover:text-primary py-5 text-base font-semibold hover:text-lg"
+            className="min-w-0 flex-1 rounded-4xl px-4 py-4 text-base font-semibold text-[#8B5E34] transition-all duration-200 hover:bg-white/70 hover:text-[#8B5E34] data-[state=active]:bg-[#8B5E34]! data-[state=active]:text-white! data-[state=active]:shadow-sm"
           >
-            {tab.icon && <tab.icon className="size-[21px]" />}
+            {tab.icon && <tab.icon className="size-5.25" />}
             {tab.value}
           </TabsTrigger>
         ))}
