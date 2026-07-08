@@ -5,13 +5,13 @@ import { ClusterApiItem, ZoneApiResponse } from "@/lib/types/model/type";
 import { baseUrl } from "@/lib/utl";
 import { cookies } from "next/headers";
  
-export default async function Page({params, searchParams,} : {params : Promise<{year : string}>, searchParams: Promise<{ zoneNo?: string }>;}) {
+export default async function Page({params, searchParams,} : {params : Promise<{year : string}>, searchParams: Promise<{ zoneNo?: string; clusterNo?: string; poleNo : string; }>;}) {
 
   const cookieStore = await cookies();
   const cookieHeader = cookieStore.toString();
 
   const {year} = await params;
-  const { zoneNo } = await searchParams;
+  const { zoneNo, clusterNo, poleNo } = await searchParams;
 
   const zoneResponse = await fetch(`${baseUrl}/zones/get-all-zones?year=${year}`,
     {
@@ -39,7 +39,14 @@ export default async function Page({params, searchParams,} : {params : Promise<{
 
   const selectedZoneNo = zoneNo ?? locationOptions[0]?.id ?? "";
 
-  const response = await fetch(`${baseUrl}/clusters/get-by-zone?year=${year}&zoneId=${selectedZoneNo}`, {
+  const query = new URLSearchParams();
+
+  query.set("zoneId", selectedZoneNo);
+
+  if (clusterNo) query.set("clusterNo", clusterNo);
+  if (poleNo) query.set("poleNo", poleNo);
+
+  const response = await fetch(`${baseUrl}/clusters/get-cluster-filter?${query.toString()}`, {
     credentials: "include",
     method: "GET",
     headers: {
