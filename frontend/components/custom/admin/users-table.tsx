@@ -1,7 +1,8 @@
 "use client";
 
 import { Account } from "@/lib/types/model/account";
-import { Edit, KeyRound } from "lucide-react";
+import { KeyRound } from "lucide-react";
+import EditButton from "@/components/custom/common/edit-button";
 import {
   Table,
   TableBody,
@@ -123,13 +124,7 @@ export default function UsersTable({
               <TableCell>
                 <div className="flex items-center justify-center gap-2">
                   {/* Edit User Info */}
-                  <button
-                    onClick={() => onEditUser(user)}
-                    className="text-primary-button hover:bg-primary-button/10 rounded-lg p-2 transition-colors"
-                    title="Edit User Information"
-                  >
-                    <Edit size={18} />
-                  </button>
+                  <EditButton onClick={() => onEditUser(user)} />
 
                   {/* Change Password */}
                   <button

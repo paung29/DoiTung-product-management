@@ -2,9 +2,9 @@
 
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Edit } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import EditButton from "@/components/custom/common/edit-button";
 import {
   Dialog,
   DialogClose,
@@ -123,7 +123,7 @@ export function EditHarvestGradingButton({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <CustomButton icon={Edit} type="button" />
+        <EditButton />
       </DialogTrigger>
 
       <DialogContent className="text-primary-button border-primary max-h-[90vh] overflow-y-auto border bg-white sm:max-w-4xl">

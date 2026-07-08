@@ -16,8 +16,8 @@ import { FormsEditType, YearSettingFormType } from "@/lib/types/model/type";
 import React from "react";
 import { useForm } from "react-hook-form";
 import FormsInput from "../../../common/forms/form-input";
-import { Edit } from "lucide-react";
 import CustomSelect from "../../../common/forms/form-select";
+import EditButton from "@/components/custom/common/edit-button";
 import { useZoneForm } from "@/app/(protected)/admin/(modules)/zone-form-management/zone-form-context";
 import { updateYearSetting } from "@/lib/server-actions/admin/update-year-setting-client";
 import { useRouter } from "next/navigation";
@@ -81,9 +81,7 @@ export function EditFormButton({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">
-          <Edit className="text-primary" />
-        </Button>
+        <EditButton />
       </DialogTrigger>
 
       <DialogContent className="text-primary-button bg-soft-secondary border-primary border sm:max-w-sm">

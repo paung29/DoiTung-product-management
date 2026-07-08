@@ -3,6 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
+import BackButton from "@/components/custom/common/back-button";
 
 import imgClusterForm from "@/public/StaffImage/cluster.svg";
 import imgFlowerForm from "@/public/StaffImage/flower.svg";
@@ -107,6 +108,11 @@ function StaffHome() {
   return (
     <div className="min-h-screen bg-[#f2f1ed] px-6 py-12">
       <div className="mx-auto max-w-screen-2xl">
+        {/* Back to year selection */}
+        <div className="mb-6 flex justify-start">
+          <BackButton fallbackHref="/staff" />
+        </div>
+
         {/* Grid - All Cards */}
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
           {formCards.map((card) => (

@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Edit, Icon } from "lucide-react";
+import EditButton from "@/components/custom/common/edit-button";
 import {
   Dialog,
   DialogClose,
@@ -106,7 +106,7 @@ export function EditClusterButton({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <CustomButton icon={Edit} type="button" />
+        <EditButton />
       </DialogTrigger>
 
       <DialogContent className="border-primary bg-white sm:max-w-2xl">

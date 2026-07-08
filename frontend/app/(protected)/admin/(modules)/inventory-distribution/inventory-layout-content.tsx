@@ -3,8 +3,11 @@
 import { YearApiResponse } from "@/lib/types/model/type";
 import { useInventory } from "./inventory-context";
 import InventoryAndWarehouseFormLayout from "@/components/custom/admin/zone&form/inventory-and-warehouse-form-layout";
+import BackButton from "@/components/custom/common/back-button";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+
+const inventoryRoot = "/admin/inventory-distribution";
 
 const tabs = (year: string) => [
   { href: "/admin/inventory-distribution", label: "Stock Overview" },
@@ -44,6 +47,12 @@ export function InventoryLayoutContent({
         <div className="px-10 py-6">
           {selectedYear ? (
             <>
+              {pathname !== inventoryRoot && (
+                <div className="mb-4 flex justify-end">
+                  <BackButton fallbackHref={inventoryRoot} />
+                </div>
+              )}
+
               <div className="border-primary mb-6 flex rounded-xl border bg-amber-50 p-1">
                 {tabs(selectedYear).map((tab) => {
                   const active = pathname === tab.href;

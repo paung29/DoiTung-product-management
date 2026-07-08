@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { AlertTriangle, Edit } from "lucide-react";
+import { AlertTriangle } from "lucide-react";
 
 import {
   Dialog,
@@ -20,6 +20,7 @@ import { FieldGroup } from "@/components/ui/field";
 import { Form } from "@/components/ui/form";
 
 import FormsInput from "../../../common/forms/form-input";
+import EditButton from "@/components/custom/common/edit-button";
 
 import { YearTableDataType } from "./year-table";
 import { YearSettingFormType } from "@/lib/types/model/type";
@@ -66,12 +67,7 @@ function EditYearButton({ yearData }: EditYearButtonProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <button
-          className="text-primary-button hover:bg-primary-button/10 rounded-lg p-2 transition-colors"
-          title="Edit Year"
-        >
-          <Edit size={18} />
-        </button>
+        <EditButton />
       </DialogTrigger>
       <DialogContent className="bg-soft-secondary border-primary sm:max-w-sm">
         <DialogHeader>
