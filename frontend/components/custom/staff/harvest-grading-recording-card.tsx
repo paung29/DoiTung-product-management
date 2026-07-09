@@ -1,8 +1,7 @@
 "use client";
 
 import { Card } from "@/components/ui/card";
-import CustomButton from "../common/custom-button";
-import { Edit } from "lucide-react";
+import EditButton from "../common/edit-button";
 import { HarvestGradingRecord } from "@/lib/types/model/type";
 
 interface HarvestGradingRecordingCardProps {
@@ -84,12 +83,7 @@ export default function HarvestGradingRecordingCard({
             </div>
 
             <div className="flex justify-end">
-              <CustomButton
-                label="Edit"
-                icon={Edit}
-                onClick={() => onEdit(record)}
-                className="w-20 py-1 text-xs"
-              />
+              <EditButton onClick={() => onEdit(record)} />
             </div>
           </div>
 

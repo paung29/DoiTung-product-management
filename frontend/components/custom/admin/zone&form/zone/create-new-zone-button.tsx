@@ -17,7 +17,7 @@ import { CreateOrEditZoneForm, CreateOrEditZoneFormSchema, CreateOrEditZoneFormT
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import FormsInput from "../../../common/forms/form-input";
-import { Edit } from "lucide-react";
+import EditButton from "@/components/custom/common/edit-button";
 import { useZoneForm } from "@/app/(protected)/admin/(modules)/zone-form-management/zone-form-context";
 import { createZone } from "@/lib/server-actions/admin/create-zone-client";
 import { useRouter } from "next/navigation";
@@ -89,9 +89,7 @@ export function CreateOrEditZoneButton({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         {isEdit ? (
-          <Button className="" variant="outline">
-            <Edit className="text-primary" />
-          </Button>
+          <EditButton />
         ) : (
           <Button
             className="bg-staff-cluster-edit hover:bg-staff-cluster-edit px-4 py-6 text-white transition hover:border-2 hover:text-white hover:shadow-lg"

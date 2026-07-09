@@ -13,9 +13,9 @@ import { FieldGroup } from "@/components/ui/field";
 import { Form } from "@/components/ui/form";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Edit } from "lucide-react";
 
 import FormsInput from "../../../common/forms/form-input";
+import EditButton from "@/components/custom/common/edit-button";
 import CustomSelect from "../../../common/forms/form-select";
 import CustomButton from "@/components/custom/common/custom-button";
 
@@ -91,7 +91,7 @@ export function EditPodButton({ podData }: { podData: PodTableDataType }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <CustomButton icon={Edit} type="button" />
+        <EditButton />
       </DialogTrigger>
 
       <DialogContent className="text-primary-button border-primary border bg-white sm:max-w-3xl">

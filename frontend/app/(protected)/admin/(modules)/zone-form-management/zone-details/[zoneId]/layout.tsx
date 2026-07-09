@@ -4,6 +4,7 @@ import Link from "next/link";
 import { MapPin } from "lucide-react";
 import { useParams, usePathname } from "next/navigation";
 import { ZoneFormContextProvider } from "../../zone-form-context";
+import BackButton from "@/components/custom/common/back-button";
 
 function FormsInZonePageLayout({ children }: { children: React.ReactNode }) {
   const params = useParams<{ zoneId: string }>();
@@ -24,15 +25,19 @@ function FormsInZonePageLayout({ children }: { children: React.ReactNode }) {
     <ZoneFormContextProvider>
       <div className="min-h-screen w-full px-20 py-10">
         <div className="bg-secondary mb-10 w-full rounded-lg p-8 drop-shadow-lg">
-          <div className="flex gap-2">
-            <div className="bg-primary-button flex size-15 items-center justify-center rounded-lg text-white">
-              <MapPin className="size-8" />
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex gap-2">
+              <div className="bg-primary-button flex size-15 items-center justify-center rounded-lg text-white">
+                <MapPin className="size-8" />
+              </div>
+
+              <div className="text-primary flex flex-col justify-center gap-1">
+                <h1 className="text-xl font-bold">Zone Name {zoneId}</h1>
+                <p>Comprehensive production tracking and grading data</p>
+              </div>
             </div>
 
-            <div className="text-primary flex flex-col justify-center gap-1">
-              <h1 className="text-xl font-bold">Zone Name {zoneId}</h1>
-              <p>Comprehensive production tracking and grading data</p>
-            </div>
+            <BackButton fallbackHref="/admin/zone-form-management" />
           </div>
         </div>
 

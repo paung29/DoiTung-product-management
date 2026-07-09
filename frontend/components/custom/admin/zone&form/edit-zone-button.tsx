@@ -10,9 +10,9 @@ import {
 } from "@/components/ui/dialog";
 
 import { Button } from "@/components/ui/button";
-import { Edit } from "lucide-react";
 import { useForm } from "react-hook-form";
 import FormsInput from "../../common/forms/form-input";
+import EditButton from "@/components/custom/common/edit-button";
 import { Form } from "@/components/ui/form";
 import { editZoneType, updateZone } from "@/lib/server-actions/admin/update-zone-name-client";
 import { useState } from "react";
@@ -61,9 +61,7 @@ export function EditZoneButton({id, name} : {id : number, name : string}) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">
-          <Edit className="text-blue-500" />
-        </Button>
+        <EditButton />
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-md">

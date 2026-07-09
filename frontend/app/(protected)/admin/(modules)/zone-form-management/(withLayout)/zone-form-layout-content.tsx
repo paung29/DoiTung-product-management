@@ -5,7 +5,10 @@ import InventoryAndWarehouseFormLayout from "@/components/custom/admin/zone&form
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import ZoneAndFormLayoutComponent from "@/components/custom/admin/zone&form/zone-and-form-layout";
+import BackButton from "@/components/custom/common/back-button";
 import { useZoneForm } from "../zone-form-context";
+
+const zoneFormRoot = "/admin/zone-form-management";
 
 export function ZoneFormLayoutContent({
   children,
@@ -33,6 +36,12 @@ export function ZoneFormLayoutContent({
         <div className="px-10 py-6">
           {selectedYear ? (
             <>
+              {pathname !== zoneFormRoot && (
+                <div className="mb-4 flex justify-end">
+                  <BackButton fallbackHref={zoneFormRoot} />
+                </div>
+              )}
+
               <div className="border-primary mb-6 flex rounded-xl border bg-amber-50 p-1">
                 {tabs.map((tab) => {
                   const active = pathname === tab.href;

@@ -128,6 +128,15 @@
   background-color: #faf3e0;
 }
 
+/* Hide horizontal/vertical scrollbar while keeping scroll behavior */
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
 @theme {
   --color-primary-button: #6b4423;
   --color-primary: #6b4423;
