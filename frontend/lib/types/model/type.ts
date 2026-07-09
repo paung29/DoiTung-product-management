@@ -370,8 +370,6 @@ export type StockDistributionForm = {
 };
 
 export type DistributionHistorySearchForm = {
-  startDate: string;
-  endDate: string;
   category: InventoryCategory;
   grade: string;
   productionYear: string;
@@ -534,6 +532,10 @@ export type YearApiResponse = {
     totalZone: number;
   }[];
 };
+
+export type YearListResponse = {
+  years : String[]
+}
 
 export type Zone = {
   zoneId: number;
