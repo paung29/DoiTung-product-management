@@ -536,6 +536,16 @@ export type YearApiResponse = {
   }[];
 };
 
+export type PerformanceOverview = {
+  year: number;
+  totalFlowers: number;
+  totalPods: number;
+  flowerLossRate: number;
+  podSuccessRate: number;
+  totalHarvestWeight: number;
+  totalHarvestPods: number;
+};
+
 export type Zone = {
   zoneId: number;
   zoneName: string;
