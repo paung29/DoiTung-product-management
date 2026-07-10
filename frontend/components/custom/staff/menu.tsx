@@ -61,6 +61,16 @@ export default function Menu({ menuItems, title }: MenuProps) {
         ☰
       </button>
 
+      {/* To close sidebar when the other screen click */}
+         {isOpen && (
+        <div
+          onClick={closeMenu}
+          className="fixed inset-0 z-30 bg-black/30"
+          aria-hidden="true"
+        />
+      )}
+
+
       {/*  Sidebar starts veloe header */}
       <aside
         className={`fixed left-0 z-40 w-72 transform bg-[#f7f2e6] text-[#2a1b12] shadow-2xl transition-transform duration-300 ease-in-out ${
