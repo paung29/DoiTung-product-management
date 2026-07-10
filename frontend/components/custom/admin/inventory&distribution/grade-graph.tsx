@@ -11,15 +11,8 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const data = [
-  { grade: "A+", pods: 2800, weight: 600 },
-  { grade: "A", pods: 4500, weight: 900 },
-  { grade: "B", pods: 3500, weight: 700 },
-  { grade: "C", pods: 2000, weight: 500 },
-  { grade: "D+", pods: 1500, weight: 400 },
-  { grade: "D", pods: 800, weight: 300 },
-  { grade: "Rejected", pods: 1200, weight: 280 },
-];
+import { formatGrade, toWeight } from "@/lib/types/model/function";
+import { StockGradeSummary, WeightUnit } from "@/lib/types/model/type";
 
 const CustomTooltip = ({
   active,
@@ -46,7 +39,19 @@ const CustomTooltip = ({
   return null;
 };
 
-export default function GradeGraph() {
+export default function GradeGraph({
+  grades,
+  unit,
+}: {
+  grades: StockGradeSummary[];
+  unit: WeightUnit;
+}) {
+  const data = grades.map((item) => ({
+    grade: formatGrade(item.grade),
+    pods: item.total_pod,
+    weight: toWeight(item.total_gram, unit),
+  }));
+
   return (
     <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
       {/* Title */}
@@ -68,7 +73,7 @@ export default function GradeGraph() {
               opacity={0.5}
               horizontal={false}
             />
-            <XAxis type="number" domain={[0, 6000]} stroke="#9ca3af" />
+            <XAxis type="number" domain={[0, "auto"]} stroke="#9ca3af" />
             <YAxis dataKey="grade" type="category" stroke="#9ca3af" />
             <Tooltip content={<CustomTooltip />} />
             <Legend
@@ -86,7 +91,7 @@ export default function GradeGraph() {
             <Bar
               dataKey="weight"
               fill="#d4a574"
-              name="Weight (kg)"
+              name={`Weight (${unit})`}
               radius={[0, 8, 8, 0]}
             />
           </BarChart>

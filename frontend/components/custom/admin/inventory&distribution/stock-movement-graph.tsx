@@ -11,20 +11,8 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const data = [
-  { month: "Jan", stockIn: 200, stockOut: 150, totalStock: 3000 },
-  { month: "Feb", stockIn: 250, stockOut: 180, totalStock: 3100 },
-  { month: "Mar", stockIn: 220, stockOut: 170, totalStock: 3050 },
-  { month: "Apr", stockIn: 300, stockOut: 200, totalStock: 3200 },
-  { month: "May", stockIn: 280, stockOut: 190, totalStock: 3300 },
-  { month: "Jun", stockIn: 320, stockOut: 210, totalStock: 3400 },
-  { month: "Jul", stockIn: 350, stockOut: 220, totalStock: 3500 },
-  { month: "Aug", stockIn: 330, stockOut: 200, totalStock: 3600 },
-  { month: "Sep", stockIn: 370, stockOut: 230, totalStock: 3700 },
-  { month: "Oct", stockIn: 400, stockOut: 250, totalStock: 3800 },
-  { month: "Nov", stockIn: 420, stockOut: 260, totalStock: 3900 },
-  { month: "Dec", stockIn: 450, stockOut: 280, totalStock: 4000 },
-];
+import { toWeight } from "@/lib/types/model/function";
+import { StockMonthlySummary, WeightUnit } from "@/lib/types/model/type";
 
 const CustomTooltip = ({
   active,
@@ -51,12 +39,25 @@ const CustomTooltip = ({
   return null;
 };
 
-export default function StockMovementGraph() {
+export default function StockMovementGraph({
+  months,
+  unit,
+}: {
+  months: StockMonthlySummary[];
+  unit: WeightUnit;
+}) {
+  const data = months.map((item) => ({
+    month: item.month_name,
+    stockIn: toWeight(item.stock_in_weight, unit),
+    stockOut: toWeight(item.stock_out_weight, unit),
+    totalStock: toWeight(item.total_weight, unit),
+  }));
+
   return (
     <div className="rounded-2xl border border-gray-200 bg-linear-to-br from-amber-50 to-white p-6 shadow-sm">
       {/* Title */}
       <h2 className="mb-6 text-lg font-semibold text-gray-900">
-        Stock Movement Over Time
+        Stock Movement Over Time ({unit})
       </h2>
 
       {/* Chart Container */}
