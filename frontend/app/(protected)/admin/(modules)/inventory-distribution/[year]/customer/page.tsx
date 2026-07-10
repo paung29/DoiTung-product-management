@@ -53,7 +53,7 @@ export default async function Page({params, searchParams,} : {params : Promise<{
 
   const records : CustomerHistoryData[] = stockTableapiData.customer_stock_table.map((item, index) => ({
     id: String(item.customer_id),
-    date: "Jan 8, 2026",
+    no: item.no,
     customer: item.customer_name,
     gradeA: item.grade_a,
     gradeB: item.grade_b,

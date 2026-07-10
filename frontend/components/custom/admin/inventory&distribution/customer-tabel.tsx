@@ -18,7 +18,7 @@ import CustomerEditModal from "./customer-edit-modal";
 
 export interface CustomerHistoryData {
   id: string;
-  date: string;
+  no: number;
   customer: string;
   gradeA: number;
   gradeB: number;
@@ -58,7 +58,7 @@ export default function CustomerTable({ data = [], itemsPerPage = 6 }: Props) {
           <TableHeader className="bg-primary border-b border-b-[#8a6752]">
             <TableRow className="hover:bg-transparent">
               {[
-                "DATE",
+                "No",
                 "CUSTOMER",
                 "GRADE A",
                 "GRADE B",
