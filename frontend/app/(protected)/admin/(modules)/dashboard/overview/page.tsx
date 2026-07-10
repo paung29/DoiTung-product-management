@@ -107,8 +107,7 @@ function OverviewPage() {
     };
   }, [selectedYear]);
 
-  const show = (value: number | undefined) =>
-    loading ? "…" : (value ?? 0);
+  const show = (value: number | undefined) => (loading ? "…" : (value ?? 0));
 
   const kpis = [
     { title: "Total Flowers", value: show(data?.totalFlowers), icon: Flower },
@@ -197,11 +196,11 @@ function OverviewPage() {
         {/* Inflorescence Damage Chart - Full Width */}
         <Card className="border-primary-button/20 shadow-sm">
           <div className="p-6">
-            <InflorescenceDamageChart />
+            <InflorescenceDamageChart year={selectedYear} />
           </div>
         </Card>
 
-        {/* Flower Production and Pod Overview - Side by Side */}
+        {/* Flower Production and Pod Overview - Side by Side
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
           <Card className="border-primary-button/20 bg-secondary shadow-sm">
             <div className="p-6">
@@ -214,7 +213,7 @@ function OverviewPage() {
               <ProductionMetricChart />
             </div>
           </Card>
-        </div>
+        </div> */}
       </div>
     </div>
   );
