@@ -4,10 +4,13 @@ import WarehouseTable, { WarehouseTableData } from "@/components/custom/admin/in
 
 export default function WarehousePage({records, data} : {records : WarehouseTableData[], data : WarehouseCardData}) {
   return (
-    <div className="px-10 py-6">
+    // No extra px-* here: the shared inventory layout already applies the
+    // horizontal padding, so KPI cards align edge-to-edge with the tab bar
+    // exactly like the Stock Overview tab.
+    <div className="w-full space-y-6">
       <WarehouseCard data={data}/>
 
-      <div className="py-6">
+      <div>
         <WareHouse />
 
         <div className="py-6">

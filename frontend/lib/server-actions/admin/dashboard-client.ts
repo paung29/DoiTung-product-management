@@ -28,6 +28,30 @@ export async function getPerformanceOverview(year: string | number) {
 }
 
 /**
+ * Fetch the per-stage condition breakdown (good / insect / rotten) for a year.
+ * GET /dashboard/condition-by-stage?year={year}
+ * Returns ProductionStageResponse on success, or the standard
+ * { success:false, message } error shape on failure.
+ */
+export async function getConditionByStage(year: string | number) {
+  const cookieStore = await cookies();
+
+  const response = await fetch(
+    `${baseUrl}/dashboard/condition-by-stage?year=${year}`,
+    {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        Cookie: cookieStore.toString(),
+      },
+      cache: "no-store",
+    },
+  );
+
+  return await response.json();
+}
+
+/**
  * Fetch the list of available years.
  * GET /years/get-all-years
  */

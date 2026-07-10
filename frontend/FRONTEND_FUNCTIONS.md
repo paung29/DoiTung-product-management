@@ -279,7 +279,7 @@ Purpose:
 Functions:
 
 - Shows mock KPI metrics for the current year.
-- Renders chart components for inflorescence damage, flower production, and production metrics.
+- Renders chart components for production stage health, flower production, and production metrics.
 
 ### User Management
 
