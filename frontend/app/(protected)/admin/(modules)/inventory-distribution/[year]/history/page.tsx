@@ -1,4 +1,4 @@
-"use server"
+"use server";
 
 import {getAllWarehouses,YearListResponse } from "@/lib/types/model/type";
 import { baseUrl } from "@/lib/utl";
@@ -26,6 +26,13 @@ export type StockMovementsApiResponse = {
  
 export default async function Page({params, searchParams,} : {params : Promise<{year : string}>, searchParams: Promise<{category ?: string; grade ?: string; warehouseId ?: string}>;}) {
 
+export default async function Page({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ year: string }>;
+  searchParams: Promise<{ zoneNo?: string }>;
+}) {
   const cookieStore = await cookies();
   const cookieHeader = cookieStore.toString();
 
@@ -94,21 +101,24 @@ export default async function Page({params, searchParams,} : {params : Promise<{
     }
   });
 
-  console.log("fetching data")
-  
+  console.log("fetching data");
 
-  const apiData : StockMovementsApiResponse = response.ok ? await response.json() : { stock_movements: [] };
+  const apiData: StockMovementsApiResponse = response.ok
+    ? await response.json()
+    : { stock_movements: [] };
 
-  const records : DistributionRecord[] = apiData.stock_movements.map((item, index) => ({
-    id: String(item.stock_movement_id),
-    date: item.date,
-    category: item.category,
-    grade: item.grade,
-    productionYear: item.production_year,
-    warehouse: item.warehouse,
-    amount: item.total_grams,
-    details: item.details,
-  }));
+  const records: DistributionRecord[] = apiData.stock_movements.map(
+    (item, index) => ({
+      id: String(item.stock_movement_id),
+      date: item.date,
+      category: item.category,
+      grade: item.grade,
+      productionYear: item.production_year,
+      warehouse: item.warehouse,
+      amount: item.total_grams,
+      details: item.details,
+    }),
+  );
 
   console.log(apiData)
   console.log(records)
@@ -120,4 +130,3 @@ export default async function Page({params, searchParams,} : {params : Promise<{
   );
   
 }
-

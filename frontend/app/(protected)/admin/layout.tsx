@@ -5,6 +5,7 @@ import Menu, { MenuItem } from "@/components/custom/staff/menu";
 import { useAuthStore } from "@/lib/store/user-store";
 import { baseUrl } from "@/lib/utl";
 import {
+  Calendar,
   ChartColumn,
   FileChartColumn,
   LayoutDashboardIcon,
@@ -45,7 +46,7 @@ export default function ProtectedLayout({
     },
     {
       label: "Year Management",
-      icon: Users2,
+      icon: Calendar,
       href: "/admin/year-management",
     },
     {

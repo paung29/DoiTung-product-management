@@ -34,14 +34,7 @@ function YearTable({ yearTableData }: { yearTableData: YearTableDataType[] }) {
               <TableCell>{item.totalZone}</TableCell>
 
               <TableCell>
-                <div className="flex justify-end gap-41 pr-4">
-                  <CustomButton
-                    label="View Report"
-                    className="bg-primary-button rounded-lg px-4 py-2"
-                  />
-
                   <EditYearButton yearData={item} />
-                </div>
               </TableCell>
             </TableRow>
           ))}

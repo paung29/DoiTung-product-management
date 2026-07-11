@@ -546,6 +546,39 @@ export type PerformanceOverview = {
   totalHarvestPods: number;
 };
 
+// Weight unit the admin picks on the stock overview screen.
+export type WeightUnit = "g" | "kg";
+
+export type StockGradeSummary = {
+  grade: string;
+  total_pod: number;
+  total_gram: number;
+  total_kg: number;
+  percentage: number;
+};
+
+export type StockMonthlySummary = {
+  month: number;
+  month_name: string;
+  stock_in_weight: number;
+  stock_out_weight: number;
+  total_weight: number;
+};
+
+export type StockOverview = {
+  total_pod_in_stock: number;
+  total_gram_in_stock: number;
+  total_kg_in_stock: number;
+  incoming_stock_pod: number;
+  incoming_stock_gram: number;
+  incoming_stock_kg: number;
+  issued_stock_pod: number;
+  issued_stock_gram: number;
+  issued_stock_kg: number;
+  grade_summary: StockGradeSummary[];
+  monthly_summary: StockMonthlySummary[];
+};
+
 export type Zone = {
   zoneId: number;
   zoneName: string;

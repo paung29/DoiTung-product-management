@@ -1,13 +1,23 @@
 "use client";
 
+import { formatGrade, formatWeight } from "@/lib/types/model/function";
+import { StockGradeSummary, WeightUnit } from "@/lib/types/model/type";
+
 interface GradeSummaryCardProps {
   grade: string;
   percent: number;
   pods: number;
-  weight: number;
+  weight: string;
+  unit: WeightUnit;
 }
 
-function GradeCard({ grade, percent, pods, weight }: GradeSummaryCardProps) {
+function GradeCard({
+  grade,
+  percent,
+  pods,
+  weight,
+  unit,
+}: GradeSummaryCardProps) {
   return (
     <div className="rounded-2xl border border-gray-200 bg-linear-to-br from-amber-50 to-white p-6 shadow-sm">
       {/* Top Row: Badge and Percentage */}
@@ -25,22 +35,19 @@ function GradeCard({ grade, percent, pods, weight }: GradeSummaryCardProps) {
 
       {/* Bottom: Weight */}
       <p className="text-2xl font-bold text-[#8a6752]">
-        {weight.toLocaleString()} kg
+        {weight} {unit}
       </p>
     </div>
   );
 }
 
-export default function GradeSummary() {
-  const gradeData: GradeSummaryCardProps[] = [
-    { grade: "A+", percent: 18.5, pods: 2850, weight: 630 },
-    { grade: "A", percent: 28, pods: 4320, weight: 1060 },
-    { grade: "B", percent: 23.9, pods: 3680, weight: 900 },
-    { grade: "C", percent: 13.9, pods: 2140, weight: 590 },
-    { grade: "D+", percent: 10.2, pods: 1580, weight: 440 },
-    { grade: "D", percent: 5.5, pods: 850, weight: 370 },
-  ];
-
+export default function GradeSummary({
+  grades,
+  unit,
+}: {
+  grades: StockGradeSummary[];
+  unit: WeightUnit;
+}) {
   return (
     <div className="space-y-6">
       {/* Title */}
@@ -48,8 +55,15 @@ export default function GradeSummary() {
 
       {/* Cards Grid */}
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-        {gradeData.map((item) => (
-          <GradeCard key={item.grade} {...item} />
+        {grades.map((item) => (
+          <GradeCard
+            key={item.grade}
+            grade={formatGrade(item.grade)}
+            percent={item.percentage}
+            pods={item.total_pod}
+            weight={formatWeight(item.total_gram, unit)}
+            unit={unit}
+          />
         ))}
       </div>
     </div>

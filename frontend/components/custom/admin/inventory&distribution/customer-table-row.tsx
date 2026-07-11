@@ -11,8 +11,8 @@ interface Props {
 export default function CustomerTableRow({ data, onEdit }: Props) {
   return (
     <TableRow className="h-14 border-b border-b-gray-100 transition-colors hover:bg-yellow-50">
-      <TableCell className="w-28 px-6 py-4 text-left text-sm font-medium text-gray-900">
-        {data.date}
+      <TableCell className="w-24 px-6 py-4 text-center text-sm font-medium text-gray-900">
+        {data.no}
       </TableCell>
       <TableCell className="min-w-48 flex-1 px-6 py-4 text-left text-sm font-medium text-gray-900">
         {data.customer}

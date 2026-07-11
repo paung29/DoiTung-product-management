@@ -18,7 +18,7 @@ function YearManagementTab({ records }: { records: YearTableDataType[] }) {
       </h1>
 
       {/* Toolbar Area: Status Card + Create Button */}
-      <div className="flex items-center justify-between">
+      <div className="flex justify-between">
         <div className="w-full max-w-62.5">
           <StatusCard
             icon={<Calendar size={36} />}
@@ -27,7 +27,9 @@ function YearManagementTab({ records }: { records: YearTableDataType[] }) {
           />
         </div>
 
-        <CreateYearButton />
+        <div className="flex flex-col justify-end"> 
+            <CreateYearButton  />
+        </div>
       </div>
 
       {/* Data Table */}
