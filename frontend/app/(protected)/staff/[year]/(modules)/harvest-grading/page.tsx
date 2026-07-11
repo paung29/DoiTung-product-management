@@ -6,13 +6,13 @@ import { cookies } from "next/headers";
 import HarvestGradingList from "./HarvestAndGradingPageClient";
 import { Option } from "@/lib/types/model/option";
 
-export default async function HarvestGradingEntryPage({params, searchParams,} : {params : Promise<{year : string}>, searchParams: Promise<{ zoneNo?: string }>;}) {
+export default async function HarvestGradingEntryPage({params, searchParams,} : {params : Promise<{year : string}>, searchParams: Promise<{ zoneNo?: string ; poleNo ?: string; harvestGradingFormDone ?: string}>;}) {
 
   const cookieStore = await cookies();
   const cookieHeader = cookieStore.toString();
   
   const {year} = await params;
-  const { zoneNo } = await searchParams;
+  const { zoneNo, poleNo, harvestGradingFormDone } = await searchParams;
 
   const zoneResponse = await fetch(`${baseUrl}/zones/get-all-zones?year=${year}`,
         {
@@ -40,8 +40,20 @@ export default async function HarvestGradingEntryPage({params, searchParams,} : 
   console.log("zone options",locationOptions)
 
   const selectedZoneNo = zoneNo ?? locationOptions[0]?.id ?? "";
+
+  const query = new URLSearchParams({
+    zoneId: selectedZoneNo,
+  });
+
+  if (poleNo) {
+    query.set("poleNo", poleNo);
+  }
+
+  if (harvestGradingFormDone) {
+    query.set("harvestGradingFormDone", harvestGradingFormDone);
+  }
   
-  const response = await fetch(`${baseUrl}/poles/get-by-zone?year=${year}&zoneId=${selectedZoneNo}`, {
+  const response = await fetch(`${baseUrl}/poles/get-pole-filter?year=${year}&${query.toString()}`, {
       credentials: "include",
       method: "GET",
       headers: {

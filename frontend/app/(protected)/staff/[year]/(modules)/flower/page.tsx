@@ -7,13 +7,13 @@ import { baseUrl } from "@/lib/utl";
 import { cookies } from "next/headers";
 import FlowerPageClient from "./FlowerPageClient";
  
-export default async function Page({params, searchParams,} : {params : Promise<{year : string}>, searchParams: Promise<{ zoneNo?: string }>;}) {
+export default async function Page({params, searchParams,} : {params : Promise<{year : string}>, searchParams: Promise<{ zoneNo?: string ; clusterNo?: string; poleNo?: string}>;}) {
 
   const cookieStore = await cookies();
   const cookieHeader = cookieStore.toString();
 
   const {year} = await params;
-  const { zoneNo } = await searchParams;
+  const { zoneNo, clusterNo, poleNo } = await searchParams;
   
   const zoneResponse = await fetch(`${baseUrl}/zones/get-all-zones?year=${year}`,
       {
@@ -24,24 +24,32 @@ export default async function Page({params, searchParams,} : {params : Promise<{
         credentials: "include",
       },
     );
-    console.log("zone status:", zoneResponse.status);
-  
-    if (!zoneResponse.ok) {
-      throw new Error("Failed to fetch zones");
-    }
-  
-    const data: ZoneApiResponse = await zoneResponse.json();
-  
-    const locationOptions: Option[] = (data.zones ?? []).map((zone) => ({
-      id: String(zone.zoneId),
-      value: zone.zoneName,
-    }));
-  
-    console.log("zone options",locationOptions)
-  
-    const selectedZoneNo = zoneNo ?? locationOptions[0]?.id ?? "";
+  console.log("zone status:", zoneResponse.status);
 
-  const response = await fetch(`${baseUrl}/clusters/get-by-zone?year=${year}&zoneId=${selectedZoneNo}`, {
+  if (!zoneResponse.ok) {
+    throw new Error("Failed to fetch zones");
+  }
+
+  const data: ZoneApiResponse = await zoneResponse.json();
+
+  const locationOptions: Option[] = (data.zones ?? []).map((zone) => ({
+    id: String(zone.zoneId),
+    value: zone.zoneName,
+  }));
+  
+  console.log("zone options",locationOptions)
+  
+  const selectedZoneNo = zoneNo ?? locationOptions[0]?.id ?? "";
+
+  const query = new URLSearchParams();
+
+  query.set("zoneId", selectedZoneNo);
+
+  if (clusterNo) query.set("clusterNo", clusterNo);
+
+  if (poleNo) query.set("poleNo", poleNo);
+
+  const response = await fetch(`${baseUrl}/clusters/get-cluster-filter?${query.toString()}`, {
     credentials: "include",
     method: "GET",
     headers: {

@@ -8,7 +8,6 @@ import { ClusterSearchForm } from "@/lib/types/model/type";
 import FormsInput from "../common/forms/form-input";
 import CustomButton from "../common/custom-button";
 import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
 
 
 
@@ -28,7 +27,18 @@ export default function ClusterSearch({locations , defaultZoneNo} : {locations :
   const onSubmit = (data : ClusterSearchForm) => {
     console.log("Cluster Search Data: ", data);
 
-    router.replace(`/staff/${year}/${module}?zoneNo=${data.location}`)
+    const query = new URLSearchParams();
+    query.set("zoneNo", data.location);
+
+    if (data.cluster_id) {
+      query.set("clusterNo", data.cluster_id);
+    }
+
+    if (data.pole_id) {
+      query.set("poleNo", data.pole_id);
+    }
+
+    router.replace(`/staff/${year}/${module}?${query.toString()}`);
   }
 
     const form = useForm<ClusterSearchForm>({
@@ -36,7 +46,6 @@ export default function ClusterSearch({locations , defaultZoneNo} : {locations :
         location: defaultZoneNo,
         pole_id: "",
         cluster_id: "",
-        progress_status: ""
       }
     })
 
@@ -48,14 +57,14 @@ export default function ClusterSearch({locations , defaultZoneNo} : {locations :
             <CustomSelect className="w-full" control={form.control} path="location"  label="Location" placeholder="Select Location"
             options={locations} />
 
-            <FormsInput className="w-full" control={form.control} path="pole_id" label="Pole ID" placeholder="Enter pole ID" />
-            <FormsInput className="w-full" control={form.control} path="cluster_id" label="Cluster ID" placeholder="Search by Cluster ID" />
+            <FormsInput className="w-full" control={form.control} path="pole_id" label="Pole Number" placeholder="Enter pole Number" />
+            <FormsInput className="w-full" control={form.control} path="cluster_id" label="Number" placeholder="Search by Cluster Number" />
             
-            <CustomSelect className="w-full" control={form.control} path="progress_status"  label="Progress Status" placeholder="Select Progress"
+            {/* <CustomSelect className="w-full" control={form.control} path="progress_status"  label="Progress Status" placeholder="Select Progress"
             options={[
               {id : "-1", value : "Select All"},
               ...progressStatusOptions
-            ]} />
+            ]} /> */}
 
             <div className="w-full flex items-end justify-end">
               <CustomButton label="Search" onClick={form.handleSubmit(onSubmit)} className="btn-primary  w-full sm:w-[200px]"/>
