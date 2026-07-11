@@ -33,10 +33,10 @@ function StatCard({
 }
 
 export type WarehouseCardData = {
-  totalWarehouse: string;
-  totalStockPods: string;
-  totalWeightPods: string;
-  activeWarehouse: string;
+  totalWarehouse: number;
+  remainingStockPods: number;
+  remainingStockWeights: number;
+  activeWarehouse: number;
 };
 
 type Props = {
@@ -49,23 +49,23 @@ export default function WarehouseCard({ data }: Props) {
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
         <StatCard
           title="Total Warehouse"
-          value={data.totalWarehouse}
-          label="active locations"
+          value={data.totalWarehouse.toLocaleString()}
+          label="locations"
           icon={<Package className="h-6 w-6 text-blue-600" />}
           iconWrapperClassName="bg-blue-50"
         />
 
         <StatCard
-          title="Total Stock Pods"
-          value={data.totalStockPods}
+          title="Total Remaining Pods"
+          value={data.remainingStockPods.toLocaleString()}
           label="pods"
           icon={<TrendingUp className="h-6 w-6 text-violet-600" />}
           iconWrapperClassName="bg-violet-50"
         />
 
         <StatCard
-          title="Total Weight Pods"
-          value={data.totalWeightPods}
+          title="Total Remaining Weight"
+          value={data.remainingStockWeights.toLocaleString()}
           label="g"
           icon={<Weight className="h-6 w-6 text-amber-600" />}
           iconWrapperClassName="bg-amber-50"
@@ -73,8 +73,8 @@ export default function WarehouseCard({ data }: Props) {
 
         <StatCard
           title="Active Warehouse"
-          value={data.activeWarehouse}
-          label="currently online"
+          value={data.activeWarehouse.toLocaleString()}
+          label={`of ${data.totalWarehouse.toLocaleString()} currently active`}
           icon={<CheckCircle className="h-6 w-6 text-emerald-600" />}
           iconWrapperClassName="bg-emerald-50"
         />
