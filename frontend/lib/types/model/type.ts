@@ -536,6 +536,15 @@ export type YearApiResponse = {
 export type YearListResponse = {
   years : String[]
 }
+export type PerformanceOverview = {
+  year: number;
+  totalFlowers: number;
+  totalPods: number;
+  flowerLossRate: number;
+  podSuccessRate: number;
+  totalHarvestWeight: number;
+  totalHarvestPods: number;
+};
 
 export type Zone = {
   zoneId: number;

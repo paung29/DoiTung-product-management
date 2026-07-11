@@ -9,7 +9,7 @@ import CustomButton from "@/components/custom/common/custom-button";
 import FormsInput from "@/components/custom/common/forms/form-input";
 import { Form } from "@/components/ui/form";
 import { createCustomer } from "@/lib/server-actions/admin/create-customer-client";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 const customerSchema = z.object({
   company: z
@@ -34,6 +34,8 @@ export type CustomerFormSubmit = {
 
 export default function AddCustomerButton() {
   const router = useRouter();
+  const params = useParams();
+  const year = params.year as string;
 
   const [isOpen, setIsOpen] = useState(false);
   const [customers, setCustomers] = useState<CustomerFormData[]>([]);
@@ -60,7 +62,7 @@ export default function AddCustomerButton() {
 
     form.reset();
     setIsOpen(false);
-    router.replace("/admin/inventory-distribution/customer");
+    router.replace(`/admin/inventory-distribution/${year}/customer`);
   };
 
   const handleCancel = () => {

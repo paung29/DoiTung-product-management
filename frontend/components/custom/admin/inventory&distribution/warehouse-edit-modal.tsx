@@ -8,7 +8,8 @@ import { useParams, useRouter } from "next/navigation";
 import FormsInput from "../../common/forms/form-input";
 import { Form } from "@/components/ui/form";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import { Edit, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
+import EditButton from "@/components/custom/common/edit-button";
 import CustomSelect from "../../common/forms/form-select";
 import { updateWareHouse } from "@/lib/server-actions/admin/update-warehouse-client";
 import { Option } from "@/lib/types/model/option";
@@ -92,14 +93,7 @@ export default function WareHouseEditModal({
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>
-        <button
-            type="button"
-            onClick={handleOpen}
-            className="rounded-lg p-2 text-gray-600 transition-colors hover:bg-gray-200 hover:text-gray-900"
-            title="Edit warehouse"
-        >
-            <Edit className="h-5 w-5" />
-        </button>
+        <EditButton onClick={handleOpen} />
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

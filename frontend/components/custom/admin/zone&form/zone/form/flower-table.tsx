@@ -8,7 +8,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { EditFlowerButton } from "../edit-flower-button";
-import { DeleteZoneButton } from "../../edit-zone-button";
 
 export type FlowerTableDataType = {
   flowerId: number;

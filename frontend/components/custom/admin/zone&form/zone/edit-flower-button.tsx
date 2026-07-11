@@ -14,8 +14,8 @@ import { Form } from "@/components/ui/form";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import FormsInput from "../../../common/forms/form-input";
-import { Edit } from "lucide-react";
 import CustomSelect from "../../../common/forms/form-select";
+import EditButton from "@/components/custom/common/edit-button";
 import { FlowerTableDataType } from "./form/flower-table";
 import CustomButton from "@/components/custom/common/custom-button";
 import { useParams, useRouter } from "next/navigation";
@@ -103,7 +103,7 @@ export function EditFlowerButton({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <CustomButton icon={Edit} type="button" />
+        <EditButton />
       </DialogTrigger>
 
       <DialogContent className="text-primary-button border-primary border bg-white sm:max-w-2xl">

@@ -7,7 +7,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { CreateOrEditZoneButton } from "../create-new-zone-button";
 import { EditPreharvestButton } from "../edit-preharvest-button";
 
 export type PreharvestTableDataType = {

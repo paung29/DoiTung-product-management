@@ -1,7 +1,7 @@
-import { Edit } from "lucide-react";
 import { TableCell, TableRow } from "@/components/ui/table";
 import NoteCell from "./note-cell";
 import { CustomerHistoryData } from "./customer-tabel";
+import EditButton from "@/components/custom/common/edit-button";
 
 interface Props {
   data: CustomerHistoryData;
@@ -36,12 +36,7 @@ export default function CustomerTableRow({ data, onEdit }: Props) {
         <NoteCell note={data.note} />
       </TableCell>
       <TableCell className="w-16 px-6 py-4 text-center">
-        <button
-          onClick={() => onEdit(data)}
-          className="rounded-lg p-2 text-gray-600 transition-colors hover:bg-gray-200 hover:text-gray-900"
-        >
-          <Edit className="h-5 w-5" />
-        </button>
+        <EditButton onClick={() => onEdit(data)} />
       </TableCell>
     </TableRow>
   );

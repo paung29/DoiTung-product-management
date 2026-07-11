@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Edit } from "lucide-react";
 
 import {
   Dialog,
@@ -19,6 +18,7 @@ import { Form } from "@/components/ui/form";
 import FormsInput from "../../../common/forms/form-input";
 import CustomSelect from "../../../common/forms/form-select";
 import CustomButton from "@/components/custom/common/custom-button";
+import EditButton from "@/components/custom/common/edit-button";
 
 import { PollinationTableDataType } from "./form/pollination-table";
 import { useParams, useRouter } from "next/navigation";
@@ -104,7 +104,7 @@ export function EditPollinationButton({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <CustomButton icon={Edit} type="button" />
+        <EditButton />
       </DialogTrigger>
 
       <DialogContent className="text-primary-button border-primary border-primary max-h-[90vh] w-[95vw] max-w-2xl overflow-y-auto border bg-white">

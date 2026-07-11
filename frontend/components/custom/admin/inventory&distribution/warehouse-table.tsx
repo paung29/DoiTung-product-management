@@ -8,7 +8,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Edit } from "lucide-react";
 import WareHouseEditModal from "./warehouse-edit-modal";
 
 export interface WarehouseTableData {
