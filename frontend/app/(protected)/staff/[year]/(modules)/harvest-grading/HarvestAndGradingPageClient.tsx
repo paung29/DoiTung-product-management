@@ -41,7 +41,7 @@ export default function HarvestGradingList({ poles, year,zoneNo, zones }: Props)
   return (
     <div className="mt-6 space-y-2">
 
-      <HarvestAndGradingSearch locations={zones}/>
+      <HarvestAndGradingSearch locations={zones} defaultZone={zoneNo}/>
       
       {records.map((record) => (
         <HarvestGradingRecordingCard

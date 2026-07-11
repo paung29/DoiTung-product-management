@@ -54,7 +54,6 @@ export type ClusterSearchForm = {
   location: string;
   pole_id: string;
   cluster_id: string;
-  progress_status: string;
 };
 
 export type UpdateCustomerInfoFormData = {
@@ -371,8 +370,6 @@ export type StockDistributionForm = {
 };
 
 export type DistributionHistorySearchForm = {
-  startDate: string;
-  endDate: string;
   category: InventoryCategory;
   grade: string;
   productionYear: string;
@@ -536,6 +533,9 @@ export type YearApiResponse = {
   }[];
 };
 
+export type YearListResponse = {
+  years : String[]
+}
 export type PerformanceOverview = {
   year: number;
   totalFlowers: number;

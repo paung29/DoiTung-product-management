@@ -2,45 +2,59 @@
 
 import { DistributionHistorySearchForm } from "@/lib/types/model/type";
 import { useForm } from "react-hook-form";
-import CustomDatePicker from "../../common/custom-date-picker";
 import { Form } from "@/components/ui/form";
 import { Option } from "@/lib/types/model/option";
 import CustomSelect from "../../common/forms/form-select";
 import CustomButton from "../../common/custom-button";
-import { Calendar } from "lucide-react";
+import { useParams, useRouter } from "next/navigation";
 
 const categoryOptions: Option[] = [
-  { id: "carry-over", value: "Carry Over" },
-  { id: "incoming", value: "Incoming" },
-  { id: "issued", value: "Issued" },
+  { id: "CARRY_OVER", value: "Carry Over" },
+  { id: "INCOMING", value: "Incoming" },
+  { id: "ISSUED", value: "Issued" },
 ];
 
 const gradeOptions: Option[] = [
-  { id: "A+", value: "A+" },
+  { id: "A_PLUS", value: "A+" },
   { id: "A", value: "A" },
   { id: "B", value: "B" },
   { id: "C", value: "C" },
-  { id: "D+", value: "D+" },
+  { id: "D_PLUS", value: "D+" },
   { id: "D", value: "D" },
 ];
 
-const plantationYearOptions: Option[] = [
-  { id: "2024", value: "2024" },
-  { id: "2023", value: "2023" },
-  { id: "2022", value: "2022" },
-];
+export default function DistributionHistory({plantationYearOptions, plantationAreaOptions} : {plantationYearOptions : Option[], plantationAreaOptions: Option[]}) {
 
-const plantationAreaOptions: Option[] = [
-  { id: "PM", value: "PM Phamee" },
-  { id: "RD", value: "RD Research" },
-  { id: "SE", value: "SE Building 1" },
-];
+  const router = useRouter();
+  const params = useParams();
+  const routeYear = params.year as string;
 
-export default function DistributionHistory() {
-  const form = useForm<DistributionHistorySearchForm>();
+  const form = useForm<DistributionHistorySearchForm>({
+    defaultValues : {
+      productionYear : routeYear
+    }
+  });
 
-  const onClick = () => {
+  const onClick = (data : DistributionHistorySearchForm) => {
+    const selectedYear = data.productionYear || routeYear;
     console.log(form.getValues());
+
+    const query = new URLSearchParams();
+
+    if (data.category) {
+      query.set("category", data.category);
+    }
+
+    if (data.grade) {
+      query.set("grade", data.grade);
+    }
+
+    if (data.plantationArea) {
+      query.set("warehouseId", data.plantationArea);
+    }
+
+    router.replace(`/admin/inventory-distribution/${selectedYear}/history?${query.toString()}`)
+
   };
 
   return (
@@ -56,29 +70,7 @@ export default function DistributionHistory() {
           {/* First Row: Date and Category */}
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {/* Start Date */}
-            <div className="flex flex-col">
-              <label className="mb-2 text-sm font-medium text-gray-700">
-                Start Date
-              </label>
-              <CustomDatePicker
-                control={form.control}
-                path="startDate"
-                placeholder="dd/mm/yyyy"
-                className="bg-secondary rounded-xl"
-              />
-            </div>
-
-            {/* End Date */}
-            <div className="flex flex-col">
-              <label className="mb-2 text-sm font-medium text-gray-700">
-                End Date
-              </label>
-              <CustomDatePicker
-                control={form.control}
-                path="endDate"
-                placeholder="dd/mm/yyyy"
-              />
-            </div>
+            
 
             {/* Category */}
             <div className="flex flex-col">
