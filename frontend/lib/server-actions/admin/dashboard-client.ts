@@ -94,6 +94,27 @@ export async function getPodSetRateTrend() {
 }
 
 /**
+ * Fetch the multi-year pod production trend (total / lost / remaining pods).
+ * GET /dashboard/pod-production-trend
+ * Returns PodProductionTrendResponse on success, or the standard
+ * { success:false, message } error shape on failure.
+ */
+export async function getPodProductionTrend() {
+  const cookieStore = await cookies();
+
+  const response = await fetch(`${baseUrl}/dashboard/pod-production-trend`, {
+    method: "GET",
+    credentials: "include",
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
+    cache: "no-store",
+  });
+
+  return await response.json();
+}
+
+/**
  * Fetch the list of available years.
  * GET /years/get-all-years
  */

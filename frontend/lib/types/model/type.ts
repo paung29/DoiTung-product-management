@@ -570,6 +570,17 @@ export type PodSetRateTrendResponse = {
   items: PodSetRateTrendItem[];
 };
 
+export type PodProductionTrendItem = {
+  year: number;
+  totalPods: number;
+  lostPods: number;
+  remainingPods: number;
+};
+
+export type PodProductionTrendResponse = {
+  items: PodProductionTrendItem[];
+};
+
 // Weight unit the admin picks on the stock overview screen.
 export type WeightUnit = "g" | "kg";
 

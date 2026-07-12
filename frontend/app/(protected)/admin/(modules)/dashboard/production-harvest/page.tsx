@@ -1,7 +1,7 @@
 import { PodSetRateChart } from "@/components/custom/admin/dashboard/pod-set-rate-chart";
 import { NumberHarvestablePodChart } from "@/components/custom/admin/dashboard/number-harvestable-pod-chart";
 import { FlowerProductionTrendChart } from "@/components/custom/admin/dashboard/flower-production-trend-chart";
-import { ProductivePolesChart } from "@/components/custom/admin/dashboard/productive-poles-chart";
+import { PodProductionTrendChart } from "@/components/custom/admin/dashboard/pod-production-trend-chart";
 import { Card } from "@/components/ui/card";
 import React from "react";
 
@@ -33,7 +33,7 @@ function ProductionHarvestPage() {
 
         <Card className="border-primary-button/20 shadow-sm">
           <div className="p-6">
-            <ProductivePolesChart />
+            <PodProductionTrendChart />
           </div>
         </Card>
       </div>
