@@ -546,6 +546,17 @@ export type PerformanceOverview = {
   totalHarvestPods: number;
 };
 
+export type FlowerTrendItem = {
+  year: number;
+  totalFlowers: number;
+  goodFlowers: number;
+  badFlowers: number;
+};
+
+export type FlowerProductionTrendResponse = {
+  items: FlowerTrendItem[];
+};
+
 // Weight unit the admin picks on the stock overview screen.
 export type WeightUnit = "g" | "kg";
 
