@@ -1,5 +1,5 @@
 import { PodSetRateChart } from "@/components/custom/admin/dashboard/pod-set-rate-chart";
-import { NumberHarvestablePodChart } from "@/components/custom/admin/dashboard/number-harvestable-pod-chart";
+import { HarvestablePodsTrendChart } from "@/components/custom/admin/dashboard/harvestable-pods-trend-chart";
 import { FlowerProductionTrendChart } from "@/components/custom/admin/dashboard/flower-production-trend-chart";
 import { PodProductionTrendChart } from "@/components/custom/admin/dashboard/pod-production-trend-chart";
 import { Card } from "@/components/ui/card";
@@ -18,7 +18,7 @@ function ProductionHarvestPage() {
 
         <Card className="border-primary-button/20 shadow-sm">
           <div className="p-6">
-            <NumberHarvestablePodChart />
+            <HarvestablePodsTrendChart />
           </div>
         </Card>
       </div>

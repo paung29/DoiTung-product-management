@@ -115,6 +115,27 @@ export async function getPodProductionTrend() {
 }
 
 /**
+ * Fetch the multi-year harvestable pods trend.
+ * GET /dashboard/harvestable-pods-trend
+ * Returns HarvestablePodsTrendResponse on success, or the standard
+ * { success:false, message } error shape on failure.
+ */
+export async function getHarvestablePodsTrend() {
+  const cookieStore = await cookies();
+
+  const response = await fetch(`${baseUrl}/dashboard/harvestable-pods-trend`, {
+    method: "GET",
+    credentials: "include",
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
+    cache: "no-store",
+  });
+
+  return await response.json();
+}
+
+/**
  * Fetch the list of available years.
  * GET /years/get-all-years
  */
