@@ -26,13 +26,7 @@ export type StockMovementsApiResponse = {
  
 export default async function Page({params, searchParams,} : {params : Promise<{year : string}>, searchParams: Promise<{category ?: string; grade ?: string; warehouseId ?: string}>;}) {
 
-export default async function Page({
-  params,
-  searchParams,
-}: {
-  params: Promise<{ year: string }>;
-  searchParams: Promise<{ zoneNo?: string }>;
-}) {
+ 
   const cookieStore = await cookies();
   const cookieHeader = cookieStore.toString();
 
