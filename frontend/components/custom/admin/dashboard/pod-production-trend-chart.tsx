@@ -18,42 +18,32 @@ import {
 } from "@/components/ui/chart";
 import {
   type CustomTooltipProps,
-  type PodSetRateTrendItem,
-  type PodSetRateTrendResponse,
+  type PodProductionTrendItem,
+  type PodProductionTrendResponse,
 } from "@/lib/types/model/type";
-import { getPodSetRateTrend } from "@/lib/server-actions/admin/dashboard-client";
+import { getPodProductionTrend } from "@/lib/server-actions/admin/dashboard-client";
 import { chartPalette } from "./chart-palette";
 
-type PollinationTrendPoint = {
+type PodTrendPoint = {
   year: string;
-  goodFlowers: number;
-  badFlowers: number;
-  numberPods: number;
-  unsuccessfulPollination: number;
-  totalFlowers: number;
+  remainingPods: number;
+  lostPods: number;
+  totalPods: number;
 };
 
 const chartConfig = {
-  goodFlowers: { label: "Good Flowers", color: chartPalette.leafGreen },
-  badFlowers: { label: "Bad Flowers", color: chartPalette.terracotta },
-  numberPods: { label: "Number of Pods", color: chartPalette.vanillaBrown },
-  unsuccessfulPollination: {
-    label: "Unsuccessful Pollination",
-    color: chartPalette.goldenOchre,
-  },
+  remainingPods: { label: "Remaining Pods", color: chartPalette.leafGreen },
+  lostPods: { label: "Lost Pods", color: chartPalette.terracotta },
+  totalPods: { label: "Total Pods", color: chartPalette.vanillaBrown },
 } satisfies ChartConfig;
 
 // Reusable mapping: API items -> chart points. No hardcoded values.
-function mapPollinationTrend(
-  items: PodSetRateTrendItem[],
-): PollinationTrendPoint[] {
+function mapPodTrend(items: PodProductionTrendItem[]): PodTrendPoint[] {
   return items.map((item) => ({
     year: String(item.year),
-    goodFlowers: item.goodFlowers ?? 0,
-    badFlowers: item.badFlowers ?? 0,
-    numberPods: item.numberPods ?? 0,
-    unsuccessfulPollination: item.unsuccessfulPollination ?? 0,
-    totalFlowers: item.totalFlowers ?? 0,
+    remainingPods: item.remainingPods ?? 0,
+    lostPods: item.lostPods ?? 0,
+    totalPods: item.totalPods ?? 0,
   }));
 }
 
@@ -63,7 +53,7 @@ const CustomTooltip = (props: CustomTooltipProps) => {
   const { active, payload } = props;
 
   if (active && payload && payload.length) {
-    const point = payload[0]?.payload as PollinationTrendPoint | undefined;
+    const point = payload[0]?.payload as PodTrendPoint | undefined;
 
     return (
       <div className="rounded-lg border border-gray-300 bg-white p-3 shadow-lg">
@@ -75,9 +65,6 @@ const CustomTooltip = (props: CustomTooltipProps) => {
             </p>
           ))}
         </div>
-        <p className="mt-2 border-t border-gray-200 pt-2 font-semibold text-gray-900">
-          Total Flowers: {formatCount(point?.totalFlowers)}
-        </p>
       </div>
     );
   }
@@ -86,17 +73,21 @@ const CustomTooltip = (props: CustomTooltipProps) => {
 };
 
 /**
- * Pollination Performance Trend — combined Bar + Line chart.
+ * Pod Production Trend — combined Bar + Line chart.
  *
- * Bars (stacked) show flower quality (good + bad = total flowers); the lines
- * track pod production and unsuccessful pollination across years.
+ * Stacked bars show pod outcome composition (remaining + lost), whose height
+ * equals total pods; the line tracks total pods across years.
  *
  * `year` is optional: the endpoint returns the full multi-year range, so the
  * chart works standalone. When a parent passes a changing year, the effect
  * dependency makes the chart refetch/update automatically.
  */
-export function PodSetRateChart({ year }: { year?: string | number }) {
-  const [points, setPoints] = useState<PollinationTrendPoint[]>([]);
+export function PodProductionTrendChart({
+  year,
+}: {
+  year?: string | number;
+}) {
+  const [points, setPoints] = useState<PodTrendPoint[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -106,10 +97,10 @@ export function PodSetRateChart({ year }: { year?: string | number }) {
       setLoading(true);
 
       try {
-        const res: PodSetRateTrendResponse = await getPodSetRateTrend();
+        const res: PodProductionTrendResponse = await getPodProductionTrend();
         if (!active) return;
 
-        setPoints(mapPollinationTrend(res?.items ?? []));
+        setPoints(mapPodTrend(res?.items ?? []));
       } catch {
         if (active) setPoints([]);
       } finally {
@@ -125,33 +116,27 @@ export function PodSetRateChart({ year }: { year?: string | number }) {
   const hasData =
     points.length > 0 &&
     points.some(
-      (p) =>
-        p.goodFlowers > 0 ||
-        p.badFlowers > 0 ||
-        p.numberPods > 0 ||
-        p.unsuccessfulPollination > 0 ||
-        p.totalFlowers > 0,
+      (p) => p.remainingPods > 0 || p.lostPods > 0 || p.totalPods > 0,
     );
 
   return (
     <div className="space-y-4">
       <div>
         <h3 className="text-lg font-semibold text-gray-900">
-          Pollination Performance Trend
+          Pod Production Trend
         </h3>
         <p className="text-sm text-gray-600">
-          Comparison of pollination outcomes, flower quality, and pod production
-          across years.
+          Yearly comparison of total, remaining, and lost pod production.
         </p>
       </div>
 
       {loading ? (
         <div className="flex min-h-96 w-full items-center justify-center rounded-xl border border-dashed border-gray-200 bg-gray-50 text-sm text-gray-500">
-          Loading pollination data…
+          Loading pod production data…
         </div>
       ) : !hasData ? (
         <div className="flex min-h-96 w-full items-center justify-center rounded-xl border border-dashed border-gray-200 bg-gray-50 text-sm text-gray-600">
-          No pollination data is available yet.
+          No pod production data is available yet.
         </div>
       ) : (
         <ChartContainer config={chartConfig} className="min-h-96 w-full">
@@ -169,7 +154,7 @@ export function PodSetRateChart({ year }: { year?: string | number }) {
             <YAxis
               tickFormatter={(value: number) => value.toLocaleString()}
               label={{
-                value: "Count",
+                value: "Number of Pods",
                 angle: -90,
                 position: "insideLeft",
                 style: { textAnchor: "middle" },
@@ -181,35 +166,26 @@ export function PodSetRateChart({ year }: { year?: string | number }) {
             />
 
             <Bar
-              dataKey="goodFlowers"
-              name={chartConfig.goodFlowers.label}
-              stackId="flowers"
-              fill={chartConfig.goodFlowers.color}
+              dataKey="remainingPods"
+              name={chartConfig.remainingPods.label}
+              stackId="pods"
+              fill={chartConfig.remainingPods.color}
               radius={[0, 0, 0, 0]}
             />
             <Bar
-              dataKey="badFlowers"
-              name={chartConfig.badFlowers.label}
-              stackId="flowers"
-              fill={chartConfig.badFlowers.color}
+              dataKey="lostPods"
+              name={chartConfig.lostPods.label}
+              stackId="pods"
+              fill={chartConfig.lostPods.color}
               radius={[4, 4, 0, 0]}
             />
             <Line
               type="monotone"
-              dataKey="numberPods"
-              name={chartConfig.numberPods.label}
-              stroke={chartConfig.numberPods.color}
+              dataKey="totalPods"
+              name={chartConfig.totalPods.label}
+              stroke={chartConfig.totalPods.color}
               strokeWidth={2}
-              dot={{ fill: chartConfig.numberPods.color, r: 5 }}
-              activeDot={{ r: 7 }}
-            />
-            <Line
-              type="monotone"
-              dataKey="unsuccessfulPollination"
-              name={chartConfig.unsuccessfulPollination.label}
-              stroke={chartConfig.unsuccessfulPollination.color}
-              strokeWidth={2}
-              dot={{ fill: chartConfig.unsuccessfulPollination.color, r: 5 }}
+              dot={{ fill: chartConfig.totalPods.color, r: 5 }}
               activeDot={{ r: 7 }}
             />
           </ComposedChart>

@@ -557,6 +557,43 @@ export type FlowerProductionTrendResponse = {
   items: FlowerTrendItem[];
 };
 
+export type PodSetRateTrendItem = {
+  year: number;
+  numberPods: number;
+  unsuccessfulPollination: number;
+  goodFlowers: number;
+  badFlowers: number;
+  totalFlowers: number;
+};
+
+export type PodSetRateTrendResponse = {
+  items: PodSetRateTrendItem[];
+};
+
+export type PodProductionTrendItem = {
+  year: number;
+  totalPods: number;
+  lostPods: number;
+  remainingPods: number;
+};
+
+export type PodProductionTrendResponse = {
+  items: PodProductionTrendItem[];
+};
+
+export type HarvestablePodsTrendItem = {
+  year: number;
+  totalPods: number;
+  remainingPods: number;
+  secondRoundPods: number;
+  lostPodsBeforeHarvest: number;
+  removedPods: number;
+};
+
+export type HarvestablePodsTrendResponse = {
+  items: HarvestablePodsTrendItem[];
+};
+
 // Weight unit the admin picks on the stock overview screen.
 export type WeightUnit = "g" | "kg";
 
