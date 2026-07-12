@@ -73,6 +73,27 @@ export async function getFlowerProductionTrend() {
 }
 
 /**
+ * Fetch the multi-year pollination performance / pod-set-rate trend.
+ * GET /dashboard/pod-set-rate-trend
+ * Returns PodSetRateTrendResponse on success, or the standard
+ * { success:false, message } error shape on failure.
+ */
+export async function getPodSetRateTrend() {
+  const cookieStore = await cookies();
+
+  const response = await fetch(`${baseUrl}/dashboard/pod-set-rate-trend`, {
+    method: "GET",
+    credentials: "include",
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
+    cache: "no-store",
+  });
+
+  return await response.json();
+}
+
+/**
  * Fetch the list of available years.
  * GET /years/get-all-years
  */
