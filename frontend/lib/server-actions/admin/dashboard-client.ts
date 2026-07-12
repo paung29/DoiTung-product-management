@@ -136,6 +136,69 @@ export async function getHarvestablePodsTrend() {
 }
 
 /**
+ * Fetch the multi-year average pod weight trend.
+ * GET /dashboard/weight-per-pod-trend
+ * Returns WeightPerPodTrendResponse on success, or the standard
+ * { success:false, message } error shape on failure.
+ */
+export async function getWeightPerPodTrend() {
+  const cookieStore = await cookies();
+
+  const response = await fetch(`${baseUrl}/dashboard/weight-per-pod-trend`, {
+    method: "GET",
+    credentials: "include",
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
+    cache: "no-store",
+  });
+
+  return await response.json();
+}
+
+/**
+ * Fetch the multi-year productive poles trend (total / productive / non-productive).
+ * GET /dashboard/productive-poles-trend
+ * Returns ProductivePolesTrendResponse on success, or the standard
+ * { success:false, message } error shape on failure.
+ */
+export async function getProductivePolesTrend() {
+  const cookieStore = await cookies();
+
+  const response = await fetch(`${baseUrl}/dashboard/productive-poles-trend`, {
+    method: "GET",
+    credentials: "include",
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
+    cache: "no-store",
+  });
+
+  return await response.json();
+}
+
+/**
+ * Fetch the multi-year actual yield per pole trend.
+ * GET /dashboard/actual-yield-trend
+ * Returns ActualYieldTrendResponse on success, or the standard
+ * { success:false, message } error shape on failure.
+ */
+export async function getActualYieldTrend() {
+  const cookieStore = await cookies();
+
+  const response = await fetch(`${baseUrl}/dashboard/actual-yield-trend`, {
+    method: "GET",
+    credentials: "include",
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
+    cache: "no-store",
+  });
+
+  return await response.json();
+}
+
+/**
  * Fetch the list of available years.
  * GET /years/get-all-years
  */

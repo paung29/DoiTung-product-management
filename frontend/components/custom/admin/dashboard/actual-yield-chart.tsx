@@ -1,6 +1,7 @@
 "use client";
 
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
+import { useEffect, useState } from "react";
+import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 import {
   ChartContainer,
   ChartLegend,
@@ -9,62 +10,56 @@ import {
   type ChartConfig,
 } from "@/components/ui/chart";
 import {
-  type ChartDataPoint,
   type CustomTooltipProps,
+  type WeightPerPodTrendItem,
+  type WeightPerPodTrendResponse,
 } from "@/lib/types/model/type";
+import { getWeightPerPodTrend } from "@/lib/server-actions/admin/dashboard-client";
+import { chartPalette } from "./chart-palette";
 
-// Mock data for actual yield per pole
-const chartData = [
-  {
-    year: "64/65",
-    freshYield: 450,
-    driedYield: 180,
-  },
-  {
-    year: "65/66",
-    freshYield: 520,
-    driedYield: 210,
-  },
-  {
-    year: "66/67",
-    freshYield: 580,
-    driedYield: 235,
-  },
-  {
-    year: "67/68",
-    freshYield: 620,
-    driedYield: 250,
-  },
-];
+// The backend returns a raw number with no unit field. Weights across this app
+// are tracked in grams, so display in grams. Change here if that ever changes.
+const WEIGHT_UNIT = "g";
+
+type WeightPerPodPoint = {
+  year: string;
+  averageWeightPerPod: number;
+};
 
 const chartConfig = {
-  freshYield: {
-    label: "Fresh Yield",
-    color: "#8b6f47",
-  },
-  driedYield: {
-    label: "Dried Yield",
-    color: "#f97316",
+  averageWeightPerPod: {
+    label: "Average Pod Weight",
+    color: chartPalette.vanillaBrown,
   },
 } satisfies ChartConfig;
+
+// Reusable mapping: API items -> chart points. No hardcoded values.
+function mapWeightPerPod(items: WeightPerPodTrendItem[]): WeightPerPodPoint[] {
+  return items.map((item) => ({
+    year: String(item.year),
+    averageWeightPerPod: item.averageWeightPerPod ?? 0,
+  }));
+}
+
+const formatWeight = (value?: number) =>
+  `${(value ?? 0).toLocaleString()} ${WEIGHT_UNIT}`;
 
 const CustomTooltip = (props: CustomTooltipProps) => {
   const { active, payload } = props;
 
   if (active && payload && payload.length) {
-    const data = payload[0].payload as ChartDataPoint;
+    const point = payload[0]?.payload as WeightPerPodPoint | undefined;
 
     return (
       <div className="rounded-lg border border-gray-300 bg-white p-3 shadow-lg">
-        <p className="font-semibold text-gray-900">{data.year}</p>
-        <div className="mt-2 space-y-1 text-sm">
-          <p style={{ color: chartConfig.freshYield.color }}>
-            Fresh Yield: {(data.freshYield || 0).toLocaleString()} g
-          </p>
-          <p style={{ color: chartConfig.driedYield.color }}>
-            Dried Yield: {(data.driedYield || 0).toLocaleString()} g
-          </p>
-        </div>
+        <p className="font-semibold text-gray-900">{point?.year}</p>
+        <p
+          className="mt-2 text-sm"
+          style={{ color: chartConfig.averageWeightPerPod.color }}
+        >
+          {chartConfig.averageWeightPerPod.label}:{" "}
+          {formatWeight(point?.averageWeightPerPod)}
+        </p>
       </div>
     );
   }
@@ -72,73 +67,122 @@ const CustomTooltip = (props: CustomTooltipProps) => {
   return null;
 };
 
-// Custom label component for displaying values on top of bars
+// Value label rendered above each data point.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const renderLabel = (props: any) => {
-  const { x, y, width, value } = props;
+const renderValueLabel = (props: any) => {
+  const { x, y, value } = props;
+  if (x === undefined || y === undefined) return null;
+
   return (
     <text
-      x={x + width / 2}
-      y={y - 5}
+      x={x}
+      y={y - 10}
       fill="#374151"
       textAnchor="middle"
       fontSize="12"
-      fontWeight="500"
+      fontWeight="600"
     >
-      {value}g
+      {formatWeight(value)}
     </text>
   );
 };
 
-export function ActualYieldChart() {
+/**
+ * Average Pod Weight Trend — single-metric line chart.
+ *
+ * `year` is optional: the endpoint returns the full multi-year range, so the
+ * chart works standalone. When a parent passes a changing year, the effect
+ * dependency makes the chart refetch/update automatically.
+ */
+export function ActualYieldChart({ year }: { year?: string | number }) {
+  const [points, setPoints] = useState<WeightPerPodPoint[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let active = true;
+
+    (async () => {
+      setLoading(true);
+
+      try {
+        const res: WeightPerPodTrendResponse = await getWeightPerPodTrend();
+        if (!active) return;
+
+        setPoints(mapWeightPerPod(res?.items ?? []));
+      } catch {
+        if (active) setPoints([]);
+      } finally {
+        if (active) setLoading(false);
+      }
+    })();
+
+    return () => {
+      active = false;
+    };
+  }, [year]);
+
+  const hasData = points.some((p) => p.averageWeightPerPod > 0);
+
   return (
     <div className="space-y-4">
       <div>
         <h3 className="text-lg font-semibold text-gray-900">
-          Actual Yield per Pole
+          Average Pod Weight Trend
         </h3>
         <p className="text-sm text-gray-600">
-          Fresh and dried yield production across fiscal years
+          Yearly trend of average vanilla pod weight across production seasons.
         </p>
       </div>
 
-      <ChartContainer config={chartConfig} className="min-h-96 w-full">
-        <BarChart
-          data={chartData}
-          margin={{ top: 40, right: 30, left: 0, bottom: 0 }}
-        >
-          <CartesianGrid vertical={false} />
-          <XAxis
-            dataKey="year"
-            tickLine={false}
-            tickMargin={10}
-            axisLine={false}
-          />
-          <YAxis
-            label={{
-              value: "Yield per pole (grams)",
-              angle: -90,
-              position: "insideLeft",
-              style: { textAnchor: "middle" },
-            }}
-          />
-          <ChartTooltip content={<CustomTooltip />} />
-          <ChartLegend content={<ChartLegendContent />} />
+      {loading ? (
+        <div className="flex min-h-96 w-full items-center justify-center rounded-xl border border-dashed border-gray-200 bg-gray-50 text-sm text-gray-500">
+          Loading average pod weight…
+        </div>
+      ) : !hasData ? (
+        <div className="flex min-h-96 w-full items-center justify-center rounded-xl border border-dashed border-gray-200 bg-gray-50 text-sm text-gray-600">
+          No pod weight data available.
+        </div>
+      ) : (
+        <ChartContainer config={chartConfig} className="min-h-96 w-full">
+          <LineChart
+            data={points}
+            margin={{ top: 40, right: 30, left: 0, bottom: 0 }}
+          >
+            <CartesianGrid vertical={false} />
+            <XAxis
+              dataKey="year"
+              tickLine={false}
+              tickMargin={10}
+              axisLine={false}
+            />
+            <YAxis
+              domain={[0, (dataMax: number) => (dataMax > 0 ? dataMax : 1)]}
+              tickFormatter={(value: number) => value.toLocaleString()}
+              label={{
+                value: `Average Weight per Pod (${WEIGHT_UNIT})`,
+                angle: -90,
+                position: "insideLeft",
+                style: { textAnchor: "middle" },
+              }}
+            />
+            <ChartTooltip content={<CustomTooltip />} />
+            <ChartLegend
+              content={<ChartLegendContent verticalAlign="bottom" />}
+            />
 
-          <Bar
-            dataKey="freshYield"
-            fill={chartConfig.freshYield.color}
-            radius={[4, 4, 0, 0]}
-            label={renderLabel}
-          />
-          <Bar
-            dataKey="driedYield"
-            fill={chartConfig.driedYield.color}
-            radius={[4, 4, 0, 0]}
-            label={renderLabel}
-          />
-        </BarChart>
-      </ChartContainer>
+            <Line
+              type="monotone"
+              dataKey="averageWeightPerPod"
+              name={chartConfig.averageWeightPerPod.label}
+              stroke={chartConfig.averageWeightPerPod.color}
+              strokeWidth={2}
+              dot={{ fill: chartConfig.averageWeightPerPod.color, r: 5 }}
+              activeDot={{ r: 7 }}
+              label={renderValueLabel}
+            />
+          </LineChart>
+        </ChartContainer>
+      )}
     </div>
   );
 }
