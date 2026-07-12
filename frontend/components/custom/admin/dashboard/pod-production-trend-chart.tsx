@@ -22,6 +22,7 @@ import {
   type PodProductionTrendResponse,
 } from "@/lib/types/model/type";
 import { getPodProductionTrend } from "@/lib/server-actions/admin/dashboard-client";
+import { chartPalette } from "./chart-palette";
 
 type PodTrendPoint = {
   year: string;
@@ -31,9 +32,9 @@ type PodTrendPoint = {
 };
 
 const chartConfig = {
-  remainingPods: { label: "Remaining Pods", color: "#3a835d" },
-  lostPods: { label: "Lost Pods", color: "#c32527" },
-  totalPods: { label: "Total Pods", color: "#1e3a8a" },
+  remainingPods: { label: "Remaining Pods", color: chartPalette.leafGreen },
+  lostPods: { label: "Lost Pods", color: chartPalette.terracotta },
+  totalPods: { label: "Total Pods", color: chartPalette.vanillaBrown },
 } satisfies ChartConfig;
 
 // Reusable mapping: API items -> chart points. No hardcoded values.

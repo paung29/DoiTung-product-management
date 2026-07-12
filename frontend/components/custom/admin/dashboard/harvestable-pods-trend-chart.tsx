@@ -22,6 +22,7 @@ import {
   type HarvestablePodsTrendResponse,
 } from "@/lib/types/model/type";
 import { getHarvestablePodsTrend } from "@/lib/server-actions/admin/dashboard-client";
+import { chartPalette } from "./chart-palette";
 
 type HarvestablePodsPoint = {
   year: string;
@@ -33,11 +34,20 @@ type HarvestablePodsPoint = {
 };
 
 const chartConfig = {
-  remainingPods: { label: "Remaining (Harvestable)", color: "#3a835d" },
-  lostPodsBeforeHarvest: { label: "Lost Before Harvest", color: "#c32527" },
-  removedPods: { label: "Removed Pods", color: "#d97706" },
-  secondRoundPods: { label: "Second-Round Pods", color: "#7c3aed" },
-  totalPods: { label: "Total Pods", color: "#1e3a8a" },
+  remainingPods: {
+    label: "Remaining (Harvestable)",
+    color: chartPalette.leafGreen,
+  },
+  lostPodsBeforeHarvest: {
+    label: "Lost Before Harvest",
+    color: chartPalette.terracotta,
+  },
+  removedPods: { label: "Removed Pods", color: chartPalette.goldenOchre },
+  secondRoundPods: {
+    label: "Second-Round Pods",
+    color: chartPalette.sageOlive,
+  },
+  totalPods: { label: "Total Pods", color: chartPalette.vanillaBrown },
 } satisfies ChartConfig;
 
 // Reusable mapping: API items -> chart points. No hardcoded values.

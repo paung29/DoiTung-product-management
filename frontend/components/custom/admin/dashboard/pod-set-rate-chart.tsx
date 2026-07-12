@@ -22,6 +22,7 @@ import {
   type PodSetRateTrendResponse,
 } from "@/lib/types/model/type";
 import { getPodSetRateTrend } from "@/lib/server-actions/admin/dashboard-client";
+import { chartPalette } from "./chart-palette";
 
 type PollinationTrendPoint = {
   year: string;
@@ -33,12 +34,12 @@ type PollinationTrendPoint = {
 };
 
 const chartConfig = {
-  goodFlowers: { label: "Good Flowers", color: "#3a835d" },
-  badFlowers: { label: "Bad Flowers", color: "#c32527" },
-  numberPods: { label: "Number of Pods", color: "#1e3a8a" },
+  goodFlowers: { label: "Good Flowers", color: chartPalette.leafGreen },
+  badFlowers: { label: "Bad Flowers", color: chartPalette.terracotta },
+  numberPods: { label: "Number of Pods", color: chartPalette.vanillaBrown },
   unsuccessfulPollination: {
     label: "Unsuccessful Pollination",
-    color: "#fb923c",
+    color: chartPalette.goldenOchre,
   },
 } satisfies ChartConfig;
 

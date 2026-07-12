@@ -22,6 +22,7 @@ import {
   type FlowerTrendItem,
 } from "@/lib/types/model/type";
 import { getFlowerProductionTrend } from "@/lib/server-actions/admin/dashboard-client";
+import { chartPalette } from "./chart-palette";
 
 type FlowerTrendPoint = {
   year: string;
@@ -31,9 +32,9 @@ type FlowerTrendPoint = {
 };
 
 const chartConfig = {
-  totalFlowers: { label: "Total Flowers", color: "#8b6f47" },
-  goodFlowers: { label: "Good Flowers", color: "#3a835d" },
-  badFlowers: { label: "Bad Flowers", color: "#c32527" },
+  totalFlowers: { label: "Total Flowers", color: chartPalette.tan },
+  goodFlowers: { label: "Good Flowers", color: chartPalette.leafGreen },
+  badFlowers: { label: "Bad Flowers", color: chartPalette.terracotta },
 } satisfies ChartConfig;
 
 // Reusable mapping: API items -> chart points. No hardcoded values.
