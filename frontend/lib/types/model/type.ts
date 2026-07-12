@@ -594,6 +594,15 @@ export type HarvestablePodsTrendResponse = {
   items: HarvestablePodsTrendItem[];
 };
 
+export type WeightPerPodTrendItem = {
+  year: number;
+  averageWeightPerPod: number;
+};
+
+export type WeightPerPodTrendResponse = {
+  items: WeightPerPodTrendItem[];
+};
+
 // Weight unit the admin picks on the stock overview screen.
 export type WeightUnit = "g" | "kg";
 
