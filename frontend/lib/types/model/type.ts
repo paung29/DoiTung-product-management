@@ -603,6 +603,26 @@ export type WeightPerPodTrendResponse = {
   items: WeightPerPodTrendItem[];
 };
 
+export type ProductivePolesTrendItem = {
+  year: number;
+  totalPoles: number;
+  productivePoles: number;
+  nonProductivePoles: number;
+};
+
+export type ProductivePolesTrendResponse = {
+  items: ProductivePolesTrendItem[];
+};
+
+export type ActualYieldTrendItem = {
+  year: number;
+  actualYieldPerPole: number;
+};
+
+export type ActualYieldTrendResponse = {
+  items: ActualYieldTrendItem[];
+};
+
 // Weight unit the admin picks on the stock overview screen.
 export type WeightUnit = "g" | "kg";
 
