@@ -52,6 +52,27 @@ export async function getConditionByStage(year: string | number) {
 }
 
 /**
+ * Fetch the multi-year flower production trend (total / good / bad flowers).
+ * GET /dashboard/flower-production-trend
+ * Returns FlowerProductionTrendResponse on success, or the standard
+ * { success:false, message } error shape on failure.
+ */
+export async function getFlowerProductionTrend() {
+  const cookieStore = await cookies();
+
+  const response = await fetch(`${baseUrl}/dashboard/flower-production-trend`, {
+    method: "GET",
+    credentials: "include",
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
+    cache: "no-store",
+  });
+
+  return await response.json();
+}
+
+/**
  * Fetch the list of available years.
  * GET /years/get-all-years
  */
