@@ -18,11 +18,11 @@ function ReportsAndExportPage({ years }: { years: string[] }) {
   const [harvestYear, setHarvestYear] = useState("");
   const [gradingYear, setGradingYear] = useState("");
   const [stockMovementYear, setStockMovementYear] = useState("");
-  const [stockSummaryYear, setStockSummaryYear] = useState("");
+  const [customerDistributionYear, setCustomerDistributionYear] = useState("");
 
-  function handleExport(name: string, year: string) {
+  function handleExport(name: string, yearLabel: string) {
     setToastTitle(`${name} exported`);
-    setToastDescription(`Year ${year} · EXCEL format`);
+    setToastDescription(`${yearLabel} · EXCEL format`);
     setToastVisible(true);
 
     setTimeout(() => {
@@ -32,7 +32,7 @@ function ReportsAndExportPage({ years }: { years: string[] }) {
 
   async function downloadExcelFile(
     path: string,
-    year: string,
+    year: string | undefined,
     reportName: string
   ) {
     setError(null);
@@ -59,12 +59,12 @@ function ReportsAndExportPage({ years }: { years: string[] }) {
       const a = document.createElement("a");
 
       a.href = url;
-      a.download = result.filename ?? `${reportName}-${year}.xlsx`;
+      a.download = result.filename ?? `${reportName}${year ? `-${year}` : ""}.xlsx`;
       a.click();
 
       window.URL.revokeObjectURL(url);
 
-      handleExport(reportName, year);
+      handleExport(reportName, year ? `Year ${year}` : "All Years");
     } catch {
       setError("Cannot download file. Please try again.");
     }
@@ -150,16 +150,46 @@ function ReportsAndExportPage({ years }: { years: string[] }) {
 
           <ReportExportCard
             title="Stock Summary Report"
-            description="Export annual inventory balances and stock overview."
+            description="Export all stock movement records across every year."
             years={years}
-            selectedYear={stockSummaryYear}
-            onYearChange={setStockSummaryYear}
-            disabled={!stockSummaryYear}
+            isAllYears
+            onYearChange={() => {}}
             onExport={() =>
               downloadExcelFile(
                 exportConfigs.stockSummary.path,
-                stockSummaryYear,
+                undefined,
                 exportConfigs.stockSummary.name
+              )
+            }
+          />
+
+          <ReportExportCard
+            title="Customer Distribution Report"
+            description="Export yearly customer distribution data."
+            years={years}
+            selectedYear={customerDistributionYear}
+            onYearChange={setCustomerDistributionYear}
+            disabled={!customerDistributionYear}
+            onExport={() =>
+              downloadExcelFile(
+                exportConfigs.customerDistribution.path,
+                customerDistributionYear,
+                exportConfigs.customerDistribution.name
+              )
+            }
+          />
+
+          <ReportExportCard
+            title="Customer Distribution Report (All Years)"
+            description="Export customer distribution data across all years."
+            years={years}
+            isAllYears
+            onYearChange={() => {}}
+            onExport={() =>
+              downloadExcelFile(
+                exportConfigs.customerDistributionAll.path,
+                undefined,
+                exportConfigs.customerDistributionAll.name
               )
             }
           />

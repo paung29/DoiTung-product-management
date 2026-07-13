@@ -20,6 +20,14 @@ export const exportConfigs = {
   },
   stockSummary: {
     name: "Stock Summary Report",
-    path: "/export-data/stock-summary",
+    path: "/export-data/stock-movements/all",
+  },
+  customerDistribution: {
+    name: "Customer Distribution Report",
+    path: "/export-data/customer-distribution",
+  },
+  customerDistributionAll: {
+    name: "Customer Distribution Report (All Years)",
+    path: "/export-data/customer-distribution/all",
   },
 };

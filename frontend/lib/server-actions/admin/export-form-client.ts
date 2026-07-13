@@ -3,11 +3,14 @@
 import { baseUrl } from "@/lib/utl";
 import { cookies } from "next/headers";
 
-export async function exportExcelFile(path: string, year: string) {
+export async function exportExcelFile(path: string, year?: string) {
   const cookieStore = await cookies();
   const cookieHeader = cookieStore.toString();
 
-  const response = await fetch(`${baseUrl}${path}?year=${year}`, {
+  // Only append ?year= for year-scoped reports; all-years endpoints take no param.
+  const url = year ? `${baseUrl}${path}?year=${year}` : `${baseUrl}${path}`;
+
+  const response = await fetch(url, {
     method: "GET",
     headers: {
       Cookie: cookieHeader,
@@ -19,7 +22,9 @@ export async function exportExcelFile(path: string, year: string) {
       success: false,
       message:
         response.status === 404
-          ? "Cannot download. No data found for this year."
+          ? year
+            ? "Cannot download. No data found for this year."
+            : "Cannot download. No data found."
           : "Cannot download file.",
     };
   }
@@ -27,10 +32,16 @@ export async function exportExcelFile(path: string, year: string) {
   const blob = await response.blob();
   const arrayBuffer = await blob.arrayBuffer();
 
+  // Year-scoped: "<report>-<year>.xlsx"; all-years: joins the last two path
+  // segments, e.g. "/export-data/stock-movements/all" -> "stock-movements-all.xlsx".
+  const filename = year
+    ? `${path.split("/").pop()}-${year}.xlsx`
+    : `${path.split("/").filter(Boolean).slice(-2).join("-")}.xlsx`;
+
   return {
     success: true,
     file: Buffer.from(arrayBuffer).toString("base64"),
-    filename: `${path.split("/").pop()}-${year}.xlsx`,
+    filename,
     contentType:
       response.headers.get("content-type") ||
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
