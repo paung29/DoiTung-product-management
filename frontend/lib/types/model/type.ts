@@ -623,6 +623,21 @@ export type ActualYieldTrendResponse = {
   items: ActualYieldTrendItem[];
 };
 
+export type FreshPodGradeTrendItem = {
+  year: number;
+  gradeAPlus: number;
+  gradeA: number;
+  gradeB: number;
+  gradeC: number;
+  gradeDPlus: number;
+  undersized: number;
+  rotten: number;
+};
+
+export type FreshPodGradeTrendResponse = {
+  items: FreshPodGradeTrendItem[];
+};
+
 // Weight unit the admin picks on the stock overview screen.
 export type WeightUnit = "g" | "kg";
 

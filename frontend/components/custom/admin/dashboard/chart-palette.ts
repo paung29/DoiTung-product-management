@@ -6,6 +6,8 @@
  * the same concept (e.g. "good", "lost", "total") always looks identical.
  */
 export const chartPalette = {
+  /** Deepest green — top of a quality gradient (e.g. Grade A+). */
+  deepMoss: "#2f6b4a",
   /** Healthy / good / remaining (harvestable) outcomes. */
   leafGreen: "#3a835d",
   /** Bad / lost outcomes. */
