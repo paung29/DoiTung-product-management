@@ -104,7 +104,7 @@ export default function DistributionHistory({plantationYearOptions, plantationAr
             </div>
 
             {/* Production Year */}
-            <div className="flex flex-col">
+            {/* <div className="flex flex-col">
               <label className="mb-2 text-sm font-medium text-gray-700">
                 Production Year
               </label>
@@ -115,7 +115,7 @@ export default function DistributionHistory({plantationYearOptions, plantationAr
                 placeholder="All Years"
                 triggerClassName="bg-secondary rounded-xl"
               />
-            </div>
+            </div> */}
 
             {/* Plantation Area */}
             <div className="flex flex-col">
