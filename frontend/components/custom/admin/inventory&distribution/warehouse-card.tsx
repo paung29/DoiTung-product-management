@@ -57,7 +57,7 @@ export default function WarehouseCard({ data }: Props) {
 
         <StatCard
           title="Total Remaining Pods"
-          value={data.remainingStockPods.toLocaleString()}
+          value={(data?.remainingStockPods ?? 0).toLocaleString()}
           label="pods"
           icon={<TrendingUp className="h-6 w-6 text-violet-600" />}
           iconWrapperClassName="bg-violet-50"
@@ -65,7 +65,7 @@ export default function WarehouseCard({ data }: Props) {
 
         <StatCard
           title="Total Remaining Weight"
-          value={data.remainingStockWeights.toLocaleString()}
+          value={(data?.remainingStockWeights ?? 0).toLocaleString()}
           label="g"
           icon={<Weight className="h-6 w-6 text-amber-600" />}
           iconWrapperClassName="bg-amber-50"
