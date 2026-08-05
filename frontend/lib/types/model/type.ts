@@ -723,3 +723,8 @@ export type warehouseItem = {
 export type getAllWarehouses = {
   warehouses : warehouseItem[]
 }
+
+export type YearNameFormType = {
+  year: number;
+  yearName: number;
+};

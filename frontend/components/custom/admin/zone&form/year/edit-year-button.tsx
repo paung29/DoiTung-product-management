@@ -23,12 +23,15 @@ import FormsInput from "../../../common/forms/form-input";
 import EditButton from "@/components/custom/common/edit-button";
 
 import { YearTableDataType } from "./year-table";
-import { YearSettingFormType } from "@/lib/types/model/type";
+import { YearNameFormType, YearSettingFormType } from "@/lib/types/model/type";
 import { updateYearSetting } from "@/lib/server-actions/admin/update-year-setting-client";
+import { updateYearName } from "@/lib/server-actions/admin/update-year-name-client";
 
 type EditYearFormType = {
   year: number;
+  yearName: number;
 };
+
 
 type EditYearButtonProps = {
   yearData: YearTableDataType;
@@ -41,18 +44,20 @@ function EditYearButton({ yearData }: EditYearButtonProps) {
   const form = useForm<EditYearFormType>({
     defaultValues: {
       year: Number(yearData.year),
+      yearName: Number(yearData.year),
     },
   });
 
   const handleSubmit = async (data: EditYearFormType) => {
     try {
-      const reformData: YearSettingFormType = {
+      const reformData: YearNameFormType = {
         year: data.year,
+        yearName: Number(data.yearName),
       };
 
       console.log("Updating year:", reformData);
 
-      const response = await updateYearSetting(reformData);
+      const response = await updateYearName(reformData);
 
       console.log(response);
 
@@ -87,7 +92,7 @@ function EditYearButton({ yearData }: EditYearButtonProps) {
               <FormsInput
                 inputClassName="bg-white"
                 control={form.control}
-                path="year"
+                path="yearName"
                 label="Year"
                 type="number"
                 placeholder="Eg: 2025"
