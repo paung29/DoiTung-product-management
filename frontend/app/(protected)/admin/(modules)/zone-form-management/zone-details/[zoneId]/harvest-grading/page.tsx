@@ -29,6 +29,8 @@ export type HarvestGradingItem = {
   harvestGradingFormDone: boolean;
   recordedBy: string;
   date: string;
+  rottenCount: number;
+  rottenWeight: number;
 };
 
 export default async function Page({
@@ -76,6 +78,8 @@ export default async function Page({
       rejectedUndersize_weight: Number(item.undersizedWeight ?? 0),
       recordedBy:
         item.recordedBy && item.recordedBy !== "" ? item.recordedBy : "N/A",
+      rottenCount: Number(item.rottenCount ?? 0),
+      rottenWeight: Number(item.rottenWeight ?? 0),
     })) ?? [];
 
     console.log(harvestGradingTableData)

@@ -130,6 +130,8 @@ export default function FormsClient({
       rejectedUndersize_weight: Number(item.undersizedWeight ?? 0),
       recordedBy:
         item.recordedBy && item.recordedBy !== "" ? item.recordedBy : "N/A",
+      rottenCount: Number(item.rottenCount ?? 0),
+      rottenWeight: Number(item.rottenWeight ?? 0),
     })) ?? [];
 
   return (

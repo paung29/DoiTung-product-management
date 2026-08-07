@@ -26,6 +26,8 @@ export type HarvestGradingTableDataType = {
   gradeDPlus_weight: number;
   rejectedUndersize_noPod: number;
   rejectedUndersize_weight: number;
+  rottenCount: number;
+  rottenWeight: number;
   recordedBy: string;
 };
 
@@ -115,6 +117,8 @@ export function HarvestGradingTable({
                 <TableCell>{item.gradeDPlus_weight}</TableCell>
                 <TableCell>{item.rejectedUndersize_noPod}</TableCell>
                 <TableCell>{item.rejectedUndersize_weight}</TableCell>
+                <TableCell>{item.rottenCount}</TableCell>
+                <TableCell>{item.rottenWeight}</TableCell>
                 <TableCell>{item.recordedBy}</TableCell>
                 <TableCell>
                   <div className="flex flex-row justify-center gap-2">

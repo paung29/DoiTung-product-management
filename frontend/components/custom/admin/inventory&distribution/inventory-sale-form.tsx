@@ -20,6 +20,7 @@ import { createIssued } from "@/lib/server-actions/admin/create-issued-client";
 import { useZoneForm } from "@/app/(protected)/admin/(modules)/zone-form-management/zone-form-context";
 import { useInventory } from "@/app/(protected)/admin/(modules)/inventory-distribution/inventory-context";
 import { useParams, useRouter } from "next/navigation";
+import { normalizeYear } from "@/lib/utl";
 import ApiErrorUI from "../../common/error-handle";
 
 const categoryOptions: Option[] = [
@@ -50,10 +51,10 @@ export default function InventorySaleForm({
   const params = useParams();
   const year = params.year;
 
-  const plantationYearOptions: Option[] = years.years.map((year) => ({
-    id: String(year),
-    value: String(year),
-  }));
+  const plantationYearOptions: Option[] = years.years.flatMap((year) => {
+    const value = normalizeYear(year);
+    return value ? [{ id: value, value }] : [];
+  });
 
   const [error, setError] = useState<string | null>(null);
 
