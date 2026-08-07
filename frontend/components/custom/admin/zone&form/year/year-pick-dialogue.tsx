@@ -7,6 +7,7 @@ import { z } from "zod";
 import CustomSelect from "../../../common/forms/form-select";
 import { useRouter } from "next/navigation";
 import { YearApiResponse } from "@/lib/types/model/type";
+import { normalizeYear } from "@/lib/utl";
 
 const yearSchema = z.object({
   year: z.string().min(1, "Please select a year"),
@@ -30,7 +31,11 @@ export default function YearPickerDialog({
   defaultYear = "",
 }: YearPickerDialogProps) {
 
-  const yearOptions = yearRecords?.years?.map((year) => ({ id: year, value: year, })) ?? [];
+  const yearOptions =
+    yearRecords?.years?.flatMap((year) => {
+      const value = normalizeYear(year);
+      return value ? [{ id: value, value }] : [];
+    }) ?? [];
 
   const form = useForm<YearFormValues>({
     resolver: zodResolver(yearSchema),

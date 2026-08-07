@@ -1,0 +1,208 @@
+package year
+
+import (
+	"errors"
+	"fmt"
+
+	"github.com/doitung/DoiTung-service/internal/models"
+	"github.com/doitung/DoiTung-service/internal/utils"
+	"gorm.io/gorm"
+)
+
+func (s *service) CreateYear(form YearCreateForm) (YearCreateResponse, error) {
+
+	existingYear, err := s.yearRepo.FindByYear(form.Year)
+
+	if err == nil && existingYear != nil {
+		return YearCreateResponse{}, utils.BadRequestError("year already exists")
+	}
+
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		return YearCreateResponse{}, utils.SystemError("failed to check existing year")
+	}
+
+	tx := s.db.Begin()
+
+	if tx.Error != nil {
+		return YearCreateResponse{}, utils.SystemError("failed to start transaction")
+	}
+
+	year := &models.Year{
+		Year: form.Year,
+	}
+
+	if err := s.yearRepo.Create(tx, year); err != nil {
+		tx.Rollback()
+		return YearCreateResponse{}, utils.SystemError("failed to create year")
+	}
+
+	setting := &models.YearFormSetting{
+		YearID:               year.YearID,
+		ClusterActive:        false,
+		FlowerActive:         false,
+		PollinationActive:    false,
+		PodActive:            false,
+		PreHarvestActive:     false,
+		HarvestGradingActive: false,
+	}
+
+	if err := s.yearRepo.CreateFormSetting(tx, setting); err != nil {
+		tx.Rollback()
+		return YearCreateResponse{}, utils.SystemError("failed to create year form setting")
+	}
+
+	if err := tx.Commit().Error; err != nil {
+		return YearCreateResponse{}, utils.SystemError("failed to commit transaction")
+	}
+	return YearCreateResponse{
+		Message: "year created successfully",
+	}, nil
+}
+
+func (s *service) ChangeYearFormSettingStatus(form YearFormSettingStatusChange) (YearFormSettingStatusChangeResponse, error) {
+	yearRecord, err := s.yearRepo.FindByYear(form.Year)
+
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return YearFormSettingStatusChangeResponse{}, utils.NotFoundError("year not found")
+		}
+		return YearFormSettingStatusChangeResponse{}, utils.SystemError("failed to check year")
+	}
+
+	yearID := yearRecord.YearID
+
+	yearSetting, err := s.yearRepo.FindFormSettingByYear(yearID)
+
+	if err != nil {
+		return YearFormSettingStatusChangeResponse{}, utils.NotFoundError("year form setting not found")
+	}
+
+	switch form.FormName {
+	case "cluster":
+		yearSetting.ClusterActive = *form.ActiveStatus
+	case "flower":
+		yearSetting.FlowerActive = *form.ActiveStatus
+	case "pollination":
+		yearSetting.PollinationActive = *form.ActiveStatus
+	case "pod":
+		yearSetting.PodActive = *form.ActiveStatus
+	case "preHarvest":
+		yearSetting.PreHarvestActive = *form.ActiveStatus
+	case "harvestGrading":
+		yearSetting.HarvestGradingActive = *form.ActiveStatus
+	default:
+		return YearFormSettingStatusChangeResponse{}, utils.BadRequestError("invalid form name")
+	}
+
+	if err := s.yearRepo.UpdateFormSetting(s.db, yearSetting); err != nil {
+		return YearFormSettingStatusChangeResponse{}, utils.SystemError("failed to update year form setting")
+	}
+
+	return YearFormSettingStatusChangeResponse{
+		Message: "year form setting updated successfully",
+	}, nil
+}
+
+func (s *service) GetYear() (GetYearResponse, error) {
+
+	yearsModles, err := s.yearRepo.findAll()
+
+	if err != nil {
+		return GetYearResponse{}, err
+	}
+
+	years := make([]string, 0, len(yearsModles))
+
+	for _, y := range yearsModles {
+		years = append(years, fmt.Sprintf("%d", y.Year))
+	}
+
+	return GetYearResponse{Years: years}, nil
+}
+
+func (s *service) GetYearDetails(year int) (YearSettingDetailsResponse, error) {
+
+	yearRecord, err := s.yearRepo.FindByYear(year)
+
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return YearSettingDetailsResponse{}, utils.NotFoundError("year not found")
+		}
+		return YearSettingDetailsResponse{}, utils.SystemError("failed to check year")
+	}
+
+	yearID := yearRecord.YearID
+
+	yearSettingDetails, err := s.yearRepo.FindFormSettingByYear(yearID)
+
+	if err != nil {
+		return YearSettingDetailsResponse{}, utils.NotFoundError("year form setting not found")
+	}
+
+	totalActiveForms := utils.CountTrue(yearSettingDetails.ClusterActive, yearSettingDetails.FlowerActive, yearSettingDetails.PollinationActive, yearSettingDetails.PodActive, yearSettingDetails.PreHarvestActive, yearSettingDetails.HarvestGradingActive)
+
+	var yearDetailsResponse YearSettingDetailsResponse
+	yearDetailsResponse.TotalActiveForms = totalActiveForms
+	yearDetailsResponse.Year = yearRecord.Year
+	yearDetailsResponse.ClusterActive = yearSettingDetails.ClusterActive
+	yearDetailsResponse.FlowerActive = yearSettingDetails.FlowerActive
+	yearDetailsResponse.PollinationActive = yearSettingDetails.PollinationActive
+	yearDetailsResponse.PodActive = yearSettingDetails.PodActive
+	yearDetailsResponse.PreHarvestActive = yearSettingDetails.PreHarvestActive
+	yearDetailsResponse.HarvestGradingActive = yearSettingDetails.HarvestGradingActive
+
+	return yearDetailsResponse, nil
+}
+
+func (s *service) GetYearManagementTable() (YearManagementListResponse, error) {
+	yearDetailsModels, err := s.yearRepo.findAllYearDetails()
+
+	if err != nil {
+		return YearManagementListResponse{}, err
+	}
+
+	yearManagementList := make([]YearManagementItem, 0, len(yearDetailsModels))
+
+	for _, yearSetting := range yearDetailsModels {
+		totalZone, err := s.yearRepo.CountZonesByYear(yearSetting.YearID)
+		if err != nil {
+			return YearManagementListResponse{}, utils.SystemError("failed to count zones for year")
+		}
+		yearManagementList = append(yearManagementList, YearManagementItem{
+			Year:      yearSetting.Year.Year,
+			TotalZone: int(totalZone),
+		})
+	}
+
+	return YearManagementListResponse{Years: yearManagementList}, nil
+}
+
+func (s *service) UpdateYearName(form UpdateYearNameRequest) (UpdateYearNameResponse, error) {
+	yearRecord, err := s.yearRepo.FindByYear(form.Year)
+	yearId := int(yearRecord.YearID)
+
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return UpdateYearNameResponse{}, utils.NotFoundError("year not found")
+		}
+		return UpdateYearNameResponse{}, utils.SystemError("failed to check year")
+	}
+
+	existingYear, err := s.yearRepo.FindByYear(form.YearName)
+
+	if err == nil && existingYear != nil {
+		return UpdateYearNameResponse{}, utils.BadRequestError("year already exists")
+	}
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		return UpdateYearNameResponse{}, utils.SystemError("failed to check existing year")
+	}
+
+	yearRecord.Year = form.YearName
+
+	if err := s.yearRepo.UpdateYearName(s.db, yearId, yearRecord.Year); err != nil {
+		return UpdateYearNameResponse{}, utils.SystemError("failed to update year name")
+	}
+	return UpdateYearNameResponse{
+		Message: "year name updated successfully",
+	}, nil
+}

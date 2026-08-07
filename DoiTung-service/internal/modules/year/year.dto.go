@@ -1,0 +1,52 @@
+package year
+
+type YearCreateForm struct {
+	Year int `json:"year" validate:"required"`
+}
+
+type YearCreateResponse struct {
+	Message string `json:"message"`
+}
+
+type YearFormSettingStatusChange struct {
+	Year         int    `json:"year" validate:"required"`
+	FormName     string `json:"formName" validate:"required,oneof=cluster flower pollination pod preHarvest harvestGrading"`
+	ActiveStatus *bool  `json:"activeStatus" validate:"required"`
+}
+
+type YearFormSettingStatusChangeResponse struct {
+	Message string `json:"message"`
+}
+
+type GetYearResponse struct {
+	Years []string `json:"years"`
+}
+
+type YearSettingDetailsResponse struct {
+	TotalActiveForms     int  `json:"totalActiveForms"`
+	Year                 int  `json:"year"`
+	ClusterActive        bool `json:"clusterActive"`
+	FlowerActive         bool `json:"flowerActive"`
+	PollinationActive    bool `json:"pollinationActive"`
+	PodActive            bool `json:"podActive"`
+	PreHarvestActive     bool `json:"preHarvestActive"`
+	HarvestGradingActive bool `json:"harvestGradingActive"`
+}
+
+type YearManagementListResponse struct {
+	Years []YearManagementItem `json:"years"`
+}
+
+type YearManagementItem struct {
+	Year      int `json:"year"`
+	TotalZone int `json:"totalZone"`
+}
+
+type UpdateYearNameRequest struct {
+	Year     int `json:"year" validate:"required"`
+	YearName int `json:"yearName" validate:"required"`
+}
+
+type UpdateYearNameResponse struct {
+	Message string `json:"message"`
+}

@@ -1,0 +1,28 @@
+# Go build files
+bin/
+*.exe
+*.out
+.gocache/
+.gomodcache/
+
+# Dependency folders
+vendor/
+
+# Environment files
+.env
+
+# Logs
+*.log
+
+# MacOS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+
+# SQLite DB (if using)
+*.db
+
+# Temporary files
+tmp/
