@@ -3,10 +3,11 @@
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { Home, Folder, History, User, LogOut, LucideIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import CustomButton from "../common/custom-button";
 import { useAuthStore } from "@/lib/store/user-store";
 import { baseUrl } from "@/lib/utl";
+import { cn } from "@/lib/utils";
 
 const HEADER_HEIGHT = 80;
 
@@ -24,6 +25,18 @@ type MenuProps = {
 export default function Menu({ menuItems, title }: MenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
+
+  // A menu item matches when the route equals its href or is nested under it.
+  const matches = (href: string) =>
+    pathname === href || pathname.startsWith(`${href}/`);
+
+  // Only the most specific (longest) matching href is active, so a base route
+  // like "/admin" doesn't stay highlighted on every admin sub-page.
+  const activeHref = menuItems
+    .map((item) => item.href)
+    .filter(matches)
+    .sort((a, b) => b.length - a.length)[0];
 
   useEffect(() => {
     if (!isOpen) {
@@ -86,17 +99,39 @@ export default function Menu({ menuItems, title }: MenuProps) {
         {/* Menu Items */}
         <nav className="flex h-full flex-col">
           <div className="flex-1 overflow-y-auto py-4">
-            {menuItems.map((item) => (
-              <Link
-                key={item.label}
-                href={item.href}
-                onClick={closeMenu}
-                className="flex items-center gap-4 px-6 py-4 transition hover:bg-black/5"
-              >
-                <item.icon className="h-6 w-6 text-[#8a6752]" />
-                <span className="text-lg font-medium">{item.label}</span>
-              </Link>
-            ))}
+            {menuItems.map((item) => {
+              const active = item.href === activeHref;
+
+              return (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  onClick={closeMenu}
+                  aria-current={active ? "page" : undefined}
+                  className={cn(
+                    "flex items-center gap-4 border-l-4 px-6 py-4 transition",
+                    active
+                      ? "border-[#6b4423] bg-[#6b4423]/10 text-[#6b4423]"
+                      : "border-transparent hover:bg-black/5",
+                  )}
+                >
+                  <item.icon
+                    className={cn(
+                      "h-6 w-6",
+                      active ? "text-[#6b4423]" : "text-[#8a6752]",
+                    )}
+                  />
+                  <span
+                    className={cn(
+                      "text-lg",
+                      active ? "font-semibold" : "font-medium",
+                    )}
+                  >
+                    {item.label}
+                  </span>
+                </Link>
+              );
+            })}
           </div>
 
           {/* Logout Button */}

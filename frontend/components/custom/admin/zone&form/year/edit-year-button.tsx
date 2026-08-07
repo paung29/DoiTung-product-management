@@ -21,10 +21,10 @@ import { Form } from "@/components/ui/form";
 
 import FormsInput from "../../../common/forms/form-input";
 import EditButton from "@/components/custom/common/edit-button";
+import ApiErrorUI from "@/components/custom/common/error-handle";
 
 import { YearTableDataType } from "./year-table";
-import { YearNameFormType, YearSettingFormType } from "@/lib/types/model/type";
-import { updateYearSetting } from "@/lib/server-actions/admin/update-year-setting-client";
+import { YearNameFormType } from "@/lib/types/model/type";
 import { updateYearName } from "@/lib/server-actions/admin/update-year-name-client";
 
 type EditYearFormType = {
@@ -40,6 +40,7 @@ type EditYearButtonProps = {
 function EditYearButton({ yearData }: EditYearButtonProps) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const form = useForm<EditYearFormType>({
     defaultValues: {
@@ -49,28 +50,41 @@ function EditYearButton({ yearData }: EditYearButtonProps) {
   });
 
   const handleSubmit = async (data: EditYearFormType) => {
+    setError(null);
+
     try {
       const reformData: YearNameFormType = {
         year: data.year,
         yearName: Number(data.yearName),
       };
 
-      console.log("Updating year:", reformData);
-
       const response = await updateYearName(reformData);
 
-      console.log(response);
+      // Keep the dialog open and surface the error (e.g. "year already exists").
+      if (response?.success === false) {
+        setError(response.message ?? "Failed to update year.");
+        return;
+      }
 
       setOpen(false);
-
       router.refresh();
-    } catch (error) {
-      console.error("Failed to update year:", error);
+    } catch {
+      setError("Failed to connect to server. Please try again.");
+    }
+  };
+
+  const handleOpenChange = (nextOpen: boolean) => {
+    setOpen(nextOpen);
+
+    // Reset the form and clear any error whenever the dialog closes.
+    if (!nextOpen) {
+      setError(null);
+      form.reset();
     }
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <EditButton />
       </DialogTrigger>
@@ -86,6 +100,9 @@ function EditYearButton({ yearData }: EditYearButtonProps) {
             records.
           </p>
         </div>
+
+        <ApiErrorUI message={error} />
+
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSubmit)}>
             <FieldGroup>
