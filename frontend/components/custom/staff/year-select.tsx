@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import CustomSelect from "../common/forms/form-select";
 import { useEffect, useState } from "react";
 import { YearApiResponse } from "@/lib/types/model/type";
-import { baseUrl } from "@/lib/utl";
+import { baseUrl, normalizeYear } from "@/lib/utl";
 
 const yearSchema = z.object({
   year: z.string().min(1, "Please select a year"),
@@ -72,11 +72,11 @@ export default function StaffYearDialog({
         const data: YearApiResponse = await res.json();
 
         const mappedOptions = data.years
-          .sort((a, b) => Number(b) - Number(a))
-          .map((year) => ({
-            id: year,
-            value: year,
-          }));
+          .flatMap((year) => {
+            const value = normalizeYear(year);
+            return value ? [{ id: value, value }] : [];
+          })
+          .sort((a, b) => Number(b.id) - Number(a.id));
 
         setYearOptions(mappedOptions);
       } catch (err) {

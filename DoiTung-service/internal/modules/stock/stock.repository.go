@@ -1,0 +1,31 @@
+package stock
+
+import (
+	"github.com/doitung/DoiTung-service/internal/models"
+	"github.com/doitung/DoiTung-service/internal/types/enums"
+	"gorm.io/gorm"
+)
+
+type StockRepository interface {
+	CreateStockMovement(db *gorm.DB, form *models.StockMovement) error
+	UpdateStockMovement(form *models.StockMovement) error
+	FindByID(id uint) (*models.StockMovement, error)
+	CreateNewStockBalance(db *gorm.DB, form *models.StockBalance) error
+	GetStockBalanceForUpdate(db *gorm.DB, productionYearID uint, warehouseID uint, grade enums.Grade) (*models.StockBalance, error)
+	UpdateStockBalance(db *gorm.DB, form *models.StockBalance) error
+	GetStockTotal(YearID uint, warehouseID uint, stockType enums.MovementType) (StockBalance, error)
+	DeleteStockMovement(db *gorm.DB, id uint) error
+	GetAllByYearId(yearId uint) ([]*models.StockMovement, error)
+	GetCustomerStockByYearId(yearId uint) ([]CustomerStockRow, error)
+	GetStockOverviewBalanceByYearId(yearId uint) ([]GradeSummary, error)
+	GetIncomingStockTotal(yearId uint) (StockBalance, error)
+	GetIssuedStockTotal(yearId uint) (StockBalance, error)
+	GetMonthlySummary(yearId uint) ([]MonthlySummary, error)
+	GetStockMovementHistoryFilter(
+		yearID uint,
+		category *enums.MovementType,
+		grade *enums.Grade,
+		productionYearID *uint,
+		warehouseID *uint,
+	) ([]*models.StockMovement, error)
+}

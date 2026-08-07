@@ -1,0 +1,175 @@
+package cluster
+
+import (
+	commonrepo "github.com/doitung/DoiTung-service/internal/common/repository"
+	"github.com/doitung/DoiTung-service/internal/models"
+	"gorm.io/gorm"
+)
+
+type repository struct {
+	db *gorm.DB
+}
+
+func NewClusterRepository(db *gorm.DB) ClusterRepository {
+	return &repository{db: db}
+}
+
+// CreatePole implements [ClusterRepository].
+func (r *repository) CreatePole(pole *models.Pole) error {
+	return commonrepo.Create(r.db, pole)
+}
+
+// CreateCluster implements [ClusterRepository].
+func (r *repository) CreateCluster(cluster *models.Cluster) error {
+	return commonrepo.Create(r.db, cluster)
+}
+
+// CreateClusterForm implements [ClusterRepository].
+func (r *repository) CreateClusterForm(form *models.ClusterForm) error {
+	return commonrepo.Create(r.db, form)
+}
+
+// FindPoleByZoneAndPoleNo implements [ClusterRepository].
+func (r *repository) FindPoleByZoneAndPoleNo(zoneId uint, poleNo uint) (*models.Pole, error) {
+	var pole models.Pole
+	if err := r.db.Where("zone_id = ? AND pole_no = ?", zoneId, poleNo).First(&pole).Error; err != nil {
+		return nil, err
+	}
+	return &pole, nil
+}
+
+// FindClusterByPoleAndClusterNo implements [ClusterRepository].
+func (r *repository) FindClusterByPoleAndClusterNo(poleId uint, clusterNo uint) (*models.Cluster, error) {
+	var cluster models.Cluster
+	if err := r.db.Where("pole_id = ? AND cluster_no = ?", poleId, clusterNo).First(&cluster).Error; err != nil {
+		return nil, err
+	}
+	return &cluster, nil
+}
+
+// FindClusterFormById implements [ClusterRepository].
+func (r *repository) FindClusterFormByClusterId(clusterId uint) (*models.ClusterForm, error) {
+	var form models.ClusterForm
+	if err := r.db.Where("cluster_id = ?", clusterId).First(&form).Error; err != nil {
+		return nil, err
+	}
+	return &form, nil
+}
+
+func (r *repository) UpdateCluster(db *gorm.DB, cluster *models.Cluster) error {
+	return commonrepo.Save(db, cluster)
+}
+
+func (r *repository) FindClusterById(clusterId uint) (*models.Cluster, error) {
+	var form models.Cluster
+	if err := r.db.Where("cluster_id = ?", clusterId).First(&form).Error; err != nil {
+		return nil, err
+	}
+	return &form, nil
+}
+
+func (r *repository) UpdateFormStatusByClusterId(db *gorm.DB, clusterId uint, status bool, formName string) error {
+	var cluster models.Cluster
+	if err := db.Where("cluster_id = ?", clusterId).First(&cluster).Error; err != nil {
+		return err
+	}
+
+	switch formName {
+	case "cluster":
+		cluster.ClusterFormDone = status
+	case "flower":
+		cluster.FlowerFormDone = status
+	case "pollination":
+		cluster.PollinationFormDone = status
+	case "pod":
+		cluster.PodFormDone = status
+	case "preHarvest":
+		cluster.PreHarvestFormDone = status
+	}
+
+	return commonrepo.Save(db, &cluster)
+}
+
+func (r *repository) GetAllClustersByPoleId(poleId uint) ([]models.Cluster, error) {
+	var clusters []models.Cluster
+	if err := r.db.Preload("Pole").Preload("Pole.Zone").Where("pole_id = ?", poleId).Find(&clusters).Error; err != nil {
+		return nil, err
+	}
+	return clusters, nil
+}
+
+func (r *repository) GetClusterFormByClusterId(clusterId uint) (*models.ClusterForm, error) {
+	var form models.ClusterForm
+	if err := r.db.Where("cluster_id = ?", clusterId).First(&form).Error; err != nil {
+		return nil, err
+	}
+	return &form, nil
+}
+
+func (r *repository) GetAllClusterFormDetailsByClusterId(clusterId uint) (*models.ClusterForm, error) {
+	var form models.ClusterForm
+	if err := r.db.Preload("Cluster").Preload("Cluster.Pole").Preload("Cluster.Pole.Zone").Where("cluster_id = ?", clusterId).First(&form).Error; err != nil {
+		return nil, err
+	}
+	return &form, nil
+}
+
+func (r *repository) GetClusterBasicInfoByClusterId(clusterId uint) (*models.Cluster, error) {
+	var cluster models.Cluster
+	if err := r.db.Preload("Pole").Preload("Pole.Zone").Preload("Pole.Zone.Year").Where("cluster_id = ?", clusterId).First(&cluster).Error; err != nil {
+		return nil, err
+	}
+	return &cluster, nil
+}
+
+func (r *repository) UpdateClusterFormByClusterId(db *gorm.DB, form *models.ClusterForm) error {
+	return commonrepo.Save(db, form)
+}
+
+func (r *repository) GetClusterFormHistoriesByUserIdAndYearId(userId uint, yearId uint) ([]models.ClusterForm, error) {
+	var forms []models.ClusterForm
+	if err := r.db.Preload("Cluster").Preload("Cluster.Pole").Preload("Cluster.Pole.Zone").Where("recorded_by_id = ? AND year_id = ?", userId, yearId).Find(&forms).Error; err != nil {
+		return nil, err
+	}
+	return forms, nil
+}
+
+func (r *repository) GetAllClusterFormDetailsByZoneId(zoneId uint) ([]models.ClusterForm, error) {
+	var forms []models.ClusterForm
+	if err := r.db.
+		Model(&models.ClusterForm{}).
+		Preload("RecordedBy").
+		Preload("Cluster.Pole.Zone").
+		Joins("JOIN clusters AS c ON c.cluster_id = cluster_forms.cluster_id").
+		Joins("JOIN poles AS p ON p.pole_id = c.pole_id").
+		Where("p.zone_id = ?", zoneId).
+		Find(&forms).Error; err != nil {
+		return nil, err
+	}
+	return forms, nil
+}
+
+func (r *repository) GetClustersByFilter(zoneId uint, poleNo *uint, clusterNo *uint) ([]models.Cluster, error) {
+	var clusters []models.Cluster
+
+	query := r.db.
+		Model(&models.Cluster{}).
+		Preload("Pole").
+		Preload("Pole.Zone").
+		Joins("JOIN poles ON poles.pole_id = clusters.pole_id").
+		Where("poles.zone_id = ?", zoneId)
+
+	if poleNo != nil {
+		query = query.Where("poles.pole_no = ?", *poleNo)
+	}
+
+	if clusterNo != nil {
+		query = query.Where("clusters.cluster_no = ?", *clusterNo)
+	}
+
+	err := query.
+		Order("poles.pole_no ASC, clusters.cluster_no ASC").
+		Find(&clusters).Error
+
+	return clusters, err
+}

@@ -428,6 +428,8 @@ export type HarvestGradingRecordInput = {
   gradeDPlusWeight: number;
   undersizedCount: number;
   undersizedWeight: number;
+  rottenCount: number;
+  rottenWeight: number;
 };
 
 export type HarvestGradingRecordResponse = {
@@ -448,6 +450,8 @@ export type HarvestGradingRecordResponse = {
   undersizedCount: number;
   undersizedWeight: number;
   harvestGradingFormDone: boolean;
+  rottenCount: number;
+  rottenWeight: number;
 };
 
 // Chart Types
@@ -519,6 +523,14 @@ export type WareHouseForm = z.infer<typeof WareHouseFormSchema>;
 export type WareHouseFormCreate = {
   warehouse_name: string;
   active_status: boolean;
+};
+
+export type UpdateWareHouseForm = WareHouseForm & {
+  warehouse_id: number;
+};
+
+export type UpdateWareHouseFormData = WareHouseFormCreate & {
+  warehouse_id: number;
 };
 
 export type Year = {

@@ -14,7 +14,7 @@ export async function updateZone(data : editZoneType) {
     const cookieHeader = cookieStore.toString();
 
     const response = await fetch(`${baseUrl}/zones/update-zone-name`, {
-        method : "PUT",
+        method : "PATCH",
         credentials: "include",
         headers: {
             Cookie : cookieHeader,

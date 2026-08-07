@@ -77,10 +77,19 @@ export default async function Page({
     }),
   );
 
+  const remainingStockPods = records.reduce(
+    (total, warehouse) => total + Number(warehouse.remainingPods || 0),
+    0,
+  );
+  const remainingStockWeights = records.reduce(
+    (total, warehouse) => total + Number(warehouse.remainingWeights || 0),
+    0,
+  );
+
   const cardData: WarehouseCardData = {
     totalWarehouse: apiData.total_warehouses,
-    remainingStockPods: apiData.remaining_stocks_pods,
-    remainingStockWeights: apiData.remaining_stocks_weights,
+    remainingStockPods,
+    remainingStockWeights,
     activeWarehouse: apiData.total_active_warehouses,
   };
 

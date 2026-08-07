@@ -101,6 +101,8 @@ export function EditHarvestGradingButton({
       gradeDPlusWeight: Number(data.gradeDPlus_weight),
       undersizedCount: Number(data.rejectedUndersize_noPod),
       undersizedWeight: Number(data.rejectedUndersize_weight),
+      rottenCount: Number(data.rottenCount),
+      rottenWeight: Number(data.rottenWeight)
     }
 
     try{

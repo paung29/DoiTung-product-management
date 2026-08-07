@@ -20,7 +20,11 @@ export async function createHarvestGrading(data : HarvestGradingRecordInput) {
         },
         body: JSON.stringify(data)
     })
-    
-    return await response.json()
+    const result = await response.json();
+
+      return {
+        status: response.status,
+        message: result.message,
+    };
 }
 
