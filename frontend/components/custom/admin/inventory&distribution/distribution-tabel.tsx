@@ -48,82 +48,77 @@ export default function DistributionTable({records} : {records : DistributionRec
   };
 
   return (
+    // Single <Table> so header and body share the same columns and stay aligned.
+    // The wrapper scrolls horizontally on narrow screens (min width keeps columns
+    // readable) while headers and cells remain perfectly synchronized.
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
-      {/* Header */}
-      <div className="bg-primary border-b border-b-[#8a6752]">
-        <Table>
-          <TableHeader>
-            <TableRow className="border-0 hover:bg-transparent">
-              <TableHead className="h-14 px-6 py-4 text-left font-semibold text-white">
-                DATE
-              </TableHead>
-              <TableHead className="h-14 px-6 py-4 text-left font-semibold text-white">
-                CATEGORY
-              </TableHead>
-              <TableHead className="h-14 px-6 py-4 text-left font-semibold text-white">
-                GRADE
-              </TableHead>
-              <TableHead className="h-14 px-6 py-4 text-left font-semibold text-white">
-                PRODUCTION YEAR
-              </TableHead>
-              <TableHead className="h-14 px-6 py-4 text-left font-semibold text-white">
-                WAREHOUSE
-              </TableHead>
-              <TableHead className="h-14 px-6 py-4 text-right font-semibold text-white">
-                AMOUNT (G)
-              </TableHead>
-              <TableHead className="h-14 px-6 py-4 text-left font-semibold text-white">
-                DETAILS / REMARKS
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-        </Table>
-      </div>
+      <Table className="min-w-[960px]">
+        <TableHeader>
+          <TableRow className="bg-primary border-b border-b-[#8a6752] hover:bg-primary">
+            <TableHead className="h-14 px-6 py-4 text-left font-semibold text-white">
+              DATE
+            </TableHead>
+            <TableHead className="h-14 px-6 py-4 text-left font-semibold text-white">
+              CATEGORY
+            </TableHead>
+            <TableHead className="h-14 px-6 py-4 text-left font-semibold text-white">
+              GRADE
+            </TableHead>
+            <TableHead className="h-14 px-6 py-4 text-left font-semibold text-white">
+              PRODUCTION YEAR
+            </TableHead>
+            <TableHead className="h-14 px-6 py-4 text-left font-semibold text-white">
+              WAREHOUSE
+            </TableHead>
+            <TableHead className="h-14 px-6 py-4 text-right font-semibold text-white">
+              WEIGHT (G)
+            </TableHead>
+            <TableHead className="h-14 px-6 py-4 text-left font-semibold text-white">
+              DETAILS / REMARKS
+            </TableHead>
+          </TableRow>
+        </TableHeader>
 
-      {/* Body */}
-      <div className="bg-[#FAF3E0]">
-        <Table>
-          <TableBody>
-            {records.map((record) => (
-              <TableRow
-                key={record.id}
-                className="border-0 border-b border-b-gray-100 hover:bg-yellow-50"
-              >
-                <TableCell className="h-14 px-6 py-4 text-sm text-gray-900">
-                  {record.date}
-                </TableCell>
-                <TableCell className="h-14 px-6 py-4">
-                  {(() => {
-                    const style = getCategoryBadgeStyle(record.category);
-                    return (
-                      <div
-                        className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold ${style.border} ${style.bg} ${style.text}`}
-                      >
-                        {record.category}
-                      </div>
-                    );
-                  })()}
-                </TableCell>
-                <TableCell className="h-14 px-6 py-4 text-sm font-medium text-gray-900">
-                  {record.grade}
-                </TableCell>
-                <TableCell className="h-14 px-6 py-4 text-sm text-gray-900">
-                  {record.productionYear}
-                </TableCell>
-                <TableCell className="h-14 px-6 py-4 text-sm text-gray-900">
-                  {record.warehouse}
-                </TableCell>
-                <TableCell className="h-14 px-6 py-4 text-right text-sm font-medium text-gray-900">
-                  {record.amount.toLocaleString()}
-                </TableCell>
-                <TableCell className="h-14 px-6 py-4 text-sm text-gray-700">
-                  {record.details}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
+        <TableBody className="bg-[#FAF3E0]">
+          {records.map((record) => (
+            <TableRow
+              key={record.id}
+              className="border-0 border-b border-b-gray-100 hover:bg-yellow-50"
+            >
+              <TableCell className="h-14 px-6 py-4 text-sm text-gray-900">
+                {record.date}
+              </TableCell>
+              <TableCell className="h-14 px-6 py-4">
+                {(() => {
+                  const style = getCategoryBadgeStyle(record.category);
+                  return (
+                    <div
+                      className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold ${style.border} ${style.bg} ${style.text}`}
+                    >
+                      {record.category}
+                    </div>
+                  );
+                })()}
+              </TableCell>
+              <TableCell className="h-14 px-6 py-4 text-sm font-medium text-gray-900">
+                {record.grade}
+              </TableCell>
+              <TableCell className="h-14 px-6 py-4 text-sm text-gray-900">
+                {record.productionYear}
+              </TableCell>
+              <TableCell className="h-14 px-6 py-4 text-sm text-gray-900">
+                {record.warehouse}
+              </TableCell>
+              <TableCell className="h-14 px-6 py-4 text-right text-sm font-medium text-gray-900">
+                {record.amount.toLocaleString()}
+              </TableCell>
+              <TableCell className="h-14 px-6 py-4 text-sm text-gray-700">
+                {record.details}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </div>
   );
 }

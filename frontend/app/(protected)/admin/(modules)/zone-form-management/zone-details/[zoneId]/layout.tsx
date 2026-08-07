@@ -2,15 +2,23 @@
 
 import Link from "next/link";
 import { MapPin } from "lucide-react";
-import { useParams, usePathname } from "next/navigation";
+import { useParams, usePathname, useSearchParams } from "next/navigation";
 import { ZoneFormContextProvider } from "../../zone-form-context";
-import BackButton from "@/components/custom/common/back-button";
 
 function FormsInZonePageLayout({ children }: { children: React.ReactNode }) {
   const params = useParams<{ zoneId: string }>();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const zoneId = params.zoneId;
+
+  // The year the user came from (passed via "View Report"). Preserved across the
+  // detail tabs so Back always returns to the correct Zone & Form Management view.
+  const year = searchParams.get("year");
+  const yearQuery = year ? `?year=${year}` : "";
+  const backHref = year
+    ? `/admin/zone-form-management/${year}/zone`
+    : "/admin/zone-form-management";
 
   const links = [
     { href: "cluster", label: "Cluster" },
@@ -37,7 +45,12 @@ function FormsInZonePageLayout({ children }: { children: React.ReactNode }) {
               </div>
             </div>
 
-            <BackButton fallbackHref="/admin/zone-form-management" />
+            <Link
+              href={backHref}
+              className="rounded-lg bg-primary-button px-4 py-2 text-sm text-white hover:border-2 hover:border-amber-100"
+            >
+              Back
+            </Link>
           </div>
         </div>
 
@@ -49,7 +62,7 @@ function FormsInZonePageLayout({ children }: { children: React.ReactNode }) {
             return (
               <Link
                 key={item.href}
-                href={href}
+                href={`${href}${yearQuery}`}
                 className={`flex-1 rounded-lg px-6 py-3 text-center font-semibold transition-all ${
                   active
                     ? "bg-primary text-white shadow-sm"
