@@ -76,7 +76,7 @@ export default function AddCustomerButton() {
       <CustomButton
         label="+ Add Customer"
         onClick={() => setIsOpen(true)}
-        className="bg-primary hover:bg-primary/90 w-40 p-6 text-white"
+        className="bg-[#3a835d] hover:bg-[#3a835d]/90 w-40 p-6 text-white"
       />
 
       {/* Modal Overlay */}
