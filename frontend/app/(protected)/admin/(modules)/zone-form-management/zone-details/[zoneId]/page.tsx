@@ -2,12 +2,21 @@ import { redirect } from "next/navigation";
 
 export default async function Page({
   params,
+  searchParams,
 }: {
   params: Promise<{ zoneId: string }>;
+  searchParams: Promise<{ year?: string }>;
 }) {
   const { zoneId } = await params;
+  const { year } = await searchParams;
 
-  redirect(`/admin/zone-form-management/zone-details/${zoneId}/cluster`);
+  // Preserve the originating year so the detail page's Back button can return
+  // to the correct Zone & Form Management view.
+  const yearQuery = year ? `?year=${year}` : "";
+
+  redirect(
+    `/admin/zone-form-management/zone-details/${zoneId}/cluster${yearQuery}`
+  );
 }
 
 

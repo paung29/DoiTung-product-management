@@ -28,7 +28,11 @@ export function ZoneTable({
   const router = useRouter();
 
   const onView = ({id} : {id : string}) => {
-    router.push(`/admin/zone-form-management/zone-details/${id}`)
+    // Carry the selected year so the detail page's Back button can return to
+    // this exact Zone & Form Management (zone list) view.
+    router.push(
+      `/admin/zone-form-management/zone-details/${id}?year=${selectedYear}`
+    )
   }
 
 
