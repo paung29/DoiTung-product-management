@@ -173,3 +173,29 @@ func (r *repository) GetClustersByFilter(zoneId uint, poleNo *uint, clusterNo *u
 
 	return clusters, err
 }
+
+func (r *repository) DeleteClusterById(db *gorm.DB, clusterId uint) error {
+	var cluster models.Cluster
+	if err := db.Where("cluster_id = ?", clusterId).First(&cluster).Error; err != nil {
+		return err
+	}
+
+	if err := db.Delete(&cluster).Error; err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *repository) DeleteClusterFormByClusterId(db *gorm.DB, clusterId uint) error {
+	var form models.ClusterForm
+	if err := db.Where("cluster_id = ?", clusterId).First(&form).Error; err != nil {
+		return err
+	}
+
+	if err := db.Delete(&form).Error; err != nil {
+		return err
+	}
+
+	return nil
+}

@@ -74,3 +74,7 @@ type ClusterFormDetails struct {
 type ClusterFilterResponse struct {
 	Clusters []ClusterInfo `json:"clusters"`
 }
+
+type ClusterDeleteResponse struct {
+	Message string `json:"message"`
+}

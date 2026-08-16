@@ -79,3 +79,16 @@ func (r *repository) GetPolesByFilter(zoneId uint, poleNo *uint, harvestGradingF
 
 	return poles, err
 }
+
+func (r *repository) DeletePoleById(db *gorm.DB, poleId uint) error {
+	var pole models.Pole
+	if err := db.Where("pole_id = ?", poleId).First(&pole).Error; err != nil {
+		return err
+	}
+
+	if err := db.Delete(&pole).Error; err != nil {
+		return err
+	}
+
+	return nil
+}
