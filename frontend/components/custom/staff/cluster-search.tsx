@@ -58,7 +58,7 @@ export default function ClusterSearch({locations , defaultZoneNo} : {locations :
             options={locations} />
 
             <FormsInput className="w-full" control={form.control} path="pole_id" label="Pole Number" placeholder="Enter pole Number" />
-            <FormsInput className="w-full" control={form.control} path="cluster_id" label="Number" placeholder="Search by Cluster Number" />
+            <FormsInput className="w-full" control={form.control} path="cluster_id" label="Cluster Number" placeholder="Search by Cluster Number" />
             
             {/* <CustomSelect className="w-full" control={form.control} path="progress_status"  label="Progress Status" placeholder="Select Progress"
             options={[
