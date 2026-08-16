@@ -393,8 +393,8 @@ func (s *service) DeleteClusterById(clusterId uint) (ClusterDeleteResponse, erro
 		return ClusterDeleteResponse{}, utils.SystemError("failed to get remaining clusters")
 	}
 
-	// If there are no remaining clusters, delete the pole
-	if len(remainingClusters) == 0 {
+	// If there are no remaining clusters rather than this one, delete the pole
+	if len(remainingClusters) == 1 {
 		if err := s.poleRepo.DeletePoleById(tx, poleId); err != nil {
 			tx.Rollback()
 			return ClusterDeleteResponse{}, utils.SystemError("failed to delete pole")
