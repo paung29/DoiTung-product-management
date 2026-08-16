@@ -239,8 +239,8 @@ export default function InventorySaleForm({
                   key={`amount-${category}`}
                   control={form.control}
                   path="amount"
-                  label="Amount"
-                  placeholder="Enter amount"
+                  label="Weight (g)"
+                  placeholder="Enter weight in grams"
                 />
 
                 {category === "issued" && (

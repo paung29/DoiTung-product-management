@@ -67,11 +67,9 @@ export default function DistributionHistory({plantationYearOptions, plantationAr
       {/* Form */}
       <Form {...form}>
         <form className="space-y-6">
-          {/* First Row: Date and Category */}
+          {/* Filters: Category, Grade, Warehouse — single row on desktop,
+              2 columns on tablet, stacked on mobile. */}
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {/* Start Date */}
-            
-
             {/* Category */}
             <div className="flex flex-col">
               <label className="mb-2 text-sm font-medium text-gray-700">
@@ -82,13 +80,10 @@ export default function DistributionHistory({plantationYearOptions, plantationAr
                 path="category"
                 options={categoryOptions}
                 placeholder="All Categories"
-                triggerClassName="bg-secondary rounded-xl"
+                triggerClassName="bg-secondary w-full rounded-xl"
               />
             </div>
-          </div>
 
-          {/* Second Row: Grade, Production Year, Plantation Area */}
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {/* Grade */}
             <div className="flex flex-col">
               <label className="mb-2 text-sm font-medium text-gray-700">
@@ -99,35 +94,21 @@ export default function DistributionHistory({plantationYearOptions, plantationAr
                 path="grade"
                 options={gradeOptions}
                 placeholder="All Grades"
-                triggerClassName="bg-secondary rounded-xl"
+                triggerClassName="bg-secondary w-full rounded-xl"
               />
             </div>
 
-            {/* Production Year */}
-            {/* <div className="flex flex-col">
-              <label className="mb-2 text-sm font-medium text-gray-700">
-                Production Year
-              </label>
-              <CustomSelect
-                control={form.control}
-                path="productionYear"
-                options={plantationYearOptions}
-                placeholder="All Years"
-                triggerClassName="bg-secondary rounded-xl"
-              />
-            </div> */}
-
-            {/* Plantation Area */}
+            {/* Warehouse */}
             <div className="flex flex-col">
               <label className="mb-2 text-sm font-medium text-gray-700">
-                Plantation Area
+                Warehouse
               </label>
               <CustomSelect
                 control={form.control}
                 path="plantationArea"
                 options={plantationAreaOptions}
-                placeholder="Search by area..."
-                triggerClassName="bg-secondary rounded-xl"
+                placeholder="All Warehouses"
+                triggerClassName="bg-secondary w-full rounded-xl"
               />
             </div>
           </div>
