@@ -22,7 +22,7 @@ export default function ProtectedLayout({
       href: "/staff",
     },
     { label: "History", icon: History, href: `/staff/${year}/history` },
-    { label: "Profile & Settings", icon: User, href: "/staff/profile" },
+    { label: "Profile & Settings", icon: User, href: `/staff/${year}/profile` },
   ];
 
   return (
