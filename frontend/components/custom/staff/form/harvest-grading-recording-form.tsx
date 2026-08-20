@@ -5,7 +5,11 @@ import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import FormsInput from "../../common/forms/form-input";
 import CustomButton from "../../common/custom-button";
-import { X, Check } from "lucide-react";
+import { CircleCheck, CircleX } from "lucide-react";
+import FormCard from "./form-card";
+import { StaffFormTitle, SmallStaffFormTitle } from "./staff-form-title";
+import StaffDisable from "./staff-disable";
+import StaffSmallTitle from "./staff-small-title";
 import type {
   HarvestGradingRecord,
   HarvestGradingRecordInput,
@@ -219,107 +223,83 @@ export default function HarvestGradingRecordingForm({
   ];
 
   return (
-    <div className="mx-auto max-w-5xl space-y-4">
-      <div className="space-y-4 rounded-lg border-2 border-[#8a6752] bg-[#FAF3E0] p-4 sm:p-8">
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-          <div>
-            <label className="mb-2 flex items-center gap-2 text-sm font-semibold text-[#8a6752] sm:text-base">
-              <span className="h-2 w-2 rounded-full bg-[#8a6752]" />
-              Location
-            </label>
+    <Form {...form}>
+      <form className="flex flex-col">
+        <ApiErrorUI message={error} />
 
-            <div className="rounded bg-gray-300 p-3 text-sm text-gray-600 sm:p-4 sm:text-base">
-              {record?.location || "N/A"}
+        <div className="pb-8">
+          <FormCard>
+            <StaffFormTitle isRequired={false} title={"Pole Information"} />
+            <div className="flex flex-col justify-between gap-10 py-4 md:flex-row">
+              <StaffDisable
+                title={"Location"}
+                placeholder={record?.location || "N/A"}
+              />
+              <StaffDisable
+                title={"Pole Number"}
+                placeholder={record?.poleNumber || "N/A"}
+              />
             </div>
-          </div>
-
-          <div>
-            <label className="mb-2 flex items-center gap-2 text-sm font-semibold text-[#8a6752] sm:text-base">
-              Pole Number <span className="text-red-600">*</span>
-            </label>
-
-            <div className="rounded bg-gray-300 p-3 text-sm text-gray-600 sm:p-4 sm:text-base">
-              {record?.poleNumber || "N/A"}
-            </div>
-          </div>
+          </FormCard>
         </div>
-      </div>
 
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-6 rounded-lg rounded-b-2xl border-2 border-[#8a6752] bg-[#FAF3E0] sm:p-8"
-        >
-          <ApiErrorUI message={error} />
+        <div className="pb-8">
+          <FormCard>
+            <StaffFormTitle isRequired={true} title={"Grade Entry"} />
 
-          <div className="space-y-4">
-            <h3 className="flex items-center gap-2 text-base font-semibold text-[#8a6752] sm:text-lg">
-              <span className="h-2 w-2 rounded-full bg-[#8a6752]" />
-              Grade Entry
-            </h3>
-
-            <div className="space-y-6">
+            <div className="space-y-6 py-4">
               {grades.map((gradeItem) => (
-                <div
-                  key={gradeItem.key}
-                  className="space-y-3 rounded-lg p-4 sm:p-5"
-                >
-                  <p className="text-sm font-semibold text-[#8a6752] sm:text-base">
-                    {gradeItem.label}
-                  </p>
+                <div key={gradeItem.key}>
+                  <SmallStaffFormTitle
+                    isRequired={false}
+                    title={gradeItem.label}
+                  />
 
-                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                    <div>
-                      <label className="mb-2 block text-xs font-medium text-[#8a6752] sm:text-sm">
-                        Number of Pods
-                      </label>
-
+                  <div className="flex flex-col py-2 md:flex-row md:gap-10">
+                    <div className="w-full">
+                      <StaffSmallTitle title="Number of Pods" />
                       <FormsInput
                         control={form.control}
                         path={gradeItem.podsPath}
                         placeholder="0"
                         type="number"
-                        className="w-full bg-white"
+                        className="bg-staff-form-field rounded-lg"
                       />
                     </div>
 
-                    <div>
-                      <label className="mb-2 block text-xs font-medium text-[#8a6752] sm:text-sm">
-                        Weight (g)
-                      </label>
-
+                    <div className="w-full">
+                      <StaffSmallTitle title="Weight (g)" />
                       <FormsInput
                         control={form.control}
                         path={gradeItem.weightPath}
                         placeholder="0.0"
                         type="number"
-                        className="w-full bg-white"
+                        className="bg-staff-form-field rounded-lg"
                       />
                     </div>
                   </div>
                 </div>
               ))}
             </div>
-          </div>
+          </FormCard>
+        </div>
+      </form>
 
-          <div className="flex flex-col gap-3 border-t border-[#8a6752] pt-6 sm:justify-center">
-            <CustomButton
-              type="button"
-              label="Cancel"
-              icon={X}
-              onClick={handleCancel}
-              className="w-full bg-red-600 px-6 py-2 text-white hover:bg-red-700 sm:w-auto sm:px-8"
-            />
+      <div className="flex flex-row items-center justify-around gap-4">
+        <CustomButton
+          label="Cancel"
+          onClick={handleCancel}
+          className="w-[180px] bg-red-600 hover:bg-red-700"
+          icon={CircleX}
+        />
 
-            <CustomButton
-              type="submit"
-              label="Submit"
-              icon={Check}
-              className="w-full bg-green-600 px-6 py-2 text-white hover:bg-green-700 sm:w-auto sm:px-8"
-            />
-          </div>
-        </form>
-      </Form>
-    </div>
+        <CustomButton
+          label="Submit"
+          onClick={form.handleSubmit(onSubmit)}
+          className="bg-staff-success w-[180px] hover:bg-green-800"
+          icon={CircleCheck}
+        />
+      </div>
+    </Form>
   );
 }
