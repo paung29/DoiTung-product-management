@@ -26,11 +26,11 @@ export function ZoneTable({
   const { selectedYear } = useZoneForm();
   const router = useRouter();
 
-  const onView = ({ id }: { id: string }) => {
-    // Carry the selected year so the detail page's Back button can return to
-    // this exact Zone & Form Management (zone list) view.
+  const onView = ({ id, name }: { id: string; name: string }) => {
+    // Carry the selected year and zone name so the detail page can show the
+    // real zone name and Back can return to this exact zone list view.
     router.push(
-      `/admin/zone-form-management/zone-details/${id}?year=${selectedYear}`,
+      `/admin/zone-form-management/zone-details/${id}?year=${selectedYear}&name=${encodeURIComponent(name)}`,
     );
   };
 
@@ -55,7 +55,9 @@ export function ZoneTable({
               <TableCell>{item.total_plants}</TableCell>
               <TableCell>
                 <button
-                  onClick={() => onView({ id: String(item.zone_id) })}
+                  onClick={() =>
+                    onView({ id: String(item.zone_id), name: item.zone_name })
+                  }
                   className="bg-primary-button hover:shadow-primary-button/50 rounded-lg px-4 py-2 text-white hover:shadow-md"
                 >
                   View Report
