@@ -22,24 +22,32 @@ export default function ClusterPageClient({
   year,
   defaultZoneNo,
   records,
-  zones
+  zones,
+  showSearch = true,
 }: {
   link : string;
   editLink : string;
   year: string;
-  defaultZoneNo: string;
+  defaultZoneNo?: string;
   records: ClusterRecord[];
-  zones : Option[]
+  zones?: Option[];
+  showSearch?: boolean;
 }) {
   const router = useRouter();
 
   const onEdit = (record: ClusterRecord) => {
-    router.push(`/staff/${year}/${link}/${record.id}/${editLink}`);
+    // showSearch is false only when this list is rendered from the History
+    // section — pass that along so the edit form knows to return to History
+    // (rather than the live list) after a successful submit.
+    const from = showSearch ? "" : "?from=history";
+    router.push(`/staff/${year}/${link}/${record.id}/${editLink}${from}`);
   };
 
   return (
     <div className="space-y-4 sm:space-y-6">
-      <ClusterSearch defaultZoneNo={defaultZoneNo} locations={zones}/>
+      {showSearch && (
+        <ClusterSearch defaultZoneNo={defaultZoneNo ?? ""} locations={zones ?? []}/>
+      )}
 
       <StaffContent>
         <div className="space-y-4">

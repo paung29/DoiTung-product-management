@@ -1,9 +1,11 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
-import BackButton from "@/components/custom/common/back-button";
+import CustomButton from "@/components/custom/common/custom-button";
+import { baseUrl, normalizeYear } from "@/lib/utl";
+import { YearApiResponse } from "@/lib/types/model/type";
 
 import imgClusterForm from "@/public/StaffImage/cluster.svg";
 import imgFlowerForm from "@/public/StaffImage/flower.svg";
@@ -29,7 +31,44 @@ function StaffHome() {
   const language: Lang = "en";
 
   const year = params.year as string;
-  
+
+  const [isYearValid, setIsYearValid] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const checkYear = async () => {
+      try {
+        const res = await fetch(`${baseUrl}/years/get-all-years`, {
+          method: "GET",
+          credentials: "include",
+        });
+
+        if (!res.ok) throw new Error("Failed to fetch years");
+
+        const data: YearApiResponse = await res.json();
+        const validYears = data.years.map((item) => normalizeYear(item));
+
+        if (!cancelled) {
+          setIsYearValid(validYears.includes(year));
+        }
+      } catch {
+        if (!cancelled) setIsYearValid(false);
+      }
+    };
+
+    checkYear();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [year]);
+
+  useEffect(() => {
+    if (isYearValid === false) {
+      router.replace("/staff");
+    }
+  }, [isYearValid, router]);
 
   const getText = (key: string): string => {
     const translations: Record<Lang, Record<string, string>> = {
@@ -105,12 +144,21 @@ function StaffHome() {
     router.push(path);
   };
 
+  const handleSelectYearClick = () => {
+    router.push("/staff");
+  };
+
+  if (isYearValid !== true) return null;
+
   return (
     <div className="min-h-screen bg-[#f2f1ed] px-6 py-12">
       <div className="mx-auto max-w-screen-2xl">
         {/* Back to year selection */}
         <div className="mb-6 flex justify-start">
-          <BackButton fallbackHref="/staff" />
+          <CustomButton
+            label={`Current Year - ${year}`}
+            onClick={handleSelectYearClick}
+          />
         </div>
 
         {/* Grid - All Cards */}

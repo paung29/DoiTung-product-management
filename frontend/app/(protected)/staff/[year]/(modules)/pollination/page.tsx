@@ -69,7 +69,7 @@ export default async function Page({params, searchParams,} : {params : Promise<{
       location: item.location,
       poleNumber: `${item.poleNo}`,
       clusterId: `${item.clusterNo}`,
-      recordedDate: `${item.recordedDate}`,
+      recordedDate: `${item.createdAt}`,
       progressDone: item.progressDone 
 }));
 

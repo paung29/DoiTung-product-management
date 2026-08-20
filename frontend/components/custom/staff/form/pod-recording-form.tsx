@@ -18,7 +18,7 @@ import { CircleCheck, CircleX } from "lucide-react";
 import { StaffFormTitle } from "./staff-form-title";
 import StaffDisable from "./staff-disable";
 import StaffSmallTitle from "./staff-small-title";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { createPod } from "@/lib/server-actions/create-pod-client";
 import ApiErrorUI from "../../common/error-handle";
@@ -28,6 +28,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 function PodRecordingForm({ record }: { record: GetPodApiResponse }) {
   const router = useRouter();
   const params = useParams();
+  const searchParams = useSearchParams();
+  const from = searchParams.get("from");
   const [apiError, setapiError] = useState<string | null>(null);
 
   const year = params.year;
@@ -89,7 +91,9 @@ function PodRecordingForm({ record }: { record: GetPodApiResponse }) {
         setapiError(result.message);
         return;
       }
-      router.replace(`/staff/${year}/pod`);
+      router.replace(
+        from === "history" ? `/staff/${year}/history/pod` : `/staff/${year}/pod`
+      );
     } catch (error) {
       console.error("submit error:", error);
       setapiError(getErrorMessage(error));

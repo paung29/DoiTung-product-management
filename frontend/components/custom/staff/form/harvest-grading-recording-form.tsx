@@ -17,7 +17,7 @@ import type {
 } from "@/lib/types/model/type";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { createHarvestGrading } from "@/lib/server-actions/create-harvest-grading-client";
 import { getErrorMessage } from "@/lib/types/model/function";
 import ApiErrorUI from "../../common/error-handle";
@@ -114,6 +114,8 @@ export default function HarvestGradingRecordingForm({
   const year = params.year;
 
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const from = searchParams.get("from");
 
   const [error, setError] = useState<string | null>(null);
 
@@ -165,7 +167,9 @@ export default function HarvestGradingRecordingForm({
     }
 
       router.replace(
-        `/staff/${year}/harvest-grading?zoneNo=${zoneNo}`,
+        from === "history"
+          ? `/staff/${year}/history/harvest-grading`
+          : `/staff/${year}/harvest-grading?zoneNo=${zoneNo}`,
       );
     } catch (error) {
       console.error("Submit error:", error);

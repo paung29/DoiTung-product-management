@@ -109,7 +109,7 @@ export type ClusterApiItem = {
   poleNo: number;
   clusterNo: number;
   progressDone: number;
-  recordedDate: string;
+  createdAt: string;
 };
 
 export type ClusterApiResponse = {

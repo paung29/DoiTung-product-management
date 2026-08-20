@@ -1,10 +1,9 @@
 "use client";
 
 import BackButton from "@/components/custom/common/back-button";
-import CustomButton from "@/components/custom/common/custom-button";
 import FormIconTitles from "@/components/custom/common/form-icon-titles";
-import { ClipboardList, Form, LucideIcon, FileText } from "lucide-react";
-import { useParams, usePathname, useRouter } from "next/navigation";
+import { ClipboardList, LucideIcon, FileText } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 type PageConfig = {
   title: string;
@@ -50,14 +49,7 @@ export default function StaffLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const handleBackClick = () => {
-    window.history.back();
-  };
-
   const pathname = usePathname();
-  const router = useRouter();
-  const params = useParams();
-  const year = params.year as string;
 
   const cleanPath = pathname.replace(/\/$/, "");
 
@@ -77,26 +69,12 @@ export default function StaffLayout({
     icon: ClipboardList,
   };
 
-  const isClusterListPage = cleanPath === `/staff/${year}/cluster`;
-
-  const handleAdd = () => {
-    router.push(`/staff/${year}/cluster/cluster-form`);
-  };
-
   return (
     <div className="bg-staff-backdrop border-primary-button mx-0 my-0 min-h-screen w-full rounded-none border shadow-2xl sm:mx-auto sm:my-15 sm:max-w-[80%] sm:rounded-2xl">
       <div className="bg-secondary border-primary-button flex h-16 items-center justify-between rounded-none border-b px-4 sm:rounded-t-2xl sm:px-10">
         <FormIconTitles title={title} subtitle={subtitle} icon={icon} />
 
         <div className="flex items-center gap-3">
-          {isClusterListPage && (
-            <CustomButton
-              label="Add"
-              onClick={handleAdd}
-              className="bg-green-700"
-            />
-          )}
-
           <BackButton />
         </div>
       </div>

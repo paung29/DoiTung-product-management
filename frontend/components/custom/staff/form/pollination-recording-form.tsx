@@ -12,7 +12,7 @@ import { CircleCheck, CircleX } from "lucide-react";
 import { StaffFormTitle } from "./staff-form-title";
 import StaffDisable from "./staff-disable";
 import StaffSmallTitle from "./staff-small-title";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { baseUrl } from "@/lib/utl";
 import { createPollination } from "@/lib/server-actions/create-pollintaion-client";
@@ -23,9 +23,11 @@ function PollinationRecordingForm() {
 
   const router = useRouter();
   const params = useParams();
+  const searchParams = useSearchParams();
+  const from = searchParams.get("from");
 
   const [Pollintaion, setPollintaion] = useState<GetPollinationFormApiResponse | null>(null)
-    
+
   const clusterId = params.formId
   const year = params.year
 
@@ -41,8 +43,10 @@ function PollinationRecordingForm() {
     console.log(data);
     const result = await createPollination(data);
     console.log(result)
-    router.replace(`/staff/${year}/pollination`)
-    
+    router.replace(
+      from === "history" ? `/staff/${year}/history/pollination` : `/staff/${year}/pollination`
+    )
+
   };
 
   const form = useForm<PollinationRecordingFormInput, any, PollinationRecordingFormType>({

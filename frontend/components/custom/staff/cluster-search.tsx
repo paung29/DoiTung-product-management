@@ -7,22 +7,20 @@ import { Form } from "@/components/ui/form";
 import { ClusterSearchForm } from "@/lib/types/model/type";
 import FormsInput from "../common/forms/form-input";
 import CustomButton from "../common/custom-button";
-import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 
 
 export default function ClusterSearch({locations , defaultZoneNo} : {locations : Option[], defaultZoneNo: string;}) {
 
   const router = useRouter();
-  const params = useParams();
   const serarchParams = useSearchParams();
   const pathname = usePathname();
 
-  const module = pathname.split("/").filter(Boolean).at(-1);
-  console.log("module",module)
-
-  const year = params.year as string;
-  
+  // Preserve everything before and including the module segment (e.g. "/staff/2026/cluster"
+  // or "/staff/2026/history/cluster") so search stays on the page it was submitted from
+  // instead of always dropping the "history" segment.
+  const basePath = pathname.replace(/\/$/, "");
 
   const onSubmit = (data : ClusterSearchForm) => {
     console.log("Cluster Search Data: ", data);
@@ -38,7 +36,7 @@ export default function ClusterSearch({locations , defaultZoneNo} : {locations :
       query.set("poleNo", data.pole_id);
     }
 
-    router.replace(`/staff/${year}/${module}?${query.toString()}`);
+    router.replace(`${basePath}?${query.toString()}`);
   }
 
     const form = useForm<ClusterSearchForm>({
