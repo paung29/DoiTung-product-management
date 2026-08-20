@@ -100,7 +100,7 @@ export default function StaffLayout({
             <CustomButton
               label="Add"
               onClick={handleAdd}
-              className="bg-green-700"
+              className="bg-green-700 text-white hover:bg-green-800"
             />
           )}
 
