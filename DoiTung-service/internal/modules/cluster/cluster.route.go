@@ -16,4 +16,5 @@ func ClusterRoutes(app *fiber.App, handler *ClusterHandler) {
 	cluster.Get("/get-cluster-form-histories", middleware.RequiredAuth, handler.GetClusterFormHistories)
 	cluster.Get("/get-cluster-forms-by-zone", middleware.RequiredAuth, middleware.RequireRoles("ADMIN"), handler.GetAllClustersFormByZone)
 	cluster.Get("/get-cluster-filter", middleware.RequiredAuth, handler.GetClusterFilter)
+	cluster.Delete("/delete-cluster", middleware.RequiredAuth, middleware.RequireRoles("ADMIN"), handler.DeleteClusterById)
 }

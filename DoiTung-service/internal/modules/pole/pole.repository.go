@@ -13,4 +13,5 @@ type PoleRepository interface {
 	UpdateHarvestGradingStatusByPoleId(poleId uint, status bool) error
 	GetAllPolesByZoneId(zoneId uint) ([]models.Pole, error)
 	GetPolesByFilter(zoneId uint, poleNo *uint, harvestGradingFormDone *bool) ([]models.Pole, error)
+	DeletePoleById(db *gorm.DB, poleId uint) error
 }
