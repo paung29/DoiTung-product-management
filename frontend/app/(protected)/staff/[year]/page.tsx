@@ -3,7 +3,8 @@
 import React from "react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
-import BackButton from "@/components/custom/common/back-button";
+import CustomButton from "@/components/custom/common/custom-button";
+import HomeHistoryTabs from "@/components/custom/staff/home-history-tabs";
 
 import imgClusterForm from "@/public/StaffImage/cluster.svg";
 import imgFlowerForm from "@/public/StaffImage/flower.svg";
@@ -29,7 +30,6 @@ function StaffHome() {
   const language: Lang = "en";
 
   const year = params.year as string;
-  
 
   const getText = (key: string): string => {
     const translations: Record<Lang, Record<string, string>> = {
@@ -105,12 +105,20 @@ function StaffHome() {
     router.push(path);
   };
 
+  const handleSelectYearClick = () => {
+    router.push("/staff");
+  };
+
   return (
     <div className="min-h-screen bg-[#f2f1ed] px-6 py-12">
       <div className="mx-auto max-w-screen-2xl">
-        {/* Back to year selection */}
-        <div className="mb-6 flex justify-start">
-          <BackButton fallbackHref="/staff" />
+        <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <HomeHistoryTabs active="home" />
+
+          <CustomButton
+            label={`Current Year - ${year}`}
+            onClick={handleSelectYearClick}
+          />
         </div>
 
         {/* Grid - All Cards */}
