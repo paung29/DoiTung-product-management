@@ -39,9 +39,9 @@ export default function PollinationPageClient({
 
   return (
     <div className="space-y-4 sm:space-y-6">
-      <ClusterSearch defaultZoneNo={defaultZoneNo} locations={zones}/>
-
       <StaffContent>
+        <ClusterSearch defaultZoneNo={defaultZoneNo} locations={zones}/>
+
         <div className="space-y-4">
           {records.map((record, index) => (
             <ClusterRecordingCard

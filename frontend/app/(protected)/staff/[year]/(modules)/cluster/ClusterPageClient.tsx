@@ -44,11 +44,11 @@ export default function ClusterPageClient({
 
   return (
     <div className="space-y-4 sm:space-y-6">
-      {showSearch && (
-        <ClusterSearch defaultZoneNo={defaultZoneNo ?? ""} locations={zones ?? []}/>
-      )}
-
       <StaffContent>
+        {showSearch && (
+          <ClusterSearch defaultZoneNo={defaultZoneNo ?? ""} locations={zones ?? []}/>
+        )}
+
         <div className="space-y-4">
           {records.map((record, index) => (
             <ClusterRecordingCard
