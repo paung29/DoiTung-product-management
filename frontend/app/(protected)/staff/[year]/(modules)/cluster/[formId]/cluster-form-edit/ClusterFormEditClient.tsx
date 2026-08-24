@@ -12,7 +12,7 @@ import { Option } from "@/lib/types/model/option";
 import { ClusterEditingView, ClusterEditType, ClusterRecordingFormInput, ClusterRecordingFormType, ClusterRecordingFormTypeSchema, ConditionOptions, GetClusterApiResponse } from "@/lib/types/model/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CircleCheck, CircleX } from "lucide-react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 
 function ClusterFormEdit({data} : {data : GetClusterApiResponse}) {
@@ -21,7 +21,9 @@ function ClusterFormEdit({data} : {data : GetClusterApiResponse}) {
   const year = params.year as string;
   const formId = params.formId as string;
   const router = useRouter();
-  
+  const searchParams = useSearchParams();
+  const from = searchParams.get("from");
+
   const onSubmit = async (data: ClusterRecordingFormType) => {
 
     const form : ClusterEditType = {
@@ -32,7 +34,11 @@ function ClusterFormEdit({data} : {data : GetClusterApiResponse}) {
     const response = await editCluster(form)
     console.log(response)
 
-    router.replace(`/staff/${year}/cluster`)
+    router.replace(
+      from === "history"
+        ? `/staff/${year}/history/cluster`
+        : `/staff/${year}/cluster`
+    )
   };
 
   console.log(data.location)
