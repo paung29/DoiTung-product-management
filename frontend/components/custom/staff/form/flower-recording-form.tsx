@@ -27,10 +27,12 @@ function FlowerRecordingForm() {
 
   const router = useRouter();
   const params = useParams();
-  
+  const searchParams = useSearchParams();
+  const from = searchParams.get("from");
+
   const clusterId = params.formId
   const year = params.year
-  
+
   const onSubmit = async (data: FlowerRecordingFormType) => {
     data.clusterId = Number(clusterId)
     console.log(data)
@@ -43,7 +45,9 @@ function FlowerRecordingForm() {
         return;
       }
 
-      router.replace(`/staff/${year}/flower`)
+      router.replace(
+        from === "history" ? `/staff/${year}/history/flower` : `/staff/${year}/flower`
+      )
     }catch(error) {
       console.error("submit error:", error);
       setError(getErrorMessage(error));
