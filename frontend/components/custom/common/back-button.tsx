@@ -3,7 +3,12 @@
 import { useRouter } from "next/navigation";
 
 interface BackButtonProps {
-  /** Where to go when there is no browser history to go back to. */
+  /**
+   * Where "Back" navigates to. Always used directly rather than falling back
+   * to router.back() — window.history.length reflects the whole tab's
+   * browsing history, not just in-app navigation, so it's not a reliable way
+   * to tell whether "back" has a sensible in-app destination.
+   */
   fallbackHref?: string;
   /** Optional style override; defaults to the primary button style. */
   className?: string;
@@ -19,11 +24,7 @@ function BackButton({
   const router = useRouter();
 
   const backFunction = () => {
-    if (window.history.length > 1) {
-      router.back();
-    } else {
-      router.push(fallbackHref);
-    }
+    router.push(fallbackHref);
   };
 
   return (

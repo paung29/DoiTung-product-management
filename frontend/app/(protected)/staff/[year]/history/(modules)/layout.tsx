@@ -97,7 +97,7 @@ export default function StaffLayout({
             />
           )}
 
-          <BackButton />
+          <BackButton fallbackHref={`/staff/${year}/history`} />
         </div>
       </div>
       <div className="px-4 py-4 sm:px-10 sm:py-10">{children}</div>
