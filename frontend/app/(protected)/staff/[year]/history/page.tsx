@@ -3,6 +3,8 @@
 import React from "react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
+import CustomButton from "@/components/custom/common/custom-button";
+import HomeHistoryTabs from "@/components/custom/staff/home-history-tabs";
 
 import imgClusterForm from "@/public/StaffImage/cluster.svg";
 import imgFlowerForm from "@/public/StaffImage/flower.svg";
@@ -103,9 +105,22 @@ function StaffHistory() {
     router.push(path);
   };
 
+  const handleSelectYearClick = () => {
+    router.push("/staff");
+  };
+
   return (
     <div className="min-h-screen bg-[#f2f1ed] px-6 py-12">
       <div className="mx-auto max-w-screen-2xl">
+        <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <HomeHistoryTabs active="history" />
+
+          <CustomButton
+            label={`Current Year - ${year}`}
+            onClick={handleSelectYearClick}
+          />
+        </div>
+
         {/* Grid - All Cards */}
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
           {formCards.map((card) => (

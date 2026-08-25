@@ -18,8 +18,8 @@ export default function ClusterSearch({locations , defaultZoneNo} : {locations :
   const serarchParams = useSearchParams();
   const pathname = usePathname();
 
-  const module = pathname.split("/").filter(Boolean).at(-1);
-  console.log("module",module)
+  const currentModule = pathname.split("/").filter(Boolean).at(-1);
+  console.log("module",currentModule)
 
   const year = params.year as string;
   

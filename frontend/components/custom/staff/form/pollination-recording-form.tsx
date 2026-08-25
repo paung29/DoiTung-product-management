@@ -12,7 +12,7 @@ import { CircleCheck, CircleX } from "lucide-react";
 import { StaffFormTitle } from "./staff-form-title";
 import StaffDisable from "./staff-disable";
 import StaffSmallTitle from "./staff-small-title";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { baseUrl } from "@/lib/utl";
 import { createPollination } from "@/lib/server-actions/create-pollintaion-client";
@@ -23,9 +23,12 @@ function PollinationRecordingForm() {
 
   const router = useRouter();
   const params = useParams();
+  const searchParams = useSearchParams();
+  const from = searchParams.get("from");
 
   const [Pollintaion, setPollintaion] = useState<GetPollinationFormApiResponse | null>(null)
-    
+  const [loadError, setLoadError] = useState<string | null>(null)
+
   const clusterId = params.formId
   const year = params.year
 
@@ -41,19 +44,27 @@ function PollinationRecordingForm() {
     console.log(data);
     const result = await createPollination(data);
     console.log(result)
-    router.replace(`/staff/${year}/pollination`)
-    
+    router.replace(
+      from === "history" ? `/staff/${year}/history/pollination` : `/staff/${year}/pollination`
+    )
+
   };
+
+  const getFormValues = (data: GetPollinationFormApiResponse | null) => ({
+    clusterId: Number(clusterId),
+    numberPods: String(data?.numberPods ?? ""),
+    unsuccessfulPollination: String(data?.unsuccessfulPollination ?? ""),
+    condition: data?.condition ?? "",
+  });
 
   const form = useForm<PollinationRecordingFormInput, any, PollinationRecordingFormType>({
     resolver : zodResolver(PollinationRecordingFormSchema),
-    defaultValues : {
-      clusterId: Number(clusterId),
-      numberPods: "",
-      unsuccessfulPollination : "",
-      condition: "",
-    }
+    defaultValues : getFormValues(null)
   });
+
+  const handleCancel = () => {
+    form.reset(getFormValues(Pollintaion));
+  };
 
   useEffect(() => {
 
@@ -67,12 +78,18 @@ function PollinationRecordingForm() {
             method: "GET",
             credentials: "include"
           })
-        
+
+          if (!response.ok) {
+            const errorData = await response.json().catch(() => null);
+            setLoadError(errorData?.message ?? "Failed to load pollination form.");
+            return;
+          }
+
           const result : GetPollinationFormApiResponse = await response.json();
           setPollintaion(result)
           console.log(result)
         }
-  
+
         load();
       }
     }, [clusterId])
@@ -81,15 +98,17 @@ function PollinationRecordingForm() {
 
       if (!Pollintaion || !clusterId) return;
 
-      form.reset({
-        clusterId: Number(clusterId),
-        numberPods: String(Pollintaion.numberPods ?? ""),
-        condition: Pollintaion.condition ?? "",
-        unsuccessfulPollination: String(Pollintaion.unsuccessfulPollination)
-      });
+      form.reset(getFormValues(Pollintaion));
 
   }, [Pollintaion, clusterId, form]);
-  
+
+  if (loadError) {
+    return (
+      <div className="mx-auto max-w-2xl py-16 text-center">
+        <p className="text-staff-failed text-lg font-medium">{loadError}</p>
+      </div>
+    );
+  }
 
   return (
     <Form {...form}>
@@ -183,7 +202,7 @@ function PollinationRecordingForm() {
       <div className="flex flex-row items-center justify-around gap-4">
         <CustomButton
           label="Cancel"
-          onClick={() => console.log("Delete")}
+          onClick={handleCancel}
           className="w-[180px] bg-red-600 hover:bg-red-700"
           icon={CircleX}
         />

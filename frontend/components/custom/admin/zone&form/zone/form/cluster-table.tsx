@@ -56,7 +56,7 @@ export function ClusterTable({
               <TableCell>
                 <div className="flex flex-row justify-center gap-2">
                   <EditClusterButton clusterData={item} />
-                  <DeleteClusterButton />
+                  <DeleteClusterButton clusterId={item.clusterId} />
                 </div>
               </TableCell>
             </TableRow>

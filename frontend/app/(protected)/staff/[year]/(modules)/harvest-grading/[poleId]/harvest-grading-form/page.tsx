@@ -27,6 +27,7 @@ export default async function HarvestGradingEntryPage({params, searchParams} : {
   
 
   const PassData : HarvestGradingRecord = {
+      no: 0,
       poleid: result.poleId,
       location: result.location,
       poleNumber: String(result.poleNo),

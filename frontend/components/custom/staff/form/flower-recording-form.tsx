@@ -27,10 +27,12 @@ function FlowerRecordingForm() {
 
   const router = useRouter();
   const params = useParams();
-  
+  const searchParams = useSearchParams();
+  const from = searchParams.get("from");
+
   const clusterId = params.formId
   const year = params.year
-  
+
   const onSubmit = async (data: FlowerRecordingFormType) => {
     data.clusterId = Number(clusterId)
     console.log(data)
@@ -43,7 +45,9 @@ function FlowerRecordingForm() {
         return;
       }
 
-      router.replace(`/staff/${year}/flower`)
+      router.replace(
+        from === "history" ? `/staff/${year}/history/flower` : `/staff/${year}/flower`
+      )
     }catch(error) {
       console.error("submit error:", error);
       setError(getErrorMessage(error));
@@ -51,18 +55,19 @@ function FlowerRecordingForm() {
     
   };
 
+  const getFormValues = (data: GetClusterApiResponse | null) => ({
+    clusterId: Number(clusterId),
+    condition: data?.condition ?? "",
+    totalFlowers: String(data?.totalFlowers ?? ""),
+  });
+
   const handleCancel = () => {
-    form.reset();
+    form.reset(getFormValues(Cluster));
   };
 
   const form = useForm<FlowerRecordingFormInput, any, FlowerRecordingFormType>({
-    
     resolver: zodResolver(FlowerRecordingFormTypeSchema),
-    defaultValues: {
-      clusterId: Number(clusterId),
-      condition: "",
-      totalFlowers: "",
-    },
+    defaultValues: getFormValues(null),
 });
 
   useEffect(() => {
@@ -88,11 +93,7 @@ function FlowerRecordingForm() {
   useEffect(() => {
     if (!Cluster) return;
 
-    form.reset({
-      clusterId: Number(clusterId),
-      condition: Cluster.condition ?? "",
-      totalFlowers: String(Cluster.totalFlowers ?? ""),
-    });
+    form.reset(getFormValues(Cluster));
   }, [Cluster, clusterId, form]);
 
   return (

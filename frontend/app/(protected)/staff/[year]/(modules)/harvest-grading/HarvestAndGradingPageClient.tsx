@@ -10,16 +10,18 @@ import HarvestAndGradingSearch from "@/components/custom/staff/harvest-grading-s
 import { Option } from "@/lib/types/model/option";
 
 type Props = {
-  zoneNo: string
+  zoneNo: string;
   poles: HarvestAndGradingItem[];
   year: string;
-  zones : Option[]
+  zones: Option[];
 };
 
 export function mapToHarvestGradingRecord(
-  item: HarvestAndGradingItem
+  item: HarvestAndGradingItem,
+  index: number,
 ): HarvestGradingRecord {
   return {
+    no: item.no,
     poleid: item.poleId,
     location: item.location,
     poleNumber: item.poleNo.toString(),
@@ -29,20 +31,26 @@ export function mapToHarvestGradingRecord(
   };
 }
 
-export default function HarvestGradingList({ poles, year,zoneNo, zones }: Props) {
+export default function HarvestGradingList({
+  poles,
+  year,
+  zoneNo,
+  zones,
+}: Props) {
   const router = useRouter();
 
   const handleEditRecord = (record: HarvestGradingRecord) => {
-    router.replace(`/staff/${year}/harvest-grading/${record.poleid}/harvest-grading-form?zoneNo=${zoneNo}`);
+    router.replace(
+      `/staff/${year}/harvest-grading/${record.poleid}/harvest-grading-form?zoneNo=${zoneNo}`,
+    );
   };
 
   const records = poles.map(mapToHarvestGradingRecord);
 
   return (
     <div className="mt-6 space-y-2">
+      <HarvestAndGradingSearch locations={zones} defaultZone={zoneNo} />
 
-      <HarvestAndGradingSearch locations={zones} defaultZone={zoneNo}/>
-      
       {records.map((record) => (
         <HarvestGradingRecordingCard
           key={record.poleNumber}
