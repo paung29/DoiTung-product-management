@@ -2,7 +2,7 @@
 
 import { baseUrl } from "@/lib/utl";
 import { cookies } from "next/headers";
-import { GetClusterApiResponse, GetPodApiResponse } from "@/lib/types/model/type";
+import { GetPodApiResponse } from "@/lib/types/model/type";
 import PodForm from "./PodRecordingPageClient";
 
 export default async function Page({params,} : {params : {year : string, formId: string}}) {
@@ -21,7 +21,14 @@ export default async function Page({params,} : {params : {year : string, formId:
   });
 
   if (!response.ok) {
-    throw new Error("Failed to fetch pod form");
+    const errorData = await response.json().catch(() => null);
+    const message = errorData?.message ?? "Failed to load pod form.";
+
+    return (
+      <div className="mx-auto max-w-2xl py-16 text-center">
+        <p className="text-staff-failed text-lg font-medium">{message}</p>
+      </div>
+    );
   }
 
   const result : GetPodApiResponse  = await response.json();
@@ -29,5 +36,5 @@ export default async function Page({params,} : {params : {year : string, formId:
   return(
     <PodForm record={result}/>
   )
-  
+
 }

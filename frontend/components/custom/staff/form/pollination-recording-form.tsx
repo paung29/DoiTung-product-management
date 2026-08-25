@@ -27,6 +27,7 @@ function PollinationRecordingForm() {
   const from = searchParams.get("from");
 
   const [Pollintaion, setPollintaion] = useState<GetPollinationFormApiResponse | null>(null)
+  const [loadError, setLoadError] = useState<string | null>(null)
 
   const clusterId = params.formId
   const year = params.year
@@ -77,12 +78,18 @@ function PollinationRecordingForm() {
             method: "GET",
             credentials: "include"
           })
-        
+
+          if (!response.ok) {
+            const errorData = await response.json().catch(() => null);
+            setLoadError(errorData?.message ?? "Failed to load pollination form.");
+            return;
+          }
+
           const result : GetPollinationFormApiResponse = await response.json();
           setPollintaion(result)
           console.log(result)
         }
-  
+
         load();
       }
     }, [clusterId])
@@ -94,7 +101,14 @@ function PollinationRecordingForm() {
       form.reset(getFormValues(Pollintaion));
 
   }, [Pollintaion, clusterId, form]);
-  
+
+  if (loadError) {
+    return (
+      <div className="mx-auto max-w-2xl py-16 text-center">
+        <p className="text-staff-failed text-lg font-medium">{loadError}</p>
+      </div>
+    );
+  }
 
   return (
     <Form {...form}>
