@@ -71,8 +71,9 @@ func (s *poleService) GetPoleFilter(zoneId uint, poleNo *uint, harvestGradingFor
 
 	poleResponses := make([]PoleResponse, 0, len(poles))
 
-	for _, pole := range poles {
+	for number, pole := range poles {
 		poleResponses = append(poleResponses, PoleResponse{
+			No:                     uint(number + 1),
 			PoleId:                 pole.PoleID,
 			ZoneId:                 pole.ZoneID,
 			Location:               pole.Zone.ZoneName,

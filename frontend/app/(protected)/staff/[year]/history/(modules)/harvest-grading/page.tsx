@@ -23,7 +23,8 @@ export default async function HarvestGradingEntryPage({params} : {params : Promi
   const apiData = response.ok ? await response.json() : { harvestGradingFormHistories: [] };
 
   const records : HarvestGradingRecord[] = (apiData.harvestGradingFormHistories ?? []).map(
-  (item: HarvestGradingHistory) => ({
+  (item: HarvestGradingHistory, index: number) => ({
+    no: index + 1,
     poleid: item.poleId,
     location: item.location,
     poleNumber: item.poleNo.toString(),

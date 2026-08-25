@@ -16,6 +16,7 @@ export default function HarvestGradingRecordingCard({
   // Default
   const defaultRecords: HarvestGradingRecord[] = [
     {
+      no: 1,
       poleid: 0,
       location: "Phamee Zone 1, Phase 1",
       poleNumber: "P-00001",
@@ -64,7 +65,7 @@ export default function HarvestGradingRecordingCard({
           <div className="grid grid-cols-2 items-center gap-2 text-xs md:grid-cols-5 md:gap-4 md:text-sm">
             <div>
               <p className="text-muted-foreground text-xs">No.</p>
-              <p className="text-sm font-medium">{record.poleid}</p>
+              <p className="text-sm font-medium">{record.no}</p>
             </div>
 
             <div>
