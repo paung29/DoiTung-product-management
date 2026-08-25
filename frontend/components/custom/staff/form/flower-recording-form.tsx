@@ -55,18 +55,19 @@ function FlowerRecordingForm() {
     
   };
 
+  const getFormValues = (data: GetClusterApiResponse | null) => ({
+    clusterId: Number(clusterId),
+    condition: data?.condition ?? "",
+    totalFlowers: String(data?.totalFlowers ?? ""),
+  });
+
   const handleCancel = () => {
-    form.reset();
+    form.reset(getFormValues(Cluster));
   };
 
   const form = useForm<FlowerRecordingFormInput, any, FlowerRecordingFormType>({
-    
     resolver: zodResolver(FlowerRecordingFormTypeSchema),
-    defaultValues: {
-      clusterId: Number(clusterId),
-      condition: "",
-      totalFlowers: "",
-    },
+    defaultValues: getFormValues(null),
 });
 
   useEffect(() => {
@@ -92,11 +93,7 @@ function FlowerRecordingForm() {
   useEffect(() => {
     if (!Cluster) return;
 
-    form.reset({
-      clusterId: Number(clusterId),
-      condition: Cluster.condition ?? "",
-      totalFlowers: String(Cluster.totalFlowers ?? ""),
-    });
+    form.reset(getFormValues(Cluster));
   }, [Cluster, clusterId, form]);
 
   return (

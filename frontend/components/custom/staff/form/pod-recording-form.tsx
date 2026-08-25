@@ -92,7 +92,9 @@ function PodRecordingForm({ record }: { record: GetPodApiResponse }) {
         return;
       }
       router.replace(
-        from === "history" ? `/staff/${year}/history/pod` : `/staff/${year}/pod`
+        from === "history"
+          ? `/staff/${year}/history/pod`
+          : `/staff/${year}/pod`,
       );
     } catch (error) {
       console.error("submit error:", error);

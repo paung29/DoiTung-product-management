@@ -43,18 +43,24 @@ function ClusterFormEdit({data} : {data : GetClusterApiResponse}) {
 
   console.log(data.location)
 
-  const form = useForm<ClusterRecordingFormInput, any, ClusterRecordingFormType>({
-    resolver : zodResolver(ClusterRecordingFormTypeSchema),
-    defaultValues : {
-        year: Number(year),
-        zoneNo: String(data.location),
-        poleNo: String(data.poleNo),
-        clusterNo: String(data.clusterNo),
-        condition: String(data.condition),
-    }
+  const getFormValues = () => ({
+    year: Number(year),
+    zoneNo: String(data.location),
+    poleNo: String(data.poleNo),
+    clusterNo: String(data.clusterNo),
+    condition: String(data.condition),
   });
 
- 
+  const form = useForm<ClusterRecordingFormInput, any, ClusterRecordingFormType>({
+    resolver : zodResolver(ClusterRecordingFormTypeSchema),
+    defaultValues : getFormValues()
+  });
+
+  const handleCancel = () => {
+    form.reset(getFormValues());
+  };
+
+
   return (
     <Form {...form}>
       <form className="flex flex-col">
@@ -125,7 +131,7 @@ function ClusterFormEdit({data} : {data : GetClusterApiResponse}) {
       <div className="flex flex-row items-center justify-around gap-4">
         <CustomButton
           label="Cancel"
-          onClick={() => console.log("Delete")}
+          onClick={handleCancel}
           className="w-[180px] bg-red-600 hover:bg-red-700"
           icon={CircleX}
         />

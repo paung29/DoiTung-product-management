@@ -49,15 +49,21 @@ function PollinationRecordingForm() {
 
   };
 
+  const getFormValues = (data: GetPollinationFormApiResponse | null) => ({
+    clusterId: Number(clusterId),
+    numberPods: String(data?.numberPods ?? ""),
+    unsuccessfulPollination: String(data?.unsuccessfulPollination ?? ""),
+    condition: data?.condition ?? "",
+  });
+
   const form = useForm<PollinationRecordingFormInput, any, PollinationRecordingFormType>({
     resolver : zodResolver(PollinationRecordingFormSchema),
-    defaultValues : {
-      clusterId: Number(clusterId),
-      numberPods: "",
-      unsuccessfulPollination : "",
-      condition: "",
-    }
+    defaultValues : getFormValues(null)
   });
+
+  const handleCancel = () => {
+    form.reset(getFormValues(Pollintaion));
+  };
 
   useEffect(() => {
 
@@ -85,12 +91,7 @@ function PollinationRecordingForm() {
 
       if (!Pollintaion || !clusterId) return;
 
-      form.reset({
-        clusterId: Number(clusterId),
-        numberPods: String(Pollintaion.numberPods ?? ""),
-        condition: Pollintaion.condition ?? "",
-        unsuccessfulPollination: String(Pollintaion.unsuccessfulPollination)
-      });
+      form.reset(getFormValues(Pollintaion));
 
   }, [Pollintaion, clusterId, form]);
   
@@ -187,7 +188,7 @@ function PollinationRecordingForm() {
       <div className="flex flex-row items-center justify-around gap-4">
         <CustomButton
           label="Cancel"
-          onClick={() => console.log("Delete")}
+          onClick={handleCancel}
           className="w-[180px] bg-red-600 hover:bg-red-700"
           icon={CircleX}
         />
