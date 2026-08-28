@@ -23,4 +23,6 @@ type ClusterRepository interface {
 	GetClusterFormHistoriesByUserIdAndYearId(userId uint, yearId uint) ([]models.ClusterForm, error)
 	GetAllClusterFormDetailsByZoneId(zoneId uint) ([]models.ClusterForm, error)
 	GetClustersByFilter(zoneId uint, poleNo *uint, clusterNo *uint) ([]models.Cluster, error)
+	DeleteClusterById(db *gorm.DB, clusterId uint) error
+	DeleteClusterFormByClusterId(db *gorm.DB, clusterId uint) error
 }

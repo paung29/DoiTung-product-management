@@ -298,6 +298,7 @@ export type HarvestAndGradingResponse = {
 };
 
 export type HarvestAndGradingItem = {
+  no: number;
   poleId: number;
   zoneId: number;
   location: string;
@@ -406,6 +407,7 @@ export type FormsEditType = {
 
 // Record Models
 export type HarvestGradingRecord = {
+  no: number;
   poleid: number;
   location: string;
   poleNumber: string;
@@ -546,8 +548,8 @@ export type YearApiResponse = {
 };
 
 export type YearListResponse = {
-  years : String[]
-}
+  years: String[];
+};
 export type PerformanceOverview = {
   year: number;
   totalFlowers: number;
@@ -727,14 +729,14 @@ export type YearSettingFormType = {
 };
 
 export type warehouseItem = {
-  warehouse_id : number;
-  warehouse_name : string;
-  active_status : boolean;
-}
+  warehouse_id: number;
+  warehouse_name: string;
+  active_status: boolean;
+};
 
 export type getAllWarehouses = {
-  warehouses : warehouseItem[]
-}
+  warehouses: warehouseItem[];
+};
 
 export type YearNameFormType = {
   year: number;

@@ -12,10 +12,18 @@ function FormsInZonePageLayout({ children }: { children: React.ReactNode }) {
 
   const zoneId = params.zoneId;
 
-  // The year the user came from (passed via "View Report"). Preserved across the
-  // detail tabs so Back always returns to the correct Zone & Form Management view.
+  // The year and zone name the user came from (passed via "View Report").
+  // Preserved across the detail tabs so the header shows the real zone name
+  // and Back always returns to the correct Zone & Form Management view.
   const year = searchParams.get("year");
-  const yearQuery = year ? `?year=${year}` : "";
+  const name = searchParams.get("name");
+  const zoneName = name || `Zone ${zoneId}`;
+
+  const tabQuery = new URLSearchParams();
+  if (year) tabQuery.set("year", year);
+  if (name) tabQuery.set("name", name);
+  const tabQueryString = tabQuery.toString() ? `?${tabQuery.toString()}` : "";
+
   const backHref = year
     ? `/admin/zone-form-management/${year}/zone`
     : "/admin/zone-form-management";
@@ -40,14 +48,14 @@ function FormsInZonePageLayout({ children }: { children: React.ReactNode }) {
               </div>
 
               <div className="text-primary flex flex-col justify-center gap-1">
-                <h1 className="text-xl font-bold">Zone Name {zoneId}</h1>
+                <h1 className="text-xl font-bold">{zoneName}</h1>
                 <p>Comprehensive production tracking and grading data</p>
               </div>
             </div>
 
             <Link
               href={backHref}
-              className="rounded-lg bg-primary-button px-4 py-2 text-sm text-white hover:border-2 hover:border-amber-100"
+              className="bg-primary-button rounded-lg px-4 py-2 text-sm text-white hover:border-2 hover:border-amber-100"
             >
               Back
             </Link>
@@ -62,7 +70,7 @@ function FormsInZonePageLayout({ children }: { children: React.ReactNode }) {
             return (
               <Link
                 key={item.href}
-                href={`${href}${yearQuery}`}
+                href={`${href}${tabQueryString}`}
                 className={`flex-1 rounded-lg px-6 py-3 text-center font-semibold transition-all ${
                   active
                     ? "bg-primary text-white shadow-sm"

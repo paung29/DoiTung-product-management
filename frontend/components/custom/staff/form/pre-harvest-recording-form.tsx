@@ -16,7 +16,7 @@ import StaffSmallTitle from "./staff-small-title";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createPreHarvestForm } from "@/lib/server-actions/create-pre-harvest-client";
 import { useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { getErrorMessage } from "@/lib/types/model/function";
 import ApiErrorUI from "../../common/error-handle";
 
@@ -24,6 +24,8 @@ function PreHarvestRecordingForm({record} : {record : GetPreHarvestApiResponse})
 
   const router = useRouter();
   const params = useParams();
+  const searchParams = useSearchParams();
+  const from = searchParams.get("from");
   const year = params.year
   const formId = params.formId
 
@@ -48,7 +50,9 @@ function PreHarvestRecordingForm({record} : {record : GetPreHarvestApiResponse})
         setError(result.message);
         return;
       }
-      router.replace(`/staff/${year}/pre-harvest`)
+      router.replace(
+        from === "history" ? `/staff/${year}/history/pre-harvest` : `/staff/${year}/pre-harvest`
+      )
     }catch(error) {
       console.error("submit error:", error);
       setError(getErrorMessage(error));

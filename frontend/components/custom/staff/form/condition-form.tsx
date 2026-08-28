@@ -1,7 +1,12 @@
 // components/common/forms/form-radio-cards.tsx
 "use client";
 
-import { FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
 import { ConditionOptions } from "@/lib/types/model/type";
 
 import { cn } from "@/lib/utils";
@@ -11,7 +16,7 @@ type FormRadioCardsProps<T extends FieldValues> = {
   control: Control<T, any, any>;
   path: Path<T>;
   label?: string;
-  readonly ?: boolean;
+  readonly?: boolean;
   className?: string;
 };
 
@@ -19,11 +24,10 @@ export default function FormRadioCards<T extends FieldValues>({
   control,
   path,
   className,
-  readonly
+  readonly,
 }: FormRadioCardsProps<T>) {
+  const options = ConditionOptions;
 
-  const options = ConditionOptions
-  
   return (
     <FormField
       control={control as Control<T>}

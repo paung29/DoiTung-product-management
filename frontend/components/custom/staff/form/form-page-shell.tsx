@@ -22,22 +22,11 @@ function FormPageShell({
 }: FormPageShellProps) {
   const router = useRouter();
   const param = useParams();
-  
 
   return (
     <>
-      <div className="bg-staff-backdrop border-primary-button
-                        mx-0 sm:mx-auto
-                        my-0 sm:my-15
-                        min-h-screen
-                        w-full sm:max-w-[80%]
-                        rounded-none sm:rounded-2xl
-                        border shadow-2xl">
-        <div className="bg-secondary border-primary-button
-                          flex h-16 items-center justify-between
-                          border-b
-                          px-4 sm:px-10
-                          rounded-none sm:rounded-t-2xl">
+      <div className="bg-staff-backdrop border-primary-button mx-0 my-0 min-h-screen w-full rounded-none border shadow-2xl sm:mx-auto sm:my-15 sm:max-w-[80%] sm:rounded-2xl">
+        <div className="bg-secondary border-primary-button flex h-16 items-center justify-between rounded-none border-b px-4 sm:rounded-t-2xl sm:px-10">
           <FormIconTitles title={title} subtitle={subtitle} icon={icon} />
           <BackButton />
         </div>

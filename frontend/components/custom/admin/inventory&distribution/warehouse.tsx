@@ -52,16 +52,7 @@ export default function WareHouse() {
 
   return (
     <div className="flex items-center justify-between gap-4">
-      <Form {...form}>
-        <form className="flex-1" onSubmit={form.handleSubmit(onSearch)}>
-          <FormsInput
-            className="w-lg bg-white"
-            control={form.control}
-            path="name"
-            placeholder="Search Warehouse ..."
-          />
-        </form>
-      </Form>
+      
 
       <AddWareHouse router={router} year={String(year)} />
     </div>

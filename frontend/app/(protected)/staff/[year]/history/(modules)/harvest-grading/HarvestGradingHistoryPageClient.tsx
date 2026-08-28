@@ -1,47 +1,24 @@
-// "use client";
+"use client";
 
-// import { useRouter } from "next/navigation";
-// import HarvestGradingRecordingCard from "@/components/custom/staff/harvest-grading-recording-card";
-// import {
-//   HarvestAndGradingItem,
-//   HarvestGradingRecord,
-// } from "@/lib/types/model/type";
+import { useRouter } from "next/navigation";
+import HarvestGradingRecordingCard from "@/components/custom/staff/harvest-grading-recording-card";
+import { HarvestGradingRecord } from "@/lib/types/model/type";
 
-// type Props = {
-//   year: string;
-// };
+type Props = {
+  records: HarvestGradingRecord[];
+  year: string;
+};
 
-// export function mapToHarvestGradingRecord(
-//   item: HarvestAndGradingItem
-// ): HarvestGradingRecord {
-//   return {
-//     poleid: item.poleId,
-//     location: item.location,
-//     poleNumber: item.poleNo.toString(),
-//     recordedDate: item.createdAt,
-//     editedDate: item.updatedAt,
-//     status: item.harvestGradingFormDone ? "complete" : "incomplete",
-//   };
-// }
+export default function HarvestGradingHistoryPageClient({ records, year }: Props) {
+  const router = useRouter();
 
-// export default function HarvestGradingList( year : Props) {
-//   const router = useRouter();
+  const handleEditRecord = (record: HarvestGradingRecord) => {
+    router.push(`/staff/${year}/harvest-grading/${record.poleid}/harvest-grading-form?from=history`);
+  };
 
-//   const handleEditRecord = (record: HarvestGradingRecord) => {
-//     router.replace(`/staff/${year}/harvest-grading/${record.poleid}/harvest-grading-form?zoneNo=${zoneNo}`);
-//   };
-
-//   const records = poles.map(mapToHarvestGradingRecord);
-
-//   return (
-//     <div className="mt-6 space-y-2">
-//       {records.map((record) => (
-//         <HarvestGradingRecordingCard
-//           key={record.poleNumber}
-//           records={[record]}
-//           onEdit={handleEditRecord}
-//         />
-//       ))}
-//     </div>
-//   );
-// }
+  return (
+    <div className="px-2 py-2 sm:px-4">
+      <HarvestGradingRecordingCard records={records} onEdit={handleEditRecord} />
+    </div>
+  );
+}

@@ -82,7 +82,7 @@ export default function HarvestAndGradingSearch({locations, defaultZone} : {loca
                 className="w-full"
                 control={form.control}
                 path="pole_id"
-                label="Pole No"
+                label="Pole Number"
                 placeholder="Enter Pole Number"
               />
             </div>

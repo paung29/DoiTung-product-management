@@ -218,3 +218,26 @@ func (h *ClusterHandler) GetClusterFilter(context *fiber.Ctx) error {
 
 	return context.Status(fiber.StatusOK).JSON(response)
 }
+
+func (h *ClusterHandler) DeleteClusterById(context *fiber.Ctx) error {
+	clusterIdStr := context.Query("clusterId")
+	if clusterIdStr == "" {
+		return utils.HandleError(context, utils.BadRequestError("clusterId is required"))
+	}
+
+	clusterId, err := strconv.Atoi(clusterIdStr)
+	if err != nil {
+		return utils.HandleError(context, utils.BadRequestError("invalid clusterId"))
+	}
+
+	if clusterId <= 0 {
+		return utils.HandleError(context, utils.BadRequestError("clusterId must be greater than 0"))
+	}
+
+	response, err := h.service.DeleteClusterById(uint(clusterId))
+	if err != nil {
+		return utils.HandleError(context, err)
+	}
+
+	return context.Status(fiber.StatusOK).JSON(response)
+}

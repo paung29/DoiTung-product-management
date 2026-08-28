@@ -3,14 +3,7 @@
 import BackButton from "@/components/custom/common/back-button";
 import CustomButton from "@/components/custom/common/custom-button";
 import FormIconTitles from "@/components/custom/common/form-icon-titles";
-import {
-  ClipboardList,
-  Flower2,
-  LucideIcon,
-  Package,
-  Plane,
-  Sprout,
-} from "lucide-react";
+import { ClipboardList, Form, LucideIcon, FileText } from "lucide-react";
 import { useParams, usePathname, useRouter } from "next/navigation";
 
 type PageConfig = {
@@ -23,32 +16,32 @@ const pageConfigMap: Record<string, PageConfig> = {
   cluster: {
     title: "Cluster Recording",
     subtitle: "Record flower cluster data",
-    icon: Plane,
+    icon: FileText,
   },
   flower: {
     title: "Flower Recording",
     subtitle: "Record flower data",
-    icon: Flower2,
+    icon: FileText,
   },
   pollination: {
     title: "Pollination Recording",
     subtitle: "Record pollination data",
-    icon: ClipboardList,
+    icon: FileText,
   },
   pod: {
     title: "Pod Setting",
     subtitle: "Record pod setting data",
-    icon: Package,
+    icon: FileText,
   },
   "pre-harvest": {
     title: "Pre-Harvest Recording",
     subtitle: "Record pre-harvest data",
-    icon: Sprout,
+    icon: FileText,
   },
   "harvest-grading": {
     title: "Harvest and Grading ",
     subtitle: "Record harvest and grading data",
-    icon: ClipboardList,
+    icon: FileText,
   },
 };
 
@@ -104,7 +97,7 @@ export default function StaffLayout({
             />
           )}
 
-          <BackButton />
+          <BackButton fallbackHref={`/staff/${year}/history`} />
         </div>
       </div>
       <div className="px-4 py-4 sm:px-10 sm:py-10">{children}</div>

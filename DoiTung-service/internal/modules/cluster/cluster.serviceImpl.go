@@ -337,3 +337,76 @@ func (s *service) GetClusterFilter(zoneId uint, poleNo *uint, clusterNo *uint, p
 		Clusters: clusterResponses,
 	}, nil
 }
+
+func (s *service) DeleteClusterById(clusterId uint) (ClusterDeleteResponse, error) {
+	// Start a transaction
+	tx := s.db.Begin()
+
+	clusterRecord, err := s.clusterRepo.GetClusterBasicInfoByClusterId(clusterId)
+	if err != nil {
+		tx.Rollback()
+		return ClusterDeleteResponse{}, utils.NotFoundError("cluster not found")
+	}
+
+	clusterId = clusterRecord.ClusterID
+	flowerFormDone := clusterRecord.FlowerFormDone
+	pollinationFormDone := clusterRecord.PollinationFormDone
+	podFormDone := clusterRecord.PodFormDone
+	preHarvestFormDone := clusterRecord.PreHarvestFormDone
+
+	if flowerFormDone || pollinationFormDone || podFormDone || preHarvestFormDone {
+		tx.Rollback()
+		return ClusterDeleteResponse{}, utils.BadRequestError("cannot delete cluster with completed forms")
+	}
+
+	// Get Pole Id
+
+	poleId := clusterRecord.Pole.PoleID
+
+	poleRecord, err := s.poleRepo.GetPoleById(poleId)
+	if err != nil {
+		tx.Rollback()
+		return ClusterDeleteResponse{}, utils.NotFoundError("pole not found")
+	}
+
+	if poleRecord.HarvestGradingFormDone {
+		tx.Rollback()
+		return ClusterDeleteResponse{}, utils.BadRequestError("cannot delete cluster from a pole with completed harvest grading form")
+	}
+
+	// Delete the cluster form by cluster ID
+	if err := s.clusterRepo.DeleteClusterFormByClusterId(tx, clusterId); err != nil {
+		tx.Rollback()
+		return ClusterDeleteResponse{}, utils.SystemError("failed to delete cluster form")
+	}
+
+	// Delete the cluster by ID
+	if err := s.clusterRepo.DeleteClusterById(tx, clusterId); err != nil {
+		tx.Rollback()
+		return ClusterDeleteResponse{}, utils.SystemError("failed to delete cluster")
+	}
+
+	// Check if the cluster is the last cluster in the pole
+	remainingClusters, err := s.clusterRepo.GetAllClustersByPoleId(poleId)
+	if err != nil {
+		tx.Rollback()
+		return ClusterDeleteResponse{}, utils.SystemError("failed to get remaining clusters")
+	}
+
+	// If there are no remaining clusters rather than this one, delete the pole
+	if len(remainingClusters) == 1 {
+		if err := s.poleRepo.DeletePoleById(tx, poleId); err != nil {
+			tx.Rollback()
+			return ClusterDeleteResponse{}, utils.SystemError("failed to delete pole")
+		}
+	}
+
+	// Commit the transaction
+	if err := tx.Commit().Error; err != nil {
+		return ClusterDeleteResponse{}, utils.SystemError("failed to commit transaction")
+	}
+
+	return ClusterDeleteResponse{
+		Message: "Cluster deleted successfully",
+	}, nil
+}
